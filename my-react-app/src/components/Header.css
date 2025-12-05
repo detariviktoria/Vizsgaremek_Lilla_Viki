@@ -1,0 +1,124 @@
+/* Header specifikus stílusok */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: white;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: clamp(16px, 4vw, 20px);
+}
+
+.logo img {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+}
+
+nav a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: clamp(12px, 3vw, 16px);
+}
+
+nav a:hover {
+  color: palevioletred;
+}
+
+.user-name {
+  margin-right: 10px;
+  color: palevioletred;
+  font-weight: bold;
+  font-size: clamp(12px, 3vw, 14px);
+}
+
+nav a.back-btn {
+  background-color: palevioletred;
+  color: white !important;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-right: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+nav a.back-btn:hover {
+  background-color: #8d465d;
+}
+
+/* Tablet és mobil nézethez */
+@media (max-width: 768px) {
+  header {
+    padding: 12px 15px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  nav a {
+    margin-left: 10px;
+    font-size: 13px;
+  }
+
+  .user-name {
+    margin-right: 8px;
+    font-size: 12px;
+  }
+
+  nav a.back-btn {
+    padding: 5px 10px;
+    margin-right: 8px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 10px 12px;
+  }
+
+  .logo {
+    font-size: 14px;
+  }
+
+  .logo img {
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
+  }
+
+  nav a {
+    margin-left: 8px;
+    font-size: 11px;
+  }
+
+  .user-name {
+    margin-right: 5px;
+    font-size: 11px;
+  }
+
+  nav a.back-btn {
+    padding: 4px 8px;
+    margin-right: 5px;
+    font-size: 14px;
+  }
+}
+

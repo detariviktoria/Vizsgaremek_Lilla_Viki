@@ -1,0 +1,82 @@
+id;nev;leiras;ar;tipus;stilus_id;image_url;link_url;created_at;updated_at
+1;Vidám bögre;Vidám bögre leírása;89940;élmény;6;pelda.hu/okosora.png;https://bogrevaros.hu/Vidam-napot-bogre;2025.09.01 12:15;2025.09.01 13:00
+2;Wellness hétvége;Wellness hétvége leírása;103321;élmény;6;;https://www.pihipakk.hu/csomag/wellness-es-romantika;;
+3;DIY kézműves készlet;DIY kézműves készlet leírása;49433;élmény;8;;https://hobbivilag.hu/products/diy-3d-kezforma-klon-keszlet;;
+4;Szakácskönyv;Szakácskönyv leírása;18038;tárgy;6;;https://szoky.hu/termek/konyv/;;
+5;Sétarepülés;Sétarepülés leírása;2187;tárgy;8;;https://elmenyrepulesek.hu/uzlet/setarepules/budapest-latvanyossagai-setarepules;;
+6;Puzzle játék;Puzzle játék leírása;6459;élmény;2;;https://www.puzzlekucko.hu/termek/anatolian-1000-darabos-1143-doggies-in-the-bedroom;;
+7;Romantikus vacsora;Romantikus vacsora leírása;7247;tárgy;4;;https://meglepkek.hu/romantika-es-lanykeres/romantikus-vacsora-es-hajozas-a-dunan;;
+8;Egyedi póló;Egyedi póló leírása;11271;tárgy;3;;https://pamutlabor.hu/egyedi;;
+9;Csokoládé válogatás;Csokoládé válogatás leírása;52819;élmény;4;;https://veghmeli.com/termek/kezzel-keszitett-bonbon-valogatas-egyedulalloan-szep-diszcsomagolasban/;;
+10;Színházjegy;Színházjegy leírása;102627;élmény;1;;https://www.jegy.hu/ajandekkartya;;
+11;Gokartozás;Gokartozás leírása;75867;élmény;6;;https://gokartvac.hu/idopont-foglalas-vaci-gokart-palya/;;
+12;Festőkészlet;Festőkészlet leírása;9278;tárgy;7;;https://www.emag.hu/vincent-188-reszes-festokeszlet-4054673402117/pd/D16CZBMBM/;;
+13;Okosóra;Okosóra leírása;6474;tárgy;7;;https://okosora-aktivitasmero.arukereso.hu/;;
+14;Parfüm;Parfüm leírása;16387;tárgy;3;;https://www.notino.hu/parfumok/;;
+15;Társasjáték;Társasjáték leírása;39802;élmény;2;;https://tarsasjatekrendeles.hu/TOP_50;;
+16;Borkóstoló;Borkóstoló leírása;63357;élmény;6;;https://elmenyplaza.hu/elmeny-kategoriak/gasztronomiai-kalandok/borkostolok;;
+17;Szabadulószoba;Szabadulószoba leírása;14323;tárgy;2;;https://booking.neverland.hu/hu/gift;;
+18;Állatkerti belépő;Állatkerti belépő leírása;13523;tárgy;6;;https://tickets.zoobudapest.com/hu/;;
+19;Főzőtanfolyam;Főzőtanfolyam leírása;90698;élmény;3;;https://elmenyplaza.hu/elmeny-kategoriak/gasztronomiai-kalandok/fozotanfolyamok;;
+20;Masszázs utalvány;Masszázs utalvány leírása;3843;tárgy;1;;https://www.chmassage.hu/hu/ajandekutalvany;;
+21;Jegy koncertre;Jegy koncertre leírása;59592;élmény;3;;https://www.budapestpark.hu/;;
+22;Tánctanfolyam;Tánctanfolyam leírása;62529;élmény;1;;https://tancvalaszto.hu/kezdo-tanfolyamok.html;;
+23;Kertészeti szett;Kertészeti szett leírása;58481;élmény;4;;https://www.csepeligravir.hu/termek/kerteszeti-szett-gravirozas-nelkuli-termek/;;
+24;Hobbi készlet;Hobbi készlet leírása;12968;tárgy;4;;https://www.kreativhobby.hu/ajandekotletek-2117;;
+25;Plüssfigura;Plüssfigura leírása;10089;tárgy;8;;https://www.plussfigurabolt.hu/termek;2025.09.01 18:15;2025.09.01 18:45
+26;Kerékpár kiegészítő;Kerékpár kiegészítő leírása;8415;tárgy;6;;https://www.bicajbolt.hu/kiegeszitok;2025.09.01 18:30;2025.09.01 19:00
+27;Laptop táska;Laptop táska leírása;10995;tárgy;4;;https://www.laptoptaska.hu/termek;2025.09.01 18:45;2025.09.01 19:15
+28;Napernyő;Napernyő leírása;42141;élmény;6;;https://www.napernyobolt.hu/termek;2025.09.01 19:00;2025.09.01 19:30
+29;Sportcipő;Sportcipő leírása;9880;tárgy;5;;https://www.sportcipobolt.hu/termek;2025.09.01 19:15;2025.09.01 19:45
+30;Hátizsák;Hátizsák leírása;12350;tárgy;3;;https://www.hatizsakbolt.hu/termek;2025.09.01 19:30;2025.09.01 20:00
+31;Laptop hűtőpad;Laptop hűtőpad leírása;9612;tárgy;8;;https://www.laptophutopad.hu/termek;2025.09.01 19:45;2025.09.01 20:15
+32;LED lámpa;LED lámpa leírása;23426;élmény;1;;https://www.ledlampabolt.hu/termek;2025.09.01 20:00;2025.09.01 20:30
+33;Szépségcsomag;Szépségcsomag leírása;6991;tárgy;3;;https://www.szepsegcsomag.hu/termek;2025.09.01 20:15;2025.09.01 20:45
+34;Fitness bérlet;Fitness bérlet leírása;18475;tárgy;8;;https://www.fitnessberlet.hu/termek;2025.09.01 20:30;2025.09.01 21:00
+35;VR szemüveg;VR szemüveg leírása;15204;tárgy;7;;https://www.vrszemuveg.hu/termek;2025.09.01 20:45;2025.09.01 21:15
+36;Hangszóró;Hangszóró leírása;34263;élmény;5;;https://www.hangszorobolt.hu/termek;2025.09.01 
+37;Bluetooth fülhallgató;Bluetooth fülhallgató leírása;101883;élmény;1;;;;
+38;Ékszer szett;Ékszer szett leírása;14018;tárgy;2;;;;
+39;Fotóalbum;Fotóalbum leírása;8759;tárgy;5;;;;
+40;Könyvcsomag;Könyvcsomag leírása;74363;élmény;1;;;;
+41;Italválogatás;Italválogatás leírása;18626;tárgy;2;;;;
+42;Vezetéstechnikai tréning;Vezetéstechnikai tréning leírása;90593;élmény;1;;;;
+43;Nyári tábor belépő;Nyári tábor belépő leírása;107347;élmény;8;;;;
+44;Konyhai robotgép;Konyhai robotgép leírása;17563;tárgy;2;;;;
+45;Bögre szett;Bögre szett leírása;33739;élmény;3;;;;
+46;Hobbi magazin előfizetés;Hobbi magazin előfizetés leírása;48553;élmény;8;;;;
+47;Kézműves csokoládé;Kézműves csokoládé leírása;2559;tárgy;6;;;;
+48;Gyertyakészlet;Gyertyakészlet leírása;3539;tárgy;1;;;;
+49;Retro játék konzol;Retro játék konzol leírása;32649;élmény;5;;;;
+50;Mini drón;Mini drón játék leírása;15999;tárgy;7;;https://dronebolt.hu/mini-dron;2025.09.12 08:30;2025.09.12 09:00
+51;Szappankészítő készlet;Szappankészítő készlet leírása;8345;élmény;4;;https://hobbivilag.hu/szappankeszito;2025.09.12 09:15;2025.09.12 09:45
+52;Borkóstoló hétvége;Borkóstoló hétvége leírása;45210;élmény;6;;https://elmenyplaza.hu/borkostolo;2025.09.12 10:00;2025.09.12 10:30
+53;Okostermosztát;Okostermosztát leírása;20499;tárgy;6;;https://okosotthon.hu/okostermosztat;2025.09.12 10:45;2025.09.12 11:15
+54;Retro vinyl lemez;Retro vinyl lemez leírása;7530;tárgy;5;;https://zenebolt.hu/vinyl;2025.09.12 11:30;2025.09.12 12:00
+55;Jóga bérlet;Jóga bérlet leírása;12345;élmény;2;;https://fitnessextra.hu/joga-berlet;2025.09.12 12:15;2025.09.12 12:45
+56;Kézműves bögre;Kézműves bögre leírása;6789;tárgy;4;;https://keramia.hu/keszlet/bogre;2025.09.12 13:00;2025.09.12 13:30
+57;VR játék élmény;VR játék élmény leírása;31999;élmény;7;;https://vrworld.hu/jatek;2025.09.12 13:45;2025.09.12 14:15
+58;Színező készlet;Színező készlet leírása;2540;tárgy;8;;https://hobbivilag.hu/szinezokeszlet;2025.09.12 14:30;2025.09.12 15:00
+59;Főzőtanfolyam gasztronómia;Főzőtanfolyam leírása;21450;élmény;3;;https://gasztrotanfolyam.hu/fozo;2025.09.12 15:15;2025.09.12 15:45
+60;Masszázs hétvége;Masszázs hétvége leírása;18999;élmény;1;;https://wellnessguru.hu/masszazs;2025.09.12 16:00;2025.09.12 16:30
+61;Okos kulcstartó;Okos kulcstartó leírása;5420;tárgy;7;;https://okoseszkozok.hu/kulcstarto;2025.09.12 16:45;2025.09.12 17:15
+62;Beltéri növény szett;Beltéri növény szett leírása;11234;tárgy;4;;https://kertvarazs.hu/belteri-noveny;2025.09.12 17:30;2025.09.12 18:00
+63;Színház bérlet;Színház bérlet leírása;36500;élmény;1;;https://jegy.hu/szinhaz;2025.09.12 18:15;2025.09.12 18:45
+64;Borkóstoló vacsora;Borkóstoló vacsora leírása;40999;élmény;6;;https://gasztroelmeny.hu/borkostolo;2025.09.13 08:30;2025.09.13 09:00
+65;Kézműves gyertya készlet;Kézműves gyertya készlet leírása;3299;tárgy;4;;https://hobbivilag.hu/gyertyakeszlet;2025.09.13 09:15;2025.09.13 09:45
+66;Kerékpáros túra;Kerékpáros túra leírása;17450;élmény;5;;https://elmenyut.hu/kerekparos;2025.09.13 10:00;2025.09.13 10:30
+67;VR kaland;VR kaland leírása;34999;élmény;7;;https://vrkalandozas.hu;2025.09.13 10:45;2025.09.13 11:15
+68;Kézműves ékszer;Kézműves ékszer leírása;11999;tárgy;4;;https://kezmuvesekszerek.hu;2025.09.13 11:30;2025.09.13 12:00
+69;Séta a városban;Séta a városban leírása;10200;élmény;2;;https://varoserteke.hu/seta;2025.09.13 12:15;2025.09.13 12:45
+70;Okos lámpa;Okos lámpa leírása;9450;tárgy;6;;https://okosotthon.hu/lampa;2025.09.13 13:00;2025.09.13 13:30
+71;Festőkészlet deluxe;Festőkészlet deluxe leírása;18999;tárgy;7;;https://festokeszlet.hu/deluxe;2025.09.13 13:45;2025.09.13 14:15
+72;Kalandpark belépő;Kalandpark belépő leírása;22500;élmény;5;;https://kalandpark.hu/belépő;2025.09.13 14:30;2025.09.13 15:00
+73;Borkóstoló élmény;Borkóstoló élmény leírása;38500;élmény;6;;https://elmenyplaza.hu/borkostolo;2025.09.13 15:15;2025.09.13 15:45
+74;Egyedi fotóalbum;Egyedi fotóalbum leírása;11450;tárgy;3;;https://fotoalbum.hu/egyedi;2025.09.13 16:00;2025.09.13 16:30
+75;Szabadulószoba élmény;Szabadulószoba élmény leírása;17250;élmény;2;;https://szabaduloszoba.hu;2025.09.13 16:45;2025.09.13 17:15
+76;Hőlégballon túra;Hőlégballon túra leírása;84999;élmény;7;;https://ballon.hu;2025.09.13 17:30;2025.09.13 18:00
+77;Okos termosz;Okos termosz leírása;4250;tárgy;6;;https://okosotthon.hu/termosz;2025.09.13 18:15;2025.09.13 18:45
+78;DIY dekoráció;DIY dekoráció leírása;7540;élmény;4;;https://hobbivilag.hu/dekoracio;2025.09.14 08:30;2025.09.14 09:00
+79;Fitness szett;Fitness szett leírása;18499;tárgy;8;;https://fitnessbolt.hu/szett;2025.09.14 09:15;2025.09.14 09:45
+80;Mini színházi előadás;Mini színházi előadás leírása;10250;élmény;1;;https://szinhaz.hu/minieloadas;2025.09.14 10:00;2025.09.14 10:30
+

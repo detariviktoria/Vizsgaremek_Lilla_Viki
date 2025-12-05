@@ -1,0 +1,175 @@
+/* Tovabb specifikus stílusok */
+main {
+  margin-top: 120px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+#elmenyBtn, #targyBtn {
+  padding: 12px 24px;
+  font-size: clamp(14px, 3vw, 18px);
+  border: none;
+  border-radius: 24px;
+  background: palevioletred;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  transition: background 0.3s;
+  margin: 8px;
+  min-height: 44px;
+  min-width: 120px;
+}
+
+#elmenyBtn:hover, #targyBtn:hover {
+  background: #8d465d;
+}
+
+#ajandekLista {
+  margin-top: 20px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 1100px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(14px, 3vw, 18px);
+  box-sizing: border-box;
+}
+
+.ajandek-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  justify-items: center;
+}
+
+.ajandek-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+}
+
+.ajandek-item img {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  margin-bottom: 8px;
+}
+
+.ajandek-item span {
+  font-size: clamp(12px, 2.5vw, 16px);
+  text-align: center;
+}
+
+.ajandek-placeholder {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff4fa;
+  border-radius: 10px;
+  color: #8d465d;
+  font-size: 13px;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  margin-bottom: 8px;
+}
+
+@media (max-width: 1024px) {
+  main {
+    margin-top: 100px;
+  }
+
+  #ajandekLista {
+    padding: 18px;
+  }
+
+  .ajandek-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 14px;
+  }
+
+  .ajandek-item img,
+  .ajandek-placeholder {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  main {
+    margin-top: 100px;
+    padding: 0 8px;
+  }
+
+  #elmenyBtn, #targyBtn {
+    padding: 11px 20px;
+    margin: 6px;
+    font-size: 15px;
+  }
+
+  #ajandekLista {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .ajandek-grid {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 12px;
+  }
+
+  .ajandek-item {
+    margin: 5px;
+  }
+
+  .ajandek-item img,
+  .ajandek-placeholder {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    margin-top: 80px;
+    padding: 0 5px;
+  }
+
+  #elmenyBtn, #targyBtn {
+    padding: 11px 18px;
+    margin: 5px;
+    font-size: 13px;
+    min-width: 110px;
+  }
+
+  #ajandekLista {
+    margin-top: 12px;
+    padding: 12px;
+  }
+
+  .ajandek-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .ajandek-item {
+    margin: 4px;
+  }
+
+  .ajandek-item img,
+  .ajandek-placeholder {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 6px;
+  }
+
+  .ajandek-item span {
+    font-size: 11px;
+  }
+}
+

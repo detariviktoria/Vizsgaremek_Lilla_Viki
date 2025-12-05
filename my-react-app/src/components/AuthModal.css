@@ -1,0 +1,241 @@
+/* Modal alapstílus */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background: rgba(0,0,0,0.25);
+  padding: 10px;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-content {
+  background: #fff4fa;
+  padding: 30px 25px 20px 25px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 350px;
+  min-width: 280px;
+  box-shadow: 0 2px 12px rgba(200, 50, 70, 0.17);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+.close-modal {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  font-size: clamp(24px, 6vw, 28px);
+  color: #8d465d;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s;
+}
+
+.close-modal:hover {
+  color: palevioletred;
+}
+
+#modal-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+  gap: 10px;
+}
+
+#modal-tabs button {
+  background: none;
+  border: none;
+  font-size: clamp(14px, 3vw, 16px);
+  color: #8d465d;
+  padding: 6px 14px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#modal-tabs button.active {
+  background: #fff4fa;
+  font-weight: bold;
+  border-bottom: 2px solid palevioletred;
+}
+
+.login-form {
+  background: #fff4fa;
+  padding: 30px 25px;
+  border-radius: 14px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px rgba(200, 50, 70, 0.17);
+}
+
+.login-form h2 {
+  margin-bottom: 22px;
+  text-align: center;
+  color: palevioletred;
+  font-size: clamp(18px, 4vw, 22px);
+}
+
+.login-form input {
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  font-size: clamp(14px, 3vw, 16px);
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: palevioletred;
+  box-shadow: 0 0 0 3px rgba(200, 50, 70, 0.1);
+}
+
+.login-form button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  background-color: palevioletred;
+  color: white;
+  font-size: clamp(14px, 3vw, 16px);
+  cursor: pointer;
+  transition: background 0.3s;
+  font-weight: 600;
+  min-height: 44px;
+}
+
+.login-form button:hover {
+  background-color: rgb(141, 70, 93);
+}
+
+.switch-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+
+.switch-link a {
+  color: palevioletred;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.switch-link a:hover {
+  color: #8d465d;
+}
+
+.message-box {
+  margin-top: 7px;
+  color: red;
+  font-weight: bold;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  font-size: clamp(12px, 2.5vw, 14px);
+}
+
+@media (max-width: 768px) {
+  .modal {
+    padding: 15px;
+  }
+
+  .modal-content {
+    max-width: 90%;
+    padding: 25px 20px 16px 20px;
+  }
+
+  .login-form {
+    padding: 25px 20px;
+  }
+
+  .login-form input {
+    margin-bottom: 14px;
+    padding: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal.show {
+    display: flex;
+  }
+
+  .modal-content {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px 16px 16px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .close-modal {
+    right: 10px;
+    top: 6px;
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+  }
+
+  #modal-tabs button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .login-form {
+    padding: 20px 16px;
+    min-width: auto;
+  }
+
+  .login-form h2 {
+    margin-bottom: 18px;
+    font-size: 18px;
+  }
+
+  .login-form input {
+    margin-bottom: 14px;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .login-form button {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 48px;
+  }
+
+  .switch-link {
+    margin-top: 16px;
+    font-size: 12px;
+  }
+
+  .message-box {
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+}
+

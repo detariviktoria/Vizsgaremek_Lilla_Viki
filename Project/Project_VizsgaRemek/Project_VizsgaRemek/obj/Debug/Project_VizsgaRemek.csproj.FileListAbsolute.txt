@@ -1,0 +1,23 @@
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.exe.config
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.exe
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.pdb
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.csproj.AssemblyReference.cache
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.csproj.CoreCompileInputs.cache
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.exe
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.pdb
+H:\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.exe.config
+C:\Suli\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.exe.config
+C:\Suli\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.exe
+C:\Suli\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.pdb
+C:\Suli\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.csproj.AssemblyReference.cache
+C:\Suli\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.csproj.CoreCompileInputs.cache
+C:\Suli\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.exe
+C:\Suli\Vizsgaremek\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.pdb
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.exe.config
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.exe
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\bin\Debug\Project_VizsgaRemek.pdb
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.csproj.AssemblyReference.cache
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.exe.config
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.csproj.CoreCompileInputs.cache
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.exe
+C:\Users\lilla\Downloads\Vizsgaremek (frontend,backend)\Project\Project_VizsgaRemek\Project_VizsgaRemek\obj\Debug\Project_VizsgaRemek.pdb

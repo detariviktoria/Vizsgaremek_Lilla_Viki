@@ -1,0 +1,16 @@
+user_id;name;email;password
+1;Viktória;viktoria@mail.com;pass123
+2;Lilla;lilla@mail.com;pass456
+3;Gábor;gabor@mail.com;pass789
+4;Anna;anna@mail.com;pass321
+5;Tamás;tamas@mail.com;pass654
+6;Katalin;katalin@mail.com;pass987
+7;Miklós;miklos@mail.com;pass741
+8;Eszter;eszter@mail.com;pass852
+9;Zoltán;zoltan@mail.com;pass963
+10;Judit;judit@mail.com;pass159
+11;Péter;peter@mail.com;pass753
+12;Dóra;dora@mail.com;pass456
+13;Balázs;balazs@mail.com;pass852
+14;Réka;reka@mail.com;pass369
+15;András;andras@mail.com;pass147
