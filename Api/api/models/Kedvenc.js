@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
 
   Felhasznalo_KedvencAjandek.init(
     {
-      felhaszanlo_id: { type: DataTypes.INTEGER, primaryKey: true },
+      felhasznalo_id: { type: DataTypes.INTEGER, primaryKey: true },
       ajandek_id: { type: DataTypes.INTEGER, primaryKey: true },
       mentve: DataTypes.DATE,
     },

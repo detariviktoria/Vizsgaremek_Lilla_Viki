@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
   Kuponok.init(
     {
       coupon_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-      felhaszanlo_id: DataTypes.INTEGER,
+      felhasznalo_id: DataTypes.INTEGER,
       coupon_code: DataTypes.STRING(50),
       status: DataTypes.STRING(50),
       discount: DataTypes.INTEGER,

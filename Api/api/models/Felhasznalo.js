@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
 
   Felhasznalo.init(
     {
-      felhaszanlo_id: {
+      felhasznalo_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,

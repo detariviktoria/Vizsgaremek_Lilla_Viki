@@ -88,21 +88,21 @@ const ajandekok = [
 ];
 
 const felhasznalok = [
-  { felhaszanlo_id: 1, nev: 'Viktória', email: 'viktoria@mail.com', jelszo: 'pass123' },
-  { felhaszanlo_id: 2, nev: 'Lilla', email: 'lilla@mail.com', jelszo: 'pass456' },
-  { felhaszanlo_id: 3, nev: 'Gábor', email: 'gabor@mail.com', jelszo: 'pass789' },
-  { felhaszanlo_id: 4, nev: 'Anna', email: 'anna@mail.com', jelszo: 'pass321' },
-  { felhaszanlo_id: 5, nev: 'Tamás', email: 'tamas@mail.com', jelszo: 'pass654' },
-  { felhaszanlo_id: 6, nev: 'Katalin', email: 'katalin@mail.com', jelszo: 'pass987' },
-  { felhaszanlo_id: 7, nev: 'Miklós', email: 'miklos@mail.com', jelszo: 'pass741' },
-  { felhaszanlo_id: 8, nev: 'Eszter', email: 'eszter@mail.com', jelszo: 'pass852' },
-  { felhaszanlo_id: 9, nev: 'Zoltán', email: 'zoltan@mail.com', jelszo: 'pass963' },
-  { felhaszanlo_id: 10, nev: 'Judit', email: 'judit@mail.com', jelszo: 'pass159' },
-  { felhaszanlo_id: 11, nev: 'Péter', email: 'peter@mail.com', jelszo: 'pass753' },
-  { felhaszanlo_id: 12, nev: 'Dóra', email: 'dora@mail.com', jelszo: 'pass456' },
-  { felhaszanlo_id: 13, nev: 'Balázs', email: 'balazs@mail.com', jelszo: 'pass852' },
-  { felhaszanlo_id: 14, nev: 'Réka', email: 'reka@mail.com', jelszo: 'pass369' },
-  { felhaszanlo_id: 15, nev: 'András', email: 'andras@mail.com', jelszo: 'pass147' }
+  { felhasznalo_id: 1, nev: 'Viktória', email: 'viktoria@mail.com', jelszo: 'pass123' },
+  { felhasznalo_id: 2, nev: 'Lilla', email: 'lilla@mail.com', jelszo: 'pass456' },
+  { felhasznalo_id: 3, nev: 'Gábor', email: 'gabor@mail.com', jelszo: 'pass789' },
+  { felhasznalo_id: 4, nev: 'Anna', email: 'anna@mail.com', jelszo: 'pass321' },
+  { felhasznalo_id: 5, nev: 'Tamás', email: 'tamas@mail.com', jelszo: 'pass654' },
+  { felhasznalo_id: 6, nev: 'Katalin', email: 'katalin@mail.com', jelszo: 'pass987' },
+  { felhasznalo_id: 7, nev: 'Miklós', email: 'miklos@mail.com', jelszo: 'pass741' },
+  { felhasznalo_id: 8, nev: 'Eszter', email: 'eszter@mail.com', jelszo: 'pass852' },
+  { felhasznalo_id: 9, nev: 'Zoltán', email: 'zoltan@mail.com', jelszo: 'pass963' },
+  { felhasznalo_id: 10, nev: 'Judit', email: 'judit@mail.com', jelszo: 'pass159' },
+  { felhasznalo_id: 11, nev: 'Péter', email: 'peter@mail.com', jelszo: 'pass753' },
+  { felhasznalo_id: 12, nev: 'Dóra', email: 'dora@mail.com', jelszo: 'pass456' },
+  { felhasznalo_id: 13, nev: 'Balázs', email: 'balazs@mail.com', jelszo: 'pass852' },
+  { felhasznalo_id: 14, nev: 'Réka', email: 'reka@mail.com', jelszo: 'pass369' },
+  { felhasznalo_id: 15, nev: 'András', email: 'andras@mail.com', jelszo: 'pass147' }
 ];
 
 const ajandekAlkalomok = [
@@ -261,6 +261,8 @@ const felhasznaloKedvencAjandek = [
   { felhasznalo_id: 10, ajandek_id: 25, mentve: '2025-11-05 13:55:00' },
 ];
 
+
+
 const seedAll = async () => {
   try {
     console.log('Adatbázishoz próbálok csatlakozni...');
@@ -274,6 +276,39 @@ const seedAll = async () => {
     await db.Felhasznalo.bulkCreate(felhasznalok);
     await db.Ajandek.bulkCreate(ajandekok);
     await db.Kuponok.bulkCreate(kuponok);
+
+    // ---- PIVOT: Ajándék <-> Alkalom ----
+    for (const row of ajandekAlkalomok) {
+    await db.sequelize.query(
+      `INSERT INTO Ajandek_Alkalom (createdAt, updatedAt, ajandek_id, alkalom_id)
+      VALUES (:createdAt, :updatedAt, :ajandek_id, :alkalom_id)`,
+      {
+        replacements: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          ajandek_id: row.ajandek_id,
+          alkalom_id: row.alkalom_id
+        }
+      }
+    );
+  }
+
+    // ---- PIVOT: Ajándék <-> Célcsoport ----
+    for (const row of ajandekCelcsoportok) {
+    await db.sequelize.query(
+      `INSERT INTO Ajandek_Celcsoport (createdAt, updatedAt, ajandek_id, celcsoport_id)
+      VALUES (:createdAt, :updatedAt, :ajandek_id, :celcsoport_id)`,
+      {
+        replacements: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          ajandek_id: row.ajandek_id,
+          celcsoport_id: row.celcsoport_id
+        }
+      }
+    );
+  }
+
     await db.Felhasznalo_AjandekElozmeny.bulkCreate(felhasznaloAjandekElozmeny);
     await db.Felhasznalo_KedvencAjandek.bulkCreate(felhasznaloKedvencAjandek);
 
@@ -286,3 +321,5 @@ const seedAll = async () => {
 };
 
 seedAll();
+
+

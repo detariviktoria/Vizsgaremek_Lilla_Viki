@@ -64,11 +64,11 @@ module.exports = (sequelize) => {
     // FELHASZNÁLÓ → KUPONOK (1:N)
     // -----------------------
     Felhasznalo.hasMany(Kuponok, {
-        foreignKey: "felhaszanlo_id"
+        foreignKey: "felhasznalo_id"
     });
 
     Kuponok.belongsTo(Felhasznalo, {
-        foreignKey: "felhaszanlo_id"
+        foreignKey: "felhasznalo_id"
     });
 
     // -------------------------------------------------
@@ -76,14 +76,14 @@ module.exports = (sequelize) => {
     // -------------------------------------------------
     Felhasznalo.belongsToMany(Ajandek, {
         through: Felhasznalo_AjandekElozmeny,
-        foreignKey: "felhaszanlo_id",
+        foreignKey: "felhasznalo_id",
         otherKey: "ajandek_id"
     });
 
     Ajandek.belongsToMany(Felhasznalo, {
         through: Felhasznalo_AjandekElozmeny,
         foreignKey: "ajandek_id",
-        otherKey: "felhaszanlo_id"
+        otherKey: "felhasznalo_id"
     });
 
     // -----------------------------------------------
@@ -91,14 +91,14 @@ module.exports = (sequelize) => {
     // -----------------------------------------------
     Felhasznalo.belongsToMany(Ajandek, {
         through: Felhasznalo_KedvencAjandek,
-        foreignKey: "felhaszanlo_id",
+        foreignKey: "felhasznalo_id",
         otherKey: "ajandek_id"
     });
 
     Ajandek.belongsToMany(Felhasznalo, {
         through: Felhasznalo_KedvencAjandek,
         foreignKey: "ajandek_id",
-        otherKey: "felhaszanlo_id"
+        otherKey: "felhasznalo_id"
     });
 
     return {
