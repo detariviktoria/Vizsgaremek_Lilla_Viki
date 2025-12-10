@@ -1,3 +1,4 @@
+// Felhasznalo.js
 const { DataTypes, Model } = require("sequelize");
 const bcrypt = require("bcrypt");
 
@@ -6,20 +7,20 @@ module.exports = (sequelize) => {
 
   Felhasznalo.init(
     {
-      user_id: {
+      felhaszanlo_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      name: {
+
+      nev: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        unique: "user_name",
       },
+
       email: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        unique: "user_email",
         validate: {
           isEmail: {
             args: true,
@@ -27,24 +28,26 @@ module.exports = (sequelize) => {
           },
         },
       },
+
       password: {
         type: DataTypes.STRING(255),
         allowNull: false,
-      },
+      }
     },
     {
       sequelize,
-      modelName: "Felhasznalo",
       tableName: "Felhasznalo",
+      modelName: "Felhasznalo",
       timestamps: false,
+
       hooks: {
         beforeCreate: async (felhasznalo) => {
-          if (felhasznalo.password) {
+          if (felhasznalo.password && !felhasznalo.password.startsWith("$2")) {
             felhasznalo.password = await bcrypt.hash(felhasznalo.password, 10);
           }
         },
         beforeUpdate: async (felhasznalo) => {
-          if (felhasznalo.changed("password")) {
+          if (felhasznalo.changed("password") && !felhasznalo.password.startsWith("$2")) {
             felhasznalo.password = await bcrypt.hash(felhasznalo.password, 10);
           }
         },

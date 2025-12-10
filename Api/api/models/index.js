@@ -1,95 +1,114 @@
+const FelhasznaloModel = require("./Felhasznalo");
+const StilusokModel = require("./Stilusok");
+const AlkalomModel = require("./Alkalom");
+const CelcsoportModel = require("./Celcsoport");
+const AjandekModel = require("./Ajandek");
+const KuponokModel = require("./Kuponok");
+const Felhasznalo_AjandekElozmenyModel = require("./Elozmeny");
+const Felhasznalo_KedvencAjandekModel = require("./Kedvenc");
+
 module.exports = (sequelize) => {
-  const Felhasznalo = require("./Felhasznalo")(sequelize);
-  const Alkalom = require("./Alkalom")(sequelize);
-  const Stilus = require("./Stilus")(sequelize);
-  const Celcsoport = require("./Celcsoport")(sequelize);
-  const Ajandek = require("./Ajandek")(sequelize);
-  const Kupon = require("./Kupon")(sequelize);
-  const Gyujtemeny = require("./Gyujtemeny")(sequelize);
 
-  // Asszociációk
+    // MODELS
+    const Felhasznalo = FelhasznaloModel(sequelize);
+    const Stilusok = StilusokModel(sequelize);
+    const Alkalom = AlkalomModel(sequelize);
+    const Celcsoport = CelcsoportModel(sequelize);
+    const Ajandek = AjandekModel(sequelize);
+    const Kuponok = KuponokModel(sequelize);
+    const Felhasznalo_AjandekElozmeny = Felhasznalo_AjandekElozmenyModel(sequelize);
+    const Felhasznalo_KedvencAjandek = Felhasznalo_KedvencAjandekModel(sequelize);
 
-  // Ajandek <-> Stilus (many to many)
+    // -----------------------
+    // AJÁNDÉK -> STÍLUS (1:N)
+    // -----------------------
+    Stilusok.hasMany(Ajandek, {
+        foreignKey: "stilus_id"
+    });
 
-  Ajandek.belongsToMany(Stilus, {
+    Ajandek.belongsTo(Stilusok, {
+        foreignKey: "stilus_id"
+    });
 
-    through: "Ajandek_Stilus",
+    // -----------------------
+    // AJÁNDÉK <-> ALKALOM (N:N)
+    // -----------------------
+    Ajandek.belongsToMany(Alkalom, {
+        through: "Ajandek_Alkalom",
+        foreignKey: "ajandek_id",
+        otherKey: "alkalom_id"
+    });
 
-    foreignKey: "ajandek_id",
+    Alkalom.belongsToMany(Ajandek, {
+        through: "Ajandek_Alkalom",
+        foreignKey: "alkalom_id",
+        otherKey: "ajandek_id"
+    });
 
-    otherKey: "stilus_id",
+    // -----------------------
+    // AJÁNDÉK <-> CÉLCSOPORT (N:N)
+    // -----------------------
+    Ajandek.belongsToMany(Celcsoport, {
+        through: "Ajandek_Celcsoport",
+        foreignKey: "ajandek_id",
+        otherKey: "celcsoport_id"
+    });
 
-    as: "stilusok",
+    Celcsoport.belongsToMany(Ajandek, {
+        through: "Ajandek_Celcsoport",
+        foreignKey: "celcsoport_id",
+        otherKey: "ajandek_id"
+    });
 
-  });
+    // -----------------------
+    // FELHASZNÁLÓ → KUPONOK (1:N)
+    // -----------------------
+    Felhasznalo.hasMany(Kuponok, {
+        foreignKey: "felhaszanlo_id"
+    });
 
-  Stilus.belongsToMany(Ajandek, {
+    Kuponok.belongsTo(Felhasznalo, {
+        foreignKey: "felhaszanlo_id"
+    });
 
-    through: "Ajandek_Stilus",
+    // -------------------------------------------------
+    // FELHASZNÁLÓ <-> AJÁNDÉK ELŐZMÉNY (N:N + extra mező)
+    // -------------------------------------------------
+    Felhasznalo.belongsToMany(Ajandek, {
+        through: Felhasznalo_AjandekElozmeny,
+        foreignKey: "felhaszanlo_id",
+        otherKey: "ajandek_id"
+    });
 
-    foreignKey: "stilus_id",
+    Ajandek.belongsToMany(Felhasznalo, {
+        through: Felhasznalo_AjandekElozmeny,
+        foreignKey: "ajandek_id",
+        otherKey: "felhaszanlo_id"
+    });
 
-    otherKey: "ajandek_id",
+    // -----------------------------------------------
+    // FELHASZNÁLÓ <-> KEDVENC AJÁNDÉK (N:N + extra)
+    // -----------------------------------------------
+    Felhasznalo.belongsToMany(Ajandek, {
+        through: Felhasznalo_KedvencAjandek,
+        foreignKey: "felhaszanlo_id",
+        otherKey: "ajandek_id"
+    });
 
-    as: "ajandekok",
+    Ajandek.belongsToMany(Felhasznalo, {
+        through: Felhasznalo_KedvencAjandek,
+        foreignKey: "ajandek_id",
+        otherKey: "felhaszanlo_id"
+    });
 
-  });
-
-  // Ajandek <-> Alkalom (many to many)
-  Ajandek.belongsToMany(Alkalom, {
-    through: "Ajandek_Alkalom",
-    foreignKey: "ajandek_id",
-    otherKey: "alkalom_id",
-    as: "alkalmak",
-  });
-  Alkalom.belongsToMany(Ajandek, {
-    through: "Ajandek_Alkalom",
-    foreignKey: "alkalom_id",
-    otherKey: "ajandek_id",
-    as: "ajandekok",
-  });
-
-  // Ajandek <-> Celcsoport (many to many)
-  Ajandek.belongsToMany(Celcsoport, {
-    through: "Ajandek_Celcsoport",
-    foreignKey: "ajandek_id",
-    otherKey: "celcsoport_id",
-    as: "celcsoportok",
-  });
-  Celcsoport.belongsToMany(Ajandek, {
-    through: "Ajandek_Celcsoport",
-    foreignKey: "celcsoport_id",
-    otherKey: "ajandek_id",
-    as: "ajandekok",
-  });
-
-  // Kupon -> Felhasznalo (belongs to)
-  Kupon.belongsTo(Felhasznalo, {
-    foreignKey: "user_id",
-    as: "felhasznalo",
-  });
-  Felhasznalo.hasMany(Kupon, {
-    foreignKey: "user_id",
-    as: "kuponok",
-  });
-
-  // Gyujtemeny -> Felhasznalo (belongs to)
-  Gyujtemeny.belongsTo(Felhasznalo, {
-    foreignKey: "felhasznalo_id",
-    as: "felhasznalo",
-  });
-  Felhasznalo.hasMany(Gyujtemeny, {
-    foreignKey: "felhasznalo_id",
-    as: "gyujtemenyek",
-  });
-
-  return {
-    Felhasznalo,
-    Alkalom,
-    Stilus,
-    Celcsoport,
-    Ajandek,
-    Kupon,
-    Gyujtemeny,
-  };
+    return {
+        Felhasznalo,
+        Stilusok,
+        Alkalom,
+        Celcsoport,
+        Ajandek,
+        Kuponok,
+        Felhasznalo_AjandekElozmeny,
+        Felhasznalo_KedvencAjandek
+    };
 };

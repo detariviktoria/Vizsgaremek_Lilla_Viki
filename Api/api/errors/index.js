@@ -1,19 +1,9 @@
-class DbError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "DbError";
-  }
+module.exports =
+{
+    AppError: require("./AppError"),
+    NotFoundError: require("./NotFoundError"),
+    DbError: require("./DbError"),
+    BadRequestError: require("./BadRequestError"),
+    UnauthorizedError: require("./UnauthorizedError"),
+    ValidationError: require("./ValidationError"),
 }
-
-class ValidationError extends Error {
-  constructor(message, data = {}) {
-    super(message);
-    this.name = "ValidationError";
-    this.data = data;
-  }
-}
-
-module.exports = {
-  DbError,
-  ValidationError,
-};

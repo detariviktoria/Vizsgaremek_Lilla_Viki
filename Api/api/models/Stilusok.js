@@ -1,21 +1,21 @@
-// Célcsoport.js
+// Stilusok.js
 const { DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Celcsoport extends Model {}
+  class Stilusok extends Model {}
 
-  Celcsoport.init(
+  Stilusok.init(
     {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       nev: DataTypes.STRING(100),
     },
     {
       sequelize,
-      tableName: "Celcsoport",
-      modelName: "Celcsoport",
+      modelName: "Stilusok",
+      tableName: "Stilusok",
       timestamps: false,
     }
   );
 
-  return Celcsoport;
+  return Stilusok;
 };

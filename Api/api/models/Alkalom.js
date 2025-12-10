@@ -1,3 +1,4 @@
+//Alkalom.js
 const { DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize) => {
@@ -5,20 +6,13 @@ module.exports = (sequelize) => {
 
   Alkalom.init(
     {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      nev: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+      nev: DataTypes.STRING(100),
     },
     {
       sequelize,
-      modelName: "Alkalom",
       tableName: "Alkalom",
+      modelName: "Alkalom",
       timestamps: false,
     }
   );

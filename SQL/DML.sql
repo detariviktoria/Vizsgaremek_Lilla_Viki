@@ -1,4 +1,4 @@
-INSERT INTO Felhasznalo(user_id, name, email, password)
+INSERT INTO Felhasznalo(felhaszanlo_id, nev, email, jelszo)
 VALUES
 (1,'Viktória','viktoria@mail.com','pass123'),
 (2,'Lilla','lilla@mail.com','pass456'),
@@ -59,7 +59,7 @@ VALUES
 (9, 4),
 (10, 2),
 (10, 5);
-INSERT INTO Ajandek(id, nev, leiras, ar, tipus, stilus_id, image_url, link_url)
+INSERT INTO Ajandek(id, nev, leiras, ar, kategoria, stilus_id, image_url, link_url)
 VALUES
 (1, 'Vidám bögre', 'Vidám bögre leírása', 89940, 'élmény', 6, 'pelda.hu/okosora.png', 'https://bogrevaros.hu/Vidam-napot-bogre'),
 (2, 'Wellness hétvége', 'Wellness hétvége leírása', 103321, 'élmény', 6, NULL, 'https://www.pihipakk.hu/csomag/wellness-es-romantika'),
@@ -178,7 +178,7 @@ VALUES
 (6, 'szülők'),
 (7, 'kollégák'),
 (8, 'tanárok');
-INSERT INTO Kuponok(coupon_id, user_id, coupon_code, status, discount, expiry_date)
+INSERT INTO Kuponok(coupon_id, felhasznalo_id, coupon_code, status, discount, expiry_date)
 VALUES
 (1, 1, 'KU123', 'Nem felhasználva', 1000, '2025-12-31'),
 (2, 2, 'KU456', 'Felhasználva', 1500, '2025-11-30'),
@@ -205,3 +205,42 @@ VALUES
 (18, 'Otthoni'),
 (19, 'Utazós'),
 (20, 'Trendkövető');
+
+
+INSERT INTO Felhasznalo_AjandekElozmeny (felhasznalo_id, ajandek_id, keresesi_ido)
+VALUES
+(1, 2, '2025-11-01 10:15:00'),  -- Viktória nézett wellness hétvégét
+(1, 3, '2025-11-01 10:20:00'),  -- Viktória nézett DIY készletet
+(2, 10, '2025-10-31 18:45:00'), -- Lilla keresett színházjegyet
+(2, 7, '2025-10-31 19:00:00'),  -- Lilla romantikus vacsorát nézett
+(3, 1, '2025-11-02 09:10:00'),  -- Gábor nézett vidám bögrét
+(3, 9, '2025-11-02 09:30:00'),  -- Gábor csokiválogatást keresett
+(4, 15, '2025-11-03 08:55:00'), -- Anna társasjátékot keresett
+(4, 16, '2025-11-03 09:10:00'), -- Anna borkóstolót nézett
+(5, 21, '2025-11-04 15:25:00'), -- Tamás koncertjegyet keresett
+(5, 22, '2025-11-04 15:35:00'), -- Tamás tánctanfolyamot nézett
+(6, 12, '2025-11-05 12:00:00'), -- Katalin festőkészletet keresett
+(6, 71, '2025-11-05 12:10:00'), -- Katalin deluxe festőkészletet nézett
+(7, 76, '2025-11-05 09:50:00'), -- Miklós hőlégballon túrát keresett
+(8, 8, '2025-11-05 11:00:00'),  -- Eszter egyedi pólót keresett
+(9, 13, '2025-11-05 14:10:00'), -- Zoltán okosórát nézett
+(10, 25, '2025-11-05 13:50:00'),-- Judit plüssfigurát nézett
+(11, 17, '2025-11-05 16:05:00'),-- Péter szabadulószobát keresett
+(12, 20, '2025-11-05 16:30:00'),-- Dóra masszázsutalványt nézett
+(13, 36, '2025-11-05 18:45:00'),-- Balázs hangszórót keresett
+(14, 55, '2025-11-05 20:00:00'),-- Réka jógabérletet keresett
+(15, 60, '2025-11-05 21:15:00'); -- András masszázs hétvégét keresett
+
+
+INSERT INTO Felhasznalo_KedvencAjandek (felhasznalo_id, ajandek_id, mentve)
+VALUES
+(1, 2, '2025-11-01 10:25:00'),  -- Viktória kedvenc: Wellness hétvége
+(2, 7, '2025-10-31 19:10:00'),  -- Lilla kedvenc: Romantikus vacsora
+(3, 9, '2025-11-02 09:35:00'),  -- Gábor kedvenc: Csokoládé válogatás
+(4, 15, '2025-11-03 09:00:00'), -- Anna kedvenc: Társasjáték
+(5, 21, '2025-11-04 15:40:00'), -- Tamás kedvenc: Jegy koncertre
+(6, 71, '2025-11-05 12:15:00'), -- Katalin kedvenc: Festőkészlet deluxe
+(7, 76, '2025-11-05 09:55:00'), -- Miklós kedvenc: Hőlégballon túra
+(8, 8, '2025-11-05 11:05:00'),  -- Eszter kedvenc: Egyedi póló
+(9, 13, '2025-11-05 14:15:00'), -- Zoltán kedvenc: Okosóra
+(10, 25, '2025-11-05 13:55:00');-- Judit kedvenc: Plüssfigura

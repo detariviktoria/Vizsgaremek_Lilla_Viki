@@ -11,11 +11,10 @@ USE vizsgaremek;
 -- 1. Felhasznalo
 -- -------------------------------
 CREATE TABLE Felhasznalo (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    felhaszanlo_id INT AUTO_INCREMENT PRIMARY KEY,
+    nev VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(5000) NOT NULL,
-    is_admin BOOL NOT NULL DEFAULT FALSE
+    jelszo VARCHAR(100) NOT NULL
 );
 
 -- -------------------------------
@@ -51,8 +50,12 @@ CREATE TABLE Ajandek (
     leiras TEXT,
     ar INT NOT NULL,
     kategoria ENUM('tárgy', 'élmény') NOT NULL,
+    stilus_id INT,
     image_url VARCHAR(255),
-    link_url VARCHAR(255)
+    link_url VARCHAR(255),
+    FOREIGN KEY (stilus_id) REFERENCES Stilusok(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 -- -------------------------------
@@ -71,22 +74,7 @@ CREATE TABLE Ajandek_Alkalom (
 );
 
 -- -------------------------------
--- 7. Ajandek_Stilus
--- -------------------------------
-CREATE TABLE Ajandek_Stilus (
-    ajandek_id INT NOT NULL,
-    stilus_id INT NOT NULL,
-    PRIMARY KEY (ajandek_id, stilus_id),
-    FOREIGN KEY (ajandek_id) REFERENCES Ajandek(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    FOREIGN KEY (stilus_id) REFERENCES Stilusok(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
--- -------------------------------
--- 8. Ajandek_Celcsoport
+-- 7. Ajandek_Celcsoport
 -- -------------------------------
 CREATE TABLE Ajandek_Celcsoport (
     ajandek_id INT NOT NULL,
@@ -101,54 +89,42 @@ CREATE TABLE Ajandek_Celcsoport (
 );
 
 -- -------------------------------
--- 8. Kategoriak
--- -------------------------------
--- CREATE TABLE Kategoriak (
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     nev VARCHAR(100) NOT NULL
--- );
-
-
--- -------------------------------
--- 9. Kuponok
+-- 8. Kuponok
 -- -------------------------------
 CREATE TABLE Kuponok (
     coupon_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
+    felhaszanlo_id INT NOT NULL,
     coupon_code VARCHAR(50) NOT NULL,
     status VARCHAR(50) NOT NULL,
-    discount INT NOT NULL,  -- nincs CHECK, így 0-tól tetszőleges összegig
+    discount INT NOT NULL,
     expiry_date DATE,
-    FOREIGN KEY (user_id) REFERENCES Felhasznalo(user_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
--- -------------------------------
--- 10. Gyujtmemeny
--- -------------------------------
-
-CREATE TABLE Gyujtemeny (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    felhasznalo_id INT NOT NULL,
-    nev VARCHAR(100) NOT NULL,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL,
-    FOREIGN KEY (felhasznalo_id) REFERENCES Felhasznalo(user_id)
+    FOREIGN KEY (felhaszanlo_id) REFERENCES Felhasznalo(felhaszanlo_id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
 
-/*
-ON DELETE CASCADE
+-- -------------------------------
+-- 10. Felhasznalo_AjandekElozmeny
+-- -------------------------------
+CREATE TABLE Felhasznalo_AjandekElozmeny (
+    felhaszanlo_id INT,
+    ajandek_id INT,
+    keresesi_ido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (felhaszanlo_id, ajandek_id, keresesi_ido),
+    FOREIGN KEY (felhaszanlo_id) REFERENCES Felhasznalo(felhaszanlo_id),
+    FOREIGN KEY (ajandek_id) REFERENCES Ajandek(id)
+);
 
-Ha egy rekordot kitörölsz a fő táblából (Celcsoport),
-akkor automatikusan törli a hozzá kapcsolódó rekordokat is a gyerek táblában 
-(Ajandek_Celcsoport).
+-- -------------------------------
+-- 11. Felhasznalo_KedvencAjandek
+-- -------------------------------
+CREATE TABLE Felhasznalo_KedvencAjandek (
+    felhaszanlo_id INT,
+    ajandek_id INT,
+    mentve TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (felhaszanlo_id, ajandek_id),
+    FOREIGN KEY (felhaszanlo_id) REFERENCES Felhasznalo(felhaszanlo_id),
+    FOREIGN KEY (ajandek_id) REFERENCES Ajandek(id)
+);
 
-ON UPDATE CASCADE
-Ha egy rekord id-jét megváltoztatod a fő táblában (Celcsoport.id),
-akkor a kapcsolódó rekordokban is frissíti az idegen kulcs értéket 
-(Ajandek_Celcsoport.celcsoport_id).
-*/

@@ -1,5 +1,5 @@
-id;nev;leiras;ar;tipus;stilus_id;image_url;link_url;created_at;updated_at
-1;Vidám bögre;Vidám bögre leírása;89940;élmény;6;pelda.hu/okosora.png;https://bogrevaros.hu/Vidam-napot-bogre;2025.09.01 12:15;2025.09.01 13:00
+id;nev;leiras;ar;kategoria;stilus_id;image_url;link_url
+1;Vidám bögre;Vidám bögre leírása;89940;élmény;6;pelda.hu/okosora.png;https://bogrevaros.hu/Vidam-napot-bogre;;
 2;Wellness hétvége;Wellness hétvége leírása;103321;élmény;6;;https://www.pihipakk.hu/csomag/wellness-es-romantika;;
 3;DIY kézműves készlet;DIY kézműves készlet leírása;49433;élmény;8;;https://hobbivilag.hu/products/diy-3d-kezforma-klon-keszlet;;
 4;Szakácskönyv;Szakácskönyv leírása;18038;tárgy;6;;https://szoky.hu/termek/konyv/;;

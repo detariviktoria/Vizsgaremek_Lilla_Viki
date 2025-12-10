@@ -1,3 +1,4 @@
+//Ajandek.js
 const { DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize) => {
@@ -5,43 +6,19 @@ module.exports = (sequelize) => {
 
   Ajandek.init(
     {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      nev: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-      leiras: {
-        type: DataTypes.TEXT,
-      },
-      ar: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      kategoria: {
-
-        type: DataTypes.ENUM("tárgy", "élmény"),
-
-        allowNull: false,
-
-      },
-
-      image_url: {
-
-        type: DataTypes.STRING(255),
-
-      },
-      link_url: {
-        type: DataTypes.STRING(255),
-      },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+      nev: DataTypes.STRING(100),
+      leiras: DataTypes.TEXT,
+      ar: DataTypes.INTEGER,
+      kategoria: DataTypes.ENUM("tárgy", "élmény"),
+      stilus_id: DataTypes.INTEGER,
+      image_url: DataTypes.STRING(255),
+      link_url: DataTypes.STRING(255),
     },
     {
       sequelize,
-      modelName: "Ajandek",
       tableName: "Ajandek",
+      modelName: "Ajandek",
       timestamps: false,
     }
   );

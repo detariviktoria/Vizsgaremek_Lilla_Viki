@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
 const path = require("path");
-const db = require("./config/db");
+const db = require("./api/db"); // ez a db/index.js
 const app = express();
 
 // CORS és JSON parser middleware
@@ -34,24 +34,28 @@ app.use(session({
 }));
 
 // Route-ok importálása
-const userRoutes = require("./api/routes/userRoutes");
-const alkalomRoutes = require("./api/routes/alkalomRoutes");
-const stilusRoutes = require("./api/routes/stilusRoutes");
-const celcsoportRoutes = require("./api/routes/celcsoportRoutes");
-const gyujtemenyRoutes = require("./api/routes/gyujtemenyRoutes");
-const kategoriaRoutes = require("./api/routes/kategoriaRoutes");
-const kuponRoutes = require("./api/routes/kuponRoutes");
 const ajandekRoutes = require("./api/routes/ajandekRoutes");
+const alkalomRoutes = require("./api/routes/alkalomRoutes");
+const celcsoportRoutes = require("./api/routes/celcsoportRoutes");
+const elozmenyRoutes = require("./api/routes/elozmenyekRoutes");
+const felhasznaloRoutes = require("./api/routes/felhasznaloRoutes");
+const kedvencRoutes = require("./api/routes/kedvencekRoutes");
+const kuponRoutes = require("./api/routes/kuponRoutes");
+const stilusRoutes = require("./api/routes/stilusRoutes");
+//const gyujtemenyRoutes = require("./api/routes/gyujtemenyRoutes");
+//const kategoriaRoutes = require("./api/routes/kategoriaRoutes");
 
 // Route-ok regisztrálása
-app.use("/users", userRoutes);
+app.use("/felhasznalok", felhasznaloRoutes);
 app.use("/alkalmak", alkalomRoutes);
 app.use("/stilusok", stilusRoutes);
 app.use("/celcsoportok", celcsoportRoutes);
-app.use("/gyujtemenyek", gyujtemenyRoutes);
-app.use("/kategoriak", kategoriaRoutes);
+//app.use("/gyujtemenyek", gyujtemenyRoutes);
+//app.use("/kategoriak", kategoriaRoutes);
 app.use("/kuponok", kuponRoutes);
 app.use("/ajandekok", ajandekRoutes);
+app.use("/kedvencek", kedvencRoutes)
+app.use("/elozmenyek", elozmenyRoutes)
 
 // Minden egyéb kérést irányítsunk az index.html-re (SPA támogatás)
 
