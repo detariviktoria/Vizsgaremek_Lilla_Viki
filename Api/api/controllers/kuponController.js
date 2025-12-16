@@ -1,7 +1,131 @@
-const db = require('../../../../Viki/Api/config/db');
+const db = require('../../config/db');
 
-exports.getKuponok = (req,res)=>{ db.query('SELECT * FROM Kupon',(err,results)=>{ if(err) return res.status(500).json({ error: err }); res.json(results); }); };
-exports.getKuponById = (req,res)=>{ const {id}=req.params; db.query('SELECT * FROM Kupon WHERE id=?',[id],(err,results)=>{ if(err) return res.status(500).json({ error: err }); if(results.length===0) return res.status(404).json({ message:"Kupon nem található" }); res.json(results[0]); }); };
-exports.createKupon = (req,res)=>{ const { kod, ertek } = req.body; db.query('INSERT INTO Kupon (kod, ertek) VALUES (?,?)',[kod, ertek],(err,results)=>{ if(err) return res.status(500).json({ error: err }); res.status(201).json({ message:"Kupon létrehozva", id:results.insertId }); }); };
-exports.updateKupon = (req,res)=>{ const {id}=req.params; const { kod, ertek }=req.body; db.query('UPDATE Kupon SET kod=?, ertek=? WHERE id=?',[kod, ertek, id],(err)=>{ if(err) return res.status(500).json({ error: err }); res.json({ message:"Kupon frissítve" }); }); };
-exports.deleteKupon = (req,res)=>{ const {id}=req.params; db.query('DELETE FROM Kupon WHERE id=?',[id],(err)=>{ if(err) return res.status(500).json({ error: err }); res.json({ message:"Kupon törölve" }); }); };
+
+
+// Összes kupon lekérése
+
+exports.getKuponok = async (req, res) => {
+
+  try {
+
+    const kuponok = await db.Kupon.findAll();
+
+    res.json(kuponok);
+
+  } catch (err) {
+
+    console.error("Hiba a kuponok lekérésekor:", err);
+
+    res.status(500).json({ error: err.message });
+
+  }
+
+};
+
+
+
+// Egy kupon lekérése ID alapján
+
+exports.getKuponById = async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+
+    const kupon = await db.Kupon.findByPk(id);
+
+    if (!kupon) return res.status(404).json({ message: "Kupon nem található" });
+
+    res.json(kupon);
+
+  } catch (err) {
+
+    res.status(500).json({ error: err.message });
+
+  }
+
+};
+
+
+
+// Új kupon létrehozása
+
+exports.createKupon = async (req, res) => {
+
+  const { coupon_code, discount, user_id, status, expiry_date } = req.body;
+
+  try {
+
+    const ujKupon = await db.Kupon.create({ coupon_code, discount, user_id, status, expiry_date });
+
+    res.status(201).json({ message: "Kupon létrehozva", kupon: ujKupon });
+
+  } catch (err) {
+
+    res.status(500).json({ error: err.message });
+
+  }
+
+};
+
+
+
+// Kupon frissítése
+
+exports.updateKupon = async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+
+    const [updated] = await db.Kupon.update(req.body, { where: { coupon_id: id } });
+
+    if (updated) {
+
+      const updatedKupon = await db.Kupon.findByPk(id);
+
+      res.json({ message: "Kupon frissítve", kupon: updatedKupon });
+
+    } else {
+
+      res.status(404).json({ message: "Kupon nem található" });
+
+    }
+
+  } catch (err) {
+
+    res.status(500).json({ error: err.message });
+
+  }
+
+};
+
+
+
+// Kupon törlése
+
+exports.deleteKupon = async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+
+    const deleted = await db.Kupon.destroy({ where: { coupon_id: id } });
+
+    if (deleted) {
+
+      res.json({ message: "Kupon törölve" });
+
+    } else {
+
+      res.status(404).json({ message: "Kupon nem található" });
+
+    }
+
+  } catch (err) {
+
+    res.status(500).json({ error: err.message });
+
+  }
+
+};

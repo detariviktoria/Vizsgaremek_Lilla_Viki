@@ -1,4 +1,4 @@
-const db = require('../../../../Viki/Api/config/db');
+const db = require('../../config/db');
 
 exports.getKategoriak = (req, res) => { db.query('SELECT * FROM Kategoria', (err, results) => { if(err) return res.status(500).json({ error: err }); res.json(results); }); };
 exports.getKategoriaById = (req, res) => { const {id} = req.params; db.query('SELECT * FROM Kategoria WHERE id=?', [id], (err, results)=>{ if(err) return res.status(500).json({ error: err }); if(results.length===0) return res.status(404).json({ message: "Kategória nem található" }); res.json(results[0]); }); };

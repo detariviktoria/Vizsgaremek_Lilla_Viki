@@ -1,0 +1,29 @@
+.kategoria-lista-container {
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  margin-top: 120px;
+  width: 100%;
+}
+
+.kategoria-lista-content {
+  width: 100%;
+  max-width: 1400px;
+}
+
+.kategoria-lista-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .kategoria-lista-container {
+      margin-top: 100px;
+  }
+}

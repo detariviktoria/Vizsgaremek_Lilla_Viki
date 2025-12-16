@@ -1,8 +1,16 @@
-const db = require('../../../../Viki/Api/config/db');
+const db = require('../../config/db');
 
-exports.getStilusok = (req, res) => {
-  db.query('SELECT nev FROM Stilusok', (err, results) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json(results.map(row => row.nev));
-  });
+exports.getStilusok = async (req, res) => {
+  try {
+    const stilusok = await db.Stilus.findAll({
+      attributes: ['nev'],
+      raw: true,
+    });
+    const nevek = stilusok.map(s => s.nev);
+    res.json(nevek);
+  } catch (error) {
+    console.error('Hiba a stílusok lekérésekor:', error);
+    res.status(500).json({ error: error.message });
+  }
 };
+

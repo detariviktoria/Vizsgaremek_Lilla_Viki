@@ -1,8 +1,16 @@
-const db = require('../../../../Viki/Api/config/db');
+const db = require('../../config/db');
 
-exports.getCelcsoportok = (req, res) => {
-  db.query('SELECT nev FROM Celcsoport', (err, results) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json(results.map(row => row.nev));
-  });
+exports.getCelcsoportok = async (req, res) => {
+  try {
+    const celcsoportok = await db.Celcsoport.findAll({
+      attributes: ['nev'],
+      raw: true,
+    });
+    const nevek = celcsoportok.map(c => c.nev);
+    res.json(nevek);
+  } catch (error) {
+    console.error('Hiba a célcsoportok lekérésekor:', error);
+    res.status(500).json({ error: error.message });
+  }
 };
+
