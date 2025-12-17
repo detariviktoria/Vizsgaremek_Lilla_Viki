@@ -36,9 +36,13 @@
 }
 
 .content-grid {
+
   display: grid;
-  grid-template-columns: 1fr 300px;
+
+  grid-template-columns: 300px 1fr;
+
   gap: 40px;
+
 }
 
 .main-cards {
@@ -107,103 +111,38 @@
   background-color: #f5f5f5;
 }
 
-/* Sidebar Styles */
-
-.filter-sidebar {
-
-  padding-left: 20px;
-
-}
-
-
-
-.filter-heading-btn {
-
-  background: none;
-
-  border: none;
-
-  font-size: 24px;
-
-  font-weight: bold;
-
-  color: black;
-
-  padding: 10px;
-
-  margin-bottom: 20px;
-
-  width: 100%;
-
-  text-align: left;
-
-  transition: all 0.3s ease;
-
-  border-radius: 4px;
-
-}
-
-
-
-.filter-heading-btn.active {
-
-  background-color: black;
-
-  color: white;
-
-  cursor: pointer;
-
-}
-
-.filter-group {
-  margin-bottom: 25px;
-}
-
-.filter-group h3 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  font-weight: normal;
-}
-
-.checkbox-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.checkbox-item {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.checkbox-item input[type="checkbox"] {
-  margin-right: 10px;
-  width: 18px;
-  height: 18px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 /* Responsive Design */
+
 @media (max-width: 900px) {
+
   .content-grid {
+
     grid-template-columns: 1fr;
+
   }
 
-  .filter-sidebar {
+
+
+  .filter-panel {
+
     order: 1; /* Mobilon a szűrő alulra kerüljön, hogy a tartalom legyen az első */
-    padding-left: 0;
+
+    width: 100% !important;
+
+    max-width: none !important;
+
     margin-top: 30px;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
+
   }
+
   
+
   .main-cards {
+
      grid-template-columns: 1fr;
+
   }
+
 }
 
 @media (max-width: 768px) {

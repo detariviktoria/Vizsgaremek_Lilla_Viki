@@ -15,12 +15,19 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/kategoria" element={<KategoriaValasztas />} />
+
+        <Route path="/ajandekok" element={<KategoriaValasztas />} />
+
         <Route path="/alkalom/:nev" element={<KategoriaValasztas />} />
+
         <Route path="/stilus/:nev" element={<KategoriaValasztas />} />
+
         <Route path="/celcsoport/:nev" element={<KategoriaValasztas />} />
-        <Route path="/elmeny" element={<KategoriaLista />} />
-        <Route path="/targy" element={<KategoriaLista />} />
+
+        <Route path="/elmeny" element={<KategoriaValasztas />} />
+
+        <Route path="/targy" element={<KategoriaValasztas />} />
+
         <Route path="/tovabb" element={<Tovabb />} />
         <Route path="/bejelentkezes" element={<Bejelentkezes />} />
         <Route path="/regisztracio" element={<Regisztracio />} />

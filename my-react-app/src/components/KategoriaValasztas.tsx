@@ -1,166 +1,409 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+
+import { useParams, useSearchParams, useLocation } from 'react-router-dom';
+
+
+
 import Header from './Header';
+
 import AjandekKartya from './AjandekKartya';
+
 import { useAuth } from '../hooks/useAuth';
+
 import { api, type Ajandek } from '../api';
+
 import './KategoriaValasztas.css';
 
+
+
 export default function KategoriaValasztas() {
+
   const [allAjandekok, setAllAjandekok] = useState<Ajandek[]>([]);
+
   const [filteredAjandekok, setFilteredAjandekok] = useState<Ajandek[]>([]);
+
   const [kedvencekIds, setKedvencekIds] = useState<number[]>([]);
+
   const { userId } = useAuth();
+
+
+
   const { nev } = useParams();
 
+
+
+  const [searchParams] = useSearchParams();
+
+
+
+  const location = useLocation();
+
+
+
+  let pageTitle = 'Ajándékok';
+
+  let categoryFilter: string | null = null;
+
+
+
+  if (location.pathname === '/elmeny') {
+
+    pageTitle = 'Élmények';
+
+    categoryFilter = 'élmény';
+
+  } else if (location.pathname === '/targy') {
+
+    pageTitle = 'Tárgyak';
+
+    categoryFilter = 'tárgy';
+
+  }
+
+
+
   // Szűrő opciók (adatbázisból töltjük be)
+
   const [alkalmak, setAlkalmak] = useState<string[]>([]);
+
   const [stilusok, setStilusok] = useState<string[]>([]);
+
   const [celcsoportok, setCelcsoportok] = useState<string[]>([]);
 
+
+
   // Kiválasztott szűrők
+
   const [selectedAlkalmak, setSelectedAlkalmak] = useState<string[]>([]);
+
   const [selectedStilusok, setSelectedStilusok] = useState<string[]>([]);
+
   const [selectedCelcsoportok, setSelectedCelcsoportok] = useState<string[]>([]);
+
   const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 100000 });
+
   const [maxPriceLimit, setMaxPriceLimit] = useState(100000);
 
+
+
   // Panel állapotok (nyitva/zárva)
+
   const [isFilterOpen, setIsFilterOpen] = useState(true);
+
   const [openSections, setOpenSections] = useState({
+
     alkalom: false,
+
     stilus: false,
+
     celcsoport: false,
+
     ar: true
+
   });
 
+
+
   // Adatok betöltése
+
   useEffect(() => {
+
     const loadData = async () => {
+
       try {
+
         const [ajandekData, alkalomData, stilusData, celcsoportData] = await Promise.all([
+
           api.getAjandekok(),
+
           api.getAlkalmak(),
+
           api.getStilusok(),
+
           api.getCelcsoportok()
+
         ]);
 
-        setAllAjandekok(ajandekData);
-        setFilteredAjandekok(ajandekData);
+
+
+        let filteredData = ajandekData;
+
+        if (categoryFilter) {
+
+          filteredData = ajandekData.filter(a => a.kategoria === categoryFilter);
+
+        }
+
+
+
+        setAllAjandekok(filteredData);
+
+
+
+        setFilteredAjandekok(filteredData);
+
+
+
         setAlkalmak(alkalomData);
+
+
+
         setStilusok(stilusData);
+
+
+
         setCelcsoportok(celcsoportData);
 
+
+
+
+
+
+
         // Max ár meghatározása
-        const max = Math.max(...ajandekData.map(a => a.ar || 0));
+
+
+
+        const max = Math.max(...filteredData.map(a => a.ar || 0));
+
         setMaxPriceLimit(max);
+
         setPriceRange({ min: 0, max: max });
 
+
+
         // Kedvencek betöltése
+
         if (userId) {
+
           const kedvencData = await api.getKedvencek(userId);
+
           setKedvencekIds(kedvencData.map(k => k.id!).filter(id => id !== undefined));
+
         }
+
       } catch (error) {
+
         console.error('Hiba az adatok betöltésekor:', error);
+
       }
+
     };
+
     loadData();
-  }, [userId]);
 
-  // Kezdeti szűrés URL paraméter alapján (pl. ha a főoldalról jött)
+  }, [userId, categoryFilter]);
+
+
+
+  // URL paraméterek kezelése (Path param + Query params)
+
   useEffect(() => {
-    if (nev && allAjandekok.length > 0) {
-        // Dekódoljuk az URL paramétert
+
+    if (allAjandekok.length === 0) return;
+
+
+
+    let initAlkalmak = [];
+
+    let initStilusok = [];
+
+    let initCelcsoportok = [];
+
+    let initMinPrice = 0;
+
+    let initMaxPrice = maxPriceLimit;
+
+    let shouldFilter = false;
+
+
+
+    // 1. Path paraméter (régi működés: /alkalom/Karácsony)
+
+    if (nev) {
+
         const decodedNev = decodeURIComponent(nev);
-        
-        // Megnézzük, melyik kategóriába tartozik
-        if (alkalmak.includes(decodedNev)) setSelectedAlkalmak([decodedNev]);
-        else if (stilusok.includes(decodedNev)) setSelectedStilusok([decodedNev]);
-        else if (celcsoportok.includes(decodedNev)) setSelectedCelcsoportok([decodedNev]);
-    }
-  }, [nev, allAjandekok, alkalmak, stilusok, celcsoportok]);
 
-  // Szűrés végrehajtása
+        if (alkalmak.includes(decodedNev)) initAlkalmak.push(decodedNev);
+
+        else if (stilusok.includes(decodedNev)) initStilusok.push(decodedNev);
+
+        else if (celcsoportok.includes(decodedNev)) initCelcsoportok.push(decodedNev);
+
+        shouldFilter = true;
+
+    }
+
+
+
+    // 2. Query paraméterek (új működés: ?alkalom=...&stilus=...)
+
+    const paramAlkalom = searchParams.getAll('alkalom');
+
+    if (paramAlkalom.length > 0) {
+
+        initAlkalmak = [...initAlkalmak, ...paramAlkalom];
+
+        shouldFilter = true;
+
+    }
+
+    
+
+    const paramStilus = searchParams.getAll('stilus');
+
+    if (paramStilus.length > 0) {
+
+        initStilusok = [...initStilusok, ...paramStilus];
+
+        shouldFilter = true;
+
+    }
+
+
+
+    const paramCelcsoport = searchParams.getAll('celcsoport');
+
+    if (paramCelcsoport.length > 0) {
+
+        initCelcsoportok = [...initCelcsoportok, ...paramCelcsoport];
+
+        shouldFilter = true;
+
+    }
+
+
+
+    const minP = searchParams.get('minPrice');
+
+    const maxP = searchParams.get('maxPrice');
+
+    if (minP) { initMinPrice = Number(minP); shouldFilter = true; }
+
+    if (maxP) { initMaxPrice = Number(maxP); shouldFilter = true; }
+
+    else initMaxPrice = maxPriceLimit;
+
+
+
+    // Duplikációk szűrése
+
+    initAlkalmak = [...new Set(initAlkalmak)];
+
+    initStilusok = [...new Set(initStilusok)];
+
+    initCelcsoportok = [...new Set(initCelcsoportok)];
+
+
+
+    // Állapot frissítése
+
+    setSelectedAlkalmak(initAlkalmak);
+
+    setSelectedStilusok(initStilusok);
+
+    setSelectedCelcsoportok(initCelcsoportok);
+
+    setPriceRange({ min: initMinPrice, max: initMaxPrice });
+
+
+
+    if (shouldFilter) {
+
+        filterWithParams(initAlkalmak, initStilusok, initCelcsoportok, initMinPrice, initMaxPrice);
+
+    }
+
+
+
+  }, [allAjandekok, nev, searchParams, alkalmak, stilusok, celcsoportok, maxPriceLimit]);
+
+
+
   const handleFilter = () => {
-    let result = allAjandekok;
 
-    if (selectedAlkalmak.length > 0) {
-      // Itt az API-nak kellene támogatnia a szűrést, vagy kliens oldalon kell okoskodni.
-      // Mivel az `ajandek` objektumban nincs benne az alkalom/stilus/celcsoport neve (csak ID), 
-      // vagy az API-nak kellene visszaadnia, vagy itt kellene összekötni.
-      // EZEK HIÁNYÁBAN (mivel az API getAjandekok csak alap adatokat ad), 
-      // most csak az árra tudunk szűrni kliens oldalon, HA az API nem adja vissza a relációkat.
-      
-      // JAVÍTÁS: Az API-t kellene bővíteni, hogy a `getAjandekok` visszaadja a kapcsolódó táblákat is.
-      // VAGY: Külön lekérjük a szűrt listákat és metszetet képzünk.
-      // Ez utóbbi a biztosabb a jelenlegi API mellett.
-    }
+    filterWithParams(selectedAlkalmak, selectedStilusok, selectedCelcsoportok, priceRange.min, priceRange.max);
 
-    // Mivel a jelenlegi API struktúra nem támogatja a komplex kliens oldali szűrést hatékonyan 
-    // (mert a getAjandekok nem adja vissza a kategóriákat), 
-    // ezért egy trükköt alkalmazunk: Ha van kiválasztva filter, lekérjük az API-tól azokat,
-    // és vesszük az uniót/metszetet. De ez bonyolult.
-    
-    // EGYSZERŰSÍTÉS: Feltételezzük, hogy a szűrés gomb megnyomásakor lekérjük az adatokat.
-    // De a kérés az volt, hogy "többet is ki lehessen jelölni".
-    
-    // A legtisztább megoldás: Az összes ajándékot lekérjük (ez megvan), 
-    // és az árat szűrjük. A többi kategóriát pedig aszinkron módon szűrjük.
-    
-    // Mivel ez komplex, most egy hibrid megoldást csinálok:
-    // 1. Ár szűrés mindig megy a kliens oldalon.
-    // 2. Ha kategóriákat választott, akkor az API-tól kérjük le őket, és összefésüljük.
-
-    filterAsync();
   };
 
-  const filterAsync = async () => {
+
+
+  const filterWithParams = async (alk: string[], stil: string[], cel: string[], minP: number, maxP: number) => {
+
     let filteredIds = new Set<number>();
+
     let isFirstFilter = true;
 
+
+
     const addToSet = (items: Ajandek[]) => {
+
         const ids = items.map(a => a.id!);
+
         if (isFirstFilter) {
+
             ids.forEach(id => filteredIds.add(id));
+
             isFirstFilter = false;
+
         } else {
-            // Metszet (intersection) ha "ÉS" kapcsolatot akarunk, vagy Unió ha "VAGY"
-            // Általában kategórián belül VAGY, kategóriák között ÉS.
-            // Most egyszerűsítsünk: Unió mindenhova, majd ár szűrés.
+
             ids.forEach(id => filteredIds.add(id));
+
         }
+
     };
 
-    // Ha nincs semmi kiválasztva (csak ár), akkor minden ajándék játszik
-    if (selectedAlkalmak.length === 0 && selectedStilusok.length === 0 && selectedCelcsoportok.length === 0) {
+
+
+    if (alk.length === 0 && stil.length === 0 && cel.length === 0) {
+
         allAjandekok.forEach(a => filteredIds.add(a.id!));
+
     } else {
-        // Alkalmak
-        for (const alkalom of selectedAlkalmak) {
+
+        for (const alkalom of alk) {
+
             const data = await api.getAjandekokByAlkalom(alkalom);
+
             addToSet(data);
+
         }
-        // Stílusok
-        for (const stilus of selectedStilusok) {
+
+        for (const stilus of stil) {
+
             const data = await api.getAjandekokByStilus(stilus);
+
             addToSet(data);
+
         }
-        // Célcsoportok
-        for (const celcsoport of selectedCelcsoportok) {
+
+        for (const celcsoport of cel) {
+
             const data = await api.getAjandekokByCelcsoport(celcsoport);
+
             addToSet(data);
+
         }
+
     }
 
-    // Végső szűrés ár alapján az összegyűjtött ID-k közül
+
+
     const finalResult = allAjandekok.filter(a => 
+
         filteredIds.has(a.id!) && 
-        (a.ar || 0) >= priceRange.min && 
-        (a.ar || 0) <= priceRange.max
+
+        (a.ar || 0) >= minP && 
+
+        (a.ar || 0) <= maxP
+
     );
 
+
+
     setFilteredAjandekok(finalResult);
+
   };
 
   const toggleSection = (section: keyof typeof openSections) => {
@@ -178,8 +421,11 @@ export default function KategoriaValasztas() {
   };
 
   return (
+
     <>
-      <Header title="Kategóriaválasztás" showBack />
+
+      <Header title={pageTitle} showBack />
+
       <div className="main-content-container">
         
         {/* Szűrő Panel */}
