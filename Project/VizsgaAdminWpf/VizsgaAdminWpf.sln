@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VizsgaAdminWpf", "VizsgaAdminWpf\VizsgaAdminWpf.csproj", "{E152F612-0A80-4BD4-9D2C-975945A369B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VizsgaAdminWpf.Test", "VizsgaAdminWpf.Test\VizsgaAdminWpf.Test.csproj", "{E89043BF-5B0A-48E6-8339-7AD38532DB5C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E152F612-0A80-4BD4-9D2C-975945A369B9} = {E152F612-0A80-4BD4-9D2C-975945A369B9}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E152F612-0A80-4BD4-9D2C-975945A369B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E152F612-0A80-4BD4-9D2C-975945A369B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E152F612-0A80-4BD4-9D2C-975945A369B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E152F612-0A80-4BD4-9D2C-975945A369B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E89043BF-5B0A-48E6-8339-7AD38532DB5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89043BF-5B0A-48E6-8339-7AD38532DB5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E89043BF-5B0A-48E6-8339-7AD38532DB5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E89043BF-5B0A-48E6-8339-7AD38532DB5C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B972985-E8EA-42C0-A843-67D4D3B9172D}
+	EndGlobalSection
+EndGlobal

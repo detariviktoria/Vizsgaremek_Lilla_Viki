@@ -1,0 +1,81 @@
+.baratok-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.baratok-cim {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+}
+
+.baratok-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.barat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.barat-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.barat-info {
+  flex: 1;
+}
+
+.barat-email {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.barat-name {
+  font-size: 14px;
+  color: #666;
+}
+
+.barat-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.barat-status.elfogadva {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.barat-status.fuggo {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.nincs-adat {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 16px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 16px;
+}
+

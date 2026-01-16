@@ -1,0 +1,166 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;  
+using System.Threading.Tasks;
+using System.Diagnostics;
+
+namespace VizsgaAdminWpf
+{
+    public class ApiService
+    {
+        private static readonly HttpClient client = new HttpClient();
+        private const string BaseUrl = "http://localhost:3000"; // explicit base URL
+
+        static ApiService()
+        {
+            client.BaseAddress = new Uri(BaseUrl);
+            client.Timeout = TimeSpan.FromSeconds(30);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // some servers expect a user agent
+            if (!client.DefaultRequestHeaders.UserAgent.TryParseAdd("VizsgaAdminWpf/1.0"))
+            {
+                // ignore
+            }
+        }
+
+        private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        private async Task<string> GetStringOrThrow(HttpResponseMessage response)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException($"HTTP {(int)response.StatusCode} {response.ReasonPhrase}: {content}");
+            }
+            return content;
+        }
+
+        public async Task<List<AjandekDTO>> GetAjandekok()
+        {
+            try
+            {
+                var response = await client.GetAsync("/ajandekok");
+                var json = await GetStringOrThrow(response);
+
+                try
+                {
+                    var result = JsonSerializer.Deserialize<List<AjandekDTO>>(json, jsonOptions);
+                    return result ?? new List<AjandekDTO>();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("JSON deserialization error in GetAjandekok: " + ex.ToString());
+                    Debug.WriteLine("Response JSON: " + json);
+                    var preview = json != null && json.Length > 1000 ? json.Substring(0, 1000) + "..." : json;
+                    throw new HttpRequestException("JSON deserializációs hiba: " + ex.Message + "\nVálasz (rövid): " + preview, ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException("GetAjandekok hiba: " + ex.Message, ex);
+            }
+        }
+
+        public async Task DeleteAjandek(int id)
+        {
+            try
+            {
+                var response = await client.DeleteAsync($"/ajandekok/{id}");
+                await GetStringOrThrow(response);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException("DeleteAjandek hiba: " + ex.Message, ex);
+            }
+        }
+
+        public async Task CreateAjandek(AjandekDTO ajandek)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(ajandek, jsonOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("/ajandekok", content);
+                await GetStringOrThrow(response);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException("CreateAjandek hiba: " + ex.Message, ex);
+            }
+        }
+
+        public async Task UpdateAjandek(int id, AjandekDTO ajandek)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(ajandek, jsonOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"/ajandekok/{id}", content);
+                await GetStringOrThrow(response);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException("UpdateAjandek hiba: " + ex.Message, ex);
+            }
+        }
+
+        public async Task<string> UploadImage(string filePath)
+        {
+            try
+            {
+                using (var content = new MultipartFormDataContent())
+                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    var fileContent = new StreamContent(fileStream);
+
+                    var ext = Path.GetExtension(filePath)?.ToLowerInvariant();
+                    switch (ext)
+                    {
+                        case ".png": fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/png"); break;
+                        case ".gif": fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/gif"); break;
+                        case ".bmp": fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/bmp"); break;
+                        case ".jpg":
+                        case ".jpeg":
+                        default: fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg"); break;
+                    }
+
+                    content.Add(fileContent, "image", Path.GetFileName(filePath));
+
+                    var response = await client.PostAsync("/upload", content);
+                    var json = await GetStringOrThrow(response);
+                    var result = JsonSerializer.Deserialize<UploadResponse>(json, jsonOptions);
+                    return result?.filename;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new HttpRequestException("UploadImage hiba: " + ex.Message, ex);
+            }
+        }
+    }
+
+    public class UploadResponse
+    {
+        public string message { get; set; }
+        public string filename { get; set; }
+    }
+
+    public class AjandekDTO
+    {
+        public int id { get; set; }
+        public string nev { get; set; }
+        public string leiras { get; set; }
+        public int ar { get; set; }
+        public string kategoria { get; set; }
+        public string image_url { get; set; }
+        public string link_url { get; set; }
+    }
+}

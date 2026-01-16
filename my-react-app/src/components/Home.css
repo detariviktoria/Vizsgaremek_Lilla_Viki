@@ -1,0 +1,157 @@
+/* Home.css */
+.home-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 80px; /* Header magasság */
+}
+
+.search-section {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar-home {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 15px;
+  background-color: white;
+}
+
+.search-icon {
+  margin-right: 10px;
+  font-style: normal;
+}
+
+.search-bar-home input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+}
+
+.content-grid {
+
+  display: grid;
+
+  grid-template-columns: 300px 1fr;
+
+  gap: 40px;
+
+}
+
+.main-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-content: start;
+}
+
+.card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-title {
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  background-color: #f0f0f0;
+}
+
+.invite-banner {
+  grid-column: 1 / -1;
+  background-color: #fff9f0;
+  padding: 40px;
+  border-radius: 8px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.invite-content h2 {
+  margin: 0 0 20px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.invite-btn {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.invite-btn:hover {
+  background-color: #f5f5f5;
+}
+
+/* Responsive Design */
+
+@media (max-width: 900px) {
+
+  .content-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+
+  .filter-panel {
+
+    order: 1; /* Mobilon a szűrő alulra kerüljön, hogy a tartalom legyen az első */
+
+    width: 100% !important;
+
+    max-width: none !important;
+
+    margin-top: 30px;
+
+  }
+
+  
+
+  .main-cards {
+
+     grid-template-columns: 1fr;
+
+  }
+
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 15px;
+    margin-top: 60px;
+  }
+  
+  .card img {
+    height: 200px;
+  }
+}
