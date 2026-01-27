@@ -200,7 +200,7 @@ export const api = {
     }
   },
 
-  updateUser: async (userId: number, userData: Partial<User>): Promise<void> => {
+  updateUser: async (userId: number, userData: Partial<User> & { oldPassword?: string }): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
         method: 'PUT',
@@ -214,6 +214,41 @@ export const api = {
       }
     } catch (error) {
       console.error('Hiba a felhasználó frissítésekor:', error);
+      throw error;
+    }
+  },
+
+  forgotPassword: async (email: string): Promise<void> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      console.log('forgotPassword response.status:', response.status); // DEBUG
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Hiba a jelszó visszaállítás kérésekor');
+      }
+    } catch (error) {
+      console.error('Hiba az elfelejtett jelszó kérésekor:', error);
+      throw error;
+    }
+  },
+
+  resetPassword: async (token: string, password: string): Promise<void> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, password }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Hiba a jelszó visszaállításakor');
+      }
+    } catch (error) {
+      console.error('Hiba a jelszó visszaállításakor:', error);
       throw error;
     }
   },

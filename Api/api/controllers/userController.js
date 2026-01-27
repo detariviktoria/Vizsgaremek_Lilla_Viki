@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const { Op } = require('sequelize');
 
 const db = require("../../config/db");
 
@@ -60,17 +62,82 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// Felhasználó frissítése
-exports.updateUser = async (req, res) => {
+// Admin: felhasználó frissítése (név, email, jelszó) – frontendbe is tükröződik
+exports.updateUserAdmin = async (req, res) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
   try {
     const user = await db.Felhasznalo.findByPk(id);
     if (!user) return res.status(404).json({ message: "Felhasználó nem található" });
 
-    if (name) user.name = name;
-    if (email) user.email = email;
-    if (password) user.password = password;
+    if (name && name.trim() !== "") {
+      if (name !== user.name) {
+        const existingUser = await db.Felhasznalo.findOne({ where: { name } });
+        if (existingUser) {
+          return res.status(400).json({ message: "Ez a felhasználónév már foglalt." });
+        }
+      }
+      user.name = name.trim();
+    }
+
+    if (email && email.trim() !== "") {
+      if (email !== user.email) {
+        const existingEmail = await db.Felhasznalo.findOne({ where: { email } });
+        if (existingEmail) {
+          return res.status(400).json({ message: "Ez az e-mail cím már foglalt." });
+        }
+      }
+      user.email = email.trim();
+    }
+
+    if (password && password.trim() !== "") {
+      user.password = password.trim();
+    }
+
+    await user.save();
+
+    if (req.session && parseInt(req.session.userId) === parseInt(id)) {
+      req.session.username = user.name;
+    }
+
+    res.json({ message: "Felhasználó adatai frissítve!", user: { id: user.user_id, name: user.name, email: user.email } });
+  } catch (error) {
+    console.error('Hiba a felhasználó (admin) frissítésekor:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Felhasználó frissítése
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, password, oldPassword } = req.body;
+  try {
+    const user = await db.Felhasznalo.findByPk(id);
+    if (!user) return res.status(404).json({ message: "Felhasználó nem található" });
+
+    if (name && name !== user.name) {
+      const existingUser = await db.Felhasznalo.findOne({ where: { name } });
+      if (existingUser) {
+        return res.status(400).json({ message: "Ez a felhasználónév már foglalt." });
+      }
+      user.name = name;
+    }
+    
+    // Email módosítása le van tiltva biztonsági okokból
+    if (email && email !== user.email) {
+      return res.status(400).json({ message: "Az e-mail cím módosítása nem engedélyezett!" });
+    }
+    
+    if (password) {
+      if (!oldPassword) {
+        return res.status(400).json({ message: "A jelszó módosításához meg kell adnia a régi jelszót!" });
+      }
+      const match = await bcrypt.compare(oldPassword, user.password);
+      if (!match) {
+        return res.status(401).json({ message: "A megadott régi jelszó hibás!" });
+      }
+      user.password = password;
+    }
 
     await user.save();
 
@@ -82,6 +149,69 @@ exports.updateUser = async (req, res) => {
     res.json({ message: "Felhasználó adatai frissítve!", user: { id: user.user_id, name: user.name, email: user.email } });
   } catch (error) {
     console.error('Hiba a felhasználó frissítésekor:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Elfelejtett jelszó - Token generálás és email küldés
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await db.Felhasznalo.findOne({ where: { email } });
+    if (!user) {
+      // Ha nincs ilyen felhasználó, jelezzük a frontendnek
+      res.status(404);
+      return res.json({ message: "Ehhez az emailcímhez még nincs felhasználó létrehozva." });
+    }
+
+    const token = crypto.randomBytes(20).toString('hex');
+    user.reset_token = token;
+    user.reset_token_expires = Date.now() + 3600000; // 1 óra
+    await user.save();
+
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${token}`;
+    
+    const subject = 'Jelszó visszaállítás - AjándékAjánló';
+    const html = `
+      <h1>Szia ${user.name}!</h1>
+      <p>Jelszó visszaállítást kértél az AjándékAjánló fiókodhoz.</p>
+      <p>Kattints az alábbi linkre a jelszavad megváltoztatásához:</p>
+      <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; background-color: #e91e63; color: white; text-decoration: none; border-radius: 5px;">Jelszó visszaállítása</a>
+      <p>A link 1 óráig érvényes. Ha nem te kérted a visszaállítást, hagyd figyelmen kívül ezt az üzenetet.</p>
+    `;
+
+    await sendEmail(user.email, subject, html);
+
+    res.json({ message: "Ha létezik fiók ezzel az email címmel, elküldtük a jelszó visszaállítási linket." });
+  } catch (error) {
+    console.error('Hiba az elfelejtett jelszó folyamatban:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Jelszó visszaállítása token alapján
+exports.resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+  try {
+    const user = await db.Felhasznalo.findOne({
+      where: {
+        reset_token: token,
+        reset_token_expires: { [Op.gt]: Date.now() }
+      }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "A jelszó visszaállító link érvénytelen vagy lejárt." });
+    }
+
+    user.password = password;
+    user.reset_token = null;
+    user.reset_token_expires = null;
+    await user.save();
+
+    res.json({ message: "A jelszavad sikeresen megváltozott! Most már bejelentkezhetsz az új jelszavaddal." });
+  } catch (error) {
+    console.error('Hiba a jelszó visszaállításakor:', error);
     res.status(500).json({ error: error.message });
   }
 };

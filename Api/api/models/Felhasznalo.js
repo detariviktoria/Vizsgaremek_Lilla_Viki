@@ -28,25 +28,23 @@ module.exports = (sequelize) => {
         },
       },
       password: {
-
         type: DataTypes.STRING(255),
-
         allowNull: false,
-
       },
-
       ajanlo_id: {
-
         type: DataTypes.INTEGER,
-
         allowNull: true,
-
       },
-
+      reset_token: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
+      reset_token_expires: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
-
     {
-
       sequelize,
       modelName: "Felhasznalo",
       tableName: "Felhasznalo",

@@ -8,7 +8,8 @@
 body {
   font-family: Arial, sans-serif;
   color: #333;
-  cursor: url("/Képek/hello-kitty_cursor.png"), auto;
+  /* Visszaállítva alapértelmezett kurzorra */
+  cursor: default;
   /* Ugyanaz a háttér, mint a régi backend főoldalon */
   background-color: lightcoral;
   margin: 0;
@@ -280,7 +281,6 @@ nav a.back-btn:hover {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  cursor: url("/Képek/hello-kitty_cursor.png"), auto;
   text-align: center;
 }
 
@@ -305,7 +305,6 @@ nav a.back-btn:hover {
 }
 
 .subcategories {
-  cursor: url("/Képek/hello-kitty_cursor.png"), auto;
   margin: 40px auto 0 auto;
   padding-top: 0;
   max-width: 500px;

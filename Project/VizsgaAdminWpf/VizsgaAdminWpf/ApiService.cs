@@ -19,6 +19,42 @@ namespace VizsgaAdminWpf
             PropertyNameCaseInsensitive = true
         };
 
+        public async Task<List<UserListDto>> GetUsers()
+        {
+            try
+            {
+                var response = await client.GetAsync($"{BaseUrl}/users");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<UserListDto>>(json, JsonOptions) ?? new List<UserListDto>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Hiba a felhasználók lekérésekor: {ex.Message}", ex);
+            }
+        }
+
+        public async Task UpdateUserAdmin(int id, string name, string email, string? password)
+        {
+            try
+            {
+                var payload = new Dictionary<string, object?> { ["name"] = name, ["email"] = email };
+                if (!string.IsNullOrWhiteSpace(password)) payload["password"] = password;
+                var json = JsonSerializer.Serialize(payload, JsonOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"{BaseUrl}/users/{id}/admin", content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"API hiba: {response.StatusCode} - {errorContent}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Hiba a felhasználó módosításakor: {ex.Message}", ex);
+            }
+        }
+
         public async Task<List<AjandekDTO>> GetAjandekok()
         {
             try
@@ -273,6 +309,13 @@ namespace VizsgaAdminWpf
         public string? name { get; set; }
         public string? email { get; set; }
         public string? password { get; set; }
+    }
+
+    public class UserListDto
+    {
+        public int? user_id { get; set; }
+        public string? name { get; set; }
+        public string? email { get; set; }
     }
     public class LoginResponse
     {

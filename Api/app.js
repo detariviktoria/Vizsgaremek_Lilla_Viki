@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
 const path = require("path");
+const fs = require("fs");
 const db = require("./config/db");
 const app = express();
 
@@ -114,9 +115,18 @@ app.use("/upload", uploadRoutes);
 // A path-to-regexp újabb verziói miatt a '*' helyett regexet vagy '/*' formátumot érdemes használni
 
 app.get(/.*/, (req, res) => {
-
-  res.sendFile(path.join(__dirname, "../my-react-app/dist/index.html"));
-
+  const indexPath = path.join(__dirname, "../my-react-app/dist/index.html");
+  
+  // Ellenőrizzük, hogy létezik-e a fájl
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    // Ha nincs buildelve a frontend, csak API választ küldünk
+    res.status(404).json({ 
+      error: "Not Found", 
+      message: "API endpoint not found. Frontend is not built. Please run 'npm run build' in the my-react-app directory." 
+    });
+  }
 });
 
 

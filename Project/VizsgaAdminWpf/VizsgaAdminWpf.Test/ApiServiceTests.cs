@@ -22,7 +22,7 @@ namespace VizsgaAdminWpf.Test
             }
             catch
             {
-                Assert.IsTrue(true); // kivétel elfogadott
+                Assert.IsTrue(true); 
             }
         }
     }

@@ -13,9 +13,10 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: AuthModalProps) {
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'login' | 'register' | 'forgot'> (initialTab);
 
   const { login } = useAuth();
+  const [email, setEmail] = useState('');
 
   const [message, setMessage] = useState('');
 
@@ -101,6 +102,25 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setMessage('');
+    try {
+      await api.forgotPassword(email);
+      setMessage('A jelszó visszaállító linket elküldtük az e-mail címedre.');
+      setMessageColor('green');
+    } catch (error) {
+      // Ha a backend 404-et ad vissza, azt külön kezeljük
+      if (error instanceof Error && error.message.includes('nincs felhasználó')) {
+        setMessage(error.message);
+        setMessageColor('red');
+      } else {
+        setMessage(error instanceof Error ? error.message : 'Hiba történt a kérés során.');
+        setMessageColor('red');
+      }
+    }
+  };
+
   return (
     <div className="modal show" onClick={(e) => e.target === e.currentTarget && handleCloseModal()}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -127,6 +147,9 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
             <input type="password" name="password" placeholder="Jelszó" required />
             {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
             <button type="submit">Belépés</button>
+            <div className="forgot-password-link">
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('forgot'); setMessage(''); }}>Elfelejtetted a jelszavad?</a>
+            </div>
             <div className="switch-link">
               Még nincs fiókom, <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('register'); }}>regisztrálok</a>.
             </div>
@@ -144,6 +167,26 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
             <button type="submit">Regisztráció</button>
             <div className="switch-link">
               Már van fiókom, <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('login'); }}>bejelentkezek</a>.
+            </div>
+          </form>
+        )}
+
+        {activeTab === 'forgot' && (
+          <form className="login-form" id="modal-forgot-form" onSubmit={handleForgotPassword}>
+            <h2>Elfelejtett jelszó</h2>
+            <p className="form-info">Add meg az e-mail címed, amivel regisztráltál, és küldünk egy linket a jelszó visszaállításához.</p>
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Email címed" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required 
+            />
+            {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
+            <button type="submit">Visszaállító link küldése</button>
+            <div className="switch-link">
+              Vissza a <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('login'); setMessage(''); }}>bejelentkezéshez</a>.
             </div>
           </form>
         )}

@@ -22,6 +22,7 @@ export default function Profile() {
     name: '',
     email: '',
     password: '',
+    oldPassword: '',
   });
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export default function Profile() {
               name: userData.name || '',
               email: userData.email || '',
               password: '',
+              oldPassword: '',
             });
             setError(null);
           } else {
@@ -72,7 +74,7 @@ export default function Profile() {
     if (!userId) return;
     
     try {
-      const updateData: Partial<User> = {};
+      const updateData: Partial<User> & { oldPassword?: string } = {};
       if (field === 'name') updateData.name = formData.name;
       if (field === 'email') updateData.email = formData.email;
       if (field === 'password') {
@@ -80,7 +82,12 @@ export default function Profile() {
           setIsEditing({ ...isEditing, [field]: false });
           return;
         }
+        if (!formData.oldPassword) {
+          setError('A jelszó módosításához meg kell adnia a régi jelszót!');
+          return;
+        }
         updateData.password = formData.password;
+        updateData.oldPassword = formData.oldPassword;
       }
 
       await api.updateUser(userId, updateData);
@@ -93,7 +100,7 @@ export default function Profile() {
       setSuccess('Adatok sikeresen frissítve!');
       setTimeout(() => setSuccess(null), 3000);
       
-      if (field === 'password') setFormData({ ...formData, password: '' });
+      if (field === 'password') setFormData({ ...formData, password: '', oldPassword: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Hiba történt a mentés során.');
       setTimeout(() => setError(null), 5000);
@@ -190,40 +197,35 @@ export default function Profile() {
             <div className="profile-item">
               <label>Email cím</label>
               <div className="profile-row">
-                {isEditing.email ? (
-                  <div className="edit-group">
-                    <input 
-                      type="email" 
-                      name="email" 
-                      value={formData.email} 
-                      onChange={handleChange}
-                      autoFocus
-                    />
-                    <button className="save-btn" onClick={() => handleSave('email')}>Mentés</button>
-                  </div>
-                ) : (
-                  <>
-                    <div className="profile-value">{user?.email || 'Nincs megadva'}</div>
-                    <button className="edit-icon-btn" onClick={() => handleEdit('email')} title="Szerkesztés">✏️</button>
-                  </>
-                )}
+                <div className="profile-value">{user?.email || 'Nincs megadva'}</div>
               </div>
+              <small className="info-hint">Az e-mail cím biztonsági okokból nem módosítható</small>
             </div>
 
             <div className="profile-item">
               <label>Jelszó</label>
               <div className="profile-row">
                 {isEditing.password ? (
-                  <div className="edit-group">
+                  <div className="edit-group vertical">
+                    <input 
+                      type="password" 
+                      name="oldPassword" 
+                      placeholder="Régi jelszó"
+                      value={formData.oldPassword} 
+                      onChange={handleChange}
+                      autoFocus
+                    />
                     <input 
                       type="password" 
                       name="password" 
                       placeholder="Új jelszó"
                       value={formData.password} 
                       onChange={handleChange}
-                      autoFocus
                     />
-                    <button className="save-btn" onClick={() => handleSave('password')}>Mentés</button>
+                    <div className="edit-actions">
+                      <button className="save-btn" onClick={() => handleSave('password')}>Mentés</button>
+                      <button className="cancel-btn" onClick={() => setIsEditing({...isEditing, password: false})}>Mégse</button>
+                    </div>
                   </div>
                 ) : (
                   <>

@@ -9,6 +9,7 @@ import Kedvencek from './components/Kedvencek';
 import Elozmenyek from './components/Elozmenyek';
 import Baratok from './components/Baratok';
 import Profile from './components/Profile';
+import ResetPassword from './components/ResetPassword';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/tovabb" element={<Tovabb />} />
         <Route path="/bejelentkezes" element={<Bejelentkezes />} />
         <Route path="/regisztracio" element={<Regisztracio />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/kedvencek" element={<Kedvencek />} />
         <Route path="/elozmenyek" element={<Elozmenyek />} />
