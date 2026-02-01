@@ -1,0 +1,26 @@
+id;nev
+1;Születésnap
+2;Karácsony
+3;Valentin-nap
+4;Ballagás
+5;Esküvő
+6;Anyák napja
+7;Apák napja
+8;Húsvét
+9;Farsang
+10;Névnap
+11;Mikulás
+12;Halloween
+13;Évforduló
+14;Diplomaosztó
+15;Házasévesforduló
+16;Barátság napja
+17;Új év
+18;Nyugdíjazás
+19;Köszönetnyilvánítás
+20;Eljegyzés
+21;Szilveszter
+22;Jubileum
+23;Búcsúzkodó buli
+24;Házavató
+25;Gyermek születés

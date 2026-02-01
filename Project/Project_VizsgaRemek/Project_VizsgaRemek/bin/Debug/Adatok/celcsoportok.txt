@@ -1,0 +1,9 @@
+id;nev
+1;gyerekek
+2;felnőttek
+3;idősek
+4;párok
+5;barátok
+6;szülők
+7;kollégák
+8;tanárok
