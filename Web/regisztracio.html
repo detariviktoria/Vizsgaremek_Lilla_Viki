@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Regisztráció</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="Képek/fooldal ajandek emoji 1.oldal.webp" alt="logo">
+      Regisztráció
+    </div>
+    <nav>
+      <a href="index.html" class="back-btn">Vissza</a>
+    </nav>
+  </header>
+
+  <section class="login-section">
+    <form class="login-form" id="registerForm">
+      <h2>Regisztráció</h2>
+      <input type="email" placeholder="Email cím" required>
+      <input type="text" placeholder="Felhasználónév" required>
+      <input type="password" id="password" placeholder="Jelszó" required>
+      <input type="password" id="confirmPassword" placeholder="Jelszó megerősítése" required>
+      <button type="submit">Regisztráció</button>
+      <div id="message" class="message-box"></div>
+      <div class="switch-link">
+        Már van fiókom, <a href="bejelentkezes.html">bejelentkezés</a>.
+      </div>
+    </form>
+  </section>
+
+  <script src="regisztracio.js"></script>
+</body>
+</html>
