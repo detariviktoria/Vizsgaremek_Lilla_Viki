@@ -1,0 +1,18 @@
+.user-select {
+  margin: 12px 0 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.user-select label {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.user-select select {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+  font-size: 1rem;
+}

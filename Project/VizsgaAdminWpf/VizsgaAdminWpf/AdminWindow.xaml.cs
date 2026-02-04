@@ -132,14 +132,165 @@ namespace VizsgaAdminWpf
             }
         }
 
-        // ========== AJÁNDÉKOK GOMBOK (változatlan) ==========
-        private async void btnUploadImage_Click(object sender, RoutedEventArgs e) { /* változatlan */ }
-        private async void btnAdd_Click(object sender, RoutedEventArgs e) { /* változatlan */ }
-        private async void btnEdit_Click(object sender, RoutedEventArgs e) { /* változatlan */ }
-        private async Task DeleteGift(int id) { /* változatlan */ }
-        private async void btnDelete_Click(object sender, RoutedEventArgs e) { /* változatlan */ }
-        private async void btnRefresh_Click(object sender, RoutedEventArgs e) { await LoadGifts(); }
-        private void ClearFields() { /* változatlan */ }
+        // ========== AJÁNDÉKOK GOMBOK ==========
+
+        // Kép feltöltése az API-n keresztül
+        private async void btnUploadImage_Click(object sender, RoutedEventArgs e)
+        {
+            var openFile = new OpenFileDialog
+            {
+                Filter = "Képfájlok|*.jpg;*.jpeg;*.png;*.webp;*.bmp|Minden fájl|*.*"
+            };
+
+            if (openFile.ShowDialog() == true)
+            {
+                try
+                {
+                    var filename = await apiService.UploadImage(openFile.FileName);
+                    currentImageFilename = filename ?? "";
+
+                    if (!string.IsNullOrEmpty(currentImageFilename))
+                    {
+                        try
+                        {
+                            var uri = new Uri($"http://localhost:3000/images/{currentImageFilename}", UriKind.Absolute);
+                            imageGift.Source = new BitmapImage(uri);
+                        }
+                        catch
+                        {
+                            imageGift.Source = null;
+                        }
+                    }
+
+                    MessageBox.Show("Kép feltöltve!", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Hiba a kép feltöltésekor: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        // Új ajándék hozzáadása
+        private async void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNev.Text))
+            {
+                MessageBox.Show("A név megadása kötelező.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!int.TryParse(txtAr.Text, out var ar))
+            {
+                MessageBox.Show("Az árnak számnak kell lennie.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var ajandek = new AjandekDTO
+            {
+                nev = txtNev.Text,
+                ar = ar,
+                leiras = txtLeiras.Text,
+                kategoria = txtKategoria.Text,
+                image_url = currentImageFilename
+            };
+
+            try
+            {
+                await apiService.CreateAjandek(ajandek);
+                MessageBox.Show("Ajándék hozzáadva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                ClearFields();
+                await LoadGifts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nem sikerült az ajándék hozzáadása.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Kiválasztott ajándék módosítása
+        private async void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (listBoxGifts.SelectedItem is not AjandekItem selected || selected.Id == null)
+            {
+                MessageBox.Show("Előbb válassz ki egy ajándékot.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!int.TryParse(txtAr.Text, out var ar))
+            {
+                MessageBox.Show("Az árnak számnak kell lennie.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var ajandek = new AjandekDTO
+            {
+                id = selected.Id,
+                nev = txtNev.Text,
+                ar = ar,
+                leiras = txtLeiras.Text,
+                kategoria = txtKategoria.Text,
+                image_url = currentImageFilename
+            };
+
+            try
+            {
+                await apiService.UpdateAjandek(selected.Id.Value, ajandek);
+                MessageBox.Show("Ajándék módosítva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                await LoadGifts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nem sikerült az ajándék módosítása.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Ajándék törlése API hívással
+        private async Task DeleteGift(int id)
+        {
+            try
+            {
+                await apiService.DeleteAjandek(id);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nem sikerült az ajándék törlése.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Törlés gomb eseménykezelő
+        private async void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (listBoxGifts.SelectedItem is not AjandekItem selected || selected.Id == null)
+            {
+                MessageBox.Show("Előbb válassz ki egy ajándékot.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var result = MessageBox.Show("Biztosan törölni szeretnéd ezt az ajándékot?", "Megerősítés",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await DeleteGift(selected.Id.Value);
+                await LoadGifts();
+            }
+        }
+
+        private async void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            await LoadGifts();
+        }
+
+        private void ClearFields()
+        {
+            txtNev.Text = "";
+            txtAr.Text = "";
+            txtLeiras.Text = "";
+            txtKategoria.Text = "";
+            currentImageFilename = "";
+            imageGift.Source = null;
+        }
 
         // ========== FELHASZNÁLÓK ==========
         private async Task LoadUsers(int? userIdToKeep)

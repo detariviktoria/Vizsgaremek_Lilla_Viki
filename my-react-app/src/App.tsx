@@ -10,6 +10,7 @@ import Elozmenyek from './components/Elozmenyek';
 import Baratok from './components/Baratok';
 import Profile from './components/Profile';
 import ResetPassword from './components/ResetPassword';
+import Chat from './components/Chat';
 import './App.css';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/elozmenyek" element={<Elozmenyek />} />
         <Route path="/baratok" element={<Baratok />} />
         <Route path="/profil" element={<Profile />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>
   );

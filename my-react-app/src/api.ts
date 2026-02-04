@@ -330,4 +330,20 @@ export const api = {
       throw error;
     }
   },
+
+  // Chat privát üzenetek és előzmények
+  getChatHistory: async (user1: number, user2: number) => {
+    const response = await fetch(`${API_BASE_URL}/api/chat/history/${user1}/${user2}`);
+    if (!response.ok) throw new Error('Hiba az üzenet előzmények lekérésekor');
+    return await response.json();
+  },
+  sendChatMessage: async (from: number, to: number, message: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/chat/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from_user_id: from, to_user_id: to, message })
+    });
+    if (!response.ok) throw new Error('Hiba az üzenet küldésekor');
+    return await response.json();
+  },
 };

@@ -70,6 +70,8 @@ const uploadRoutes = require("./api/routes/uploadRoutes");
 
 const inviteRoutes = require("./api/routes/inviteRoutes");
 
+const chatRoutes = require('./api/routes/chat');
+
 
 
 // Route-ok regisztrálása
@@ -109,6 +111,8 @@ app.use("/ajandekok", ajandekRoutes);
 
 
 app.use("/upload", uploadRoutes);
+
+app.use('/api/chat', chatRoutes);
 
 // Minden egyéb kérést irányítsunk az index.html-re (SPA támogatás)
 

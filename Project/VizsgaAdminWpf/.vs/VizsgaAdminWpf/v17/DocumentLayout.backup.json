@@ -1,10 +1,45 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "H:\\Vizsgaremek_Lilla_Viki-viki\\Project\\VizsgaAdminWpf\\",
+  "WorkspaceRootPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|h:\\vizsgaremek_lilla_viki-viki\\project\\vizsgaadminwpf\\vizsgaadminwpf\\adminwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf\\adminwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|solutionrelative:vizsgaadminwpf\\adminwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf\\adminwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|solutionrelative:vizsgaadminwpf\\adminwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf\\ajandek.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|solutionrelative:vizsgaadminwpf\\ajandek.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf\\apiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|solutionrelative:vizsgaadminwpf\\apiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|solutionrelative:vizsgaadminwpf\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E152F612-0A80-4BD4-9D2C-975945A369B9}|VizsgaAdminWpf\\VizsgaAdminWpf.csproj|solutionrelative:vizsgaadminwpf\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89043BF-5B0A-48E6-8339-7AD38532DB5C}|VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf.test\\ajandekdtotests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89043BF-5B0A-48E6-8339-7AD38532DB5C}|VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj|solutionrelative:vizsgaadminwpf.test\\ajandekdtotests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89043BF-5B0A-48E6-8339-7AD38532DB5C}|VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf.test\\ajandektests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89043BF-5B0A-48E6-8339-7AD38532DB5C}|VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj|solutionrelative:vizsgaadminwpf.test\\ajandektests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E89043BF-5B0A-48E6-8339-7AD38532DB5C}|VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj|h:\\vizsgaremek_lilla_viki\\project\\vizsgaadminwpf\\vizsgaadminwpf.test\\mstestsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E89043BF-5B0A-48E6-8339-7AD38532DB5C}|VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj|solutionrelative:vizsgaadminwpf.test\\mstestsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -17,20 +52,122 @@
           "SelectedChildIndex": 1,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Microsoft.Common.CurrentVersion.targets",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ViewState": "AgIAAF8bAAAAAAAAAAAYwHEbAACmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-02-03T10:07:48.583Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AdminWindow.xaml.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AdminWindow.xaml.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf\\AdminWindow.xaml.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AdminWindow.xaml.cs",
+              "RelativeToolTip": "VizsgaAdminWpf\\AdminWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:07:32.153Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AjandekDtoTests.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekDtoTests.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf.Test\\AjandekDtoTests.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekDtoTests.cs",
+              "RelativeToolTip": "VizsgaAdminWpf.Test\\AjandekDtoTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:51.011Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AjandekTests.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "RelativeToolTip": "VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:50.407Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "MSTestSettings.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\MSTestSettings.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf.Test\\MSTestSettings.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\MSTestSettings.cs",
+              "RelativeToolTip": "VizsgaAdminWpf.Test\\MSTestSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:49.634Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf\\AssemblyInfo.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AssemblyInfo.cs",
+              "RelativeToolTip": "VizsgaAdminWpf\\AssemblyInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:48.374Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ApiClient.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\ApiClient.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf\\ApiClient.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\ApiClient.cs",
+              "RelativeToolTip": "VizsgaAdminWpf\\ApiClient.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAUwCkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:45.342Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Ajandek.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\Ajandek.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf\\Ajandek.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\Ajandek.cs",
+              "RelativeToolTip": "VizsgaAdminWpf\\Ajandek.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:44.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ApiService.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\ApiService.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf\\ApiService.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\ApiService.cs",
+              "RelativeToolTip": "VizsgaAdminWpf\\ApiService.cs",
+              "ViewState": "AgIAADYBAAAAAAAAAAA8wEYBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:43.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "AdminWindow.xaml",
-              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki-viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AdminWindow.xaml",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AdminWindow.xaml",
               "RelativeDocumentMoniker": "VizsgaAdminWpf\\AdminWindow.xaml",
-              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki-viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AdminWindow.xaml",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AdminWindow.xaml",
               "RelativeToolTip": "VizsgaAdminWpf\\AdminWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-01-23T07:59:06.166Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-23T07:59:06.166Z"
             }
           ]
         }

@@ -4,7 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 
+import Chat from './Chat';
+
+import UserSelect from './UserSelect';
+
 import './Header.css';
+
+import './ChatModal.css';
+
+import type { User } from "../api";
 
 
 
@@ -25,6 +33,10 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
 
 
@@ -51,19 +63,12 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
     <header>
 
       <div className="header-left">
-
         <Link to="/" className="logo-link">
-
           <div className="logo">
-
             <img src="/images/logo.webp" alt="logo" />
-
             {title}
-
           </div>
-
         </Link>
-
       </div>
 
 
@@ -91,9 +96,8 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
           <>
 
             <Link to="/kedvencek" title="Kedvencek" className="icon-link">❤️</Link>
-
+            <button className="chat-icon-btn" onClick={() => setIsChatOpen(true)} title="Chat">💬</button>
             <Link to="/baratok" title="Barátok" className="icon-link">👥</Link>
-
             <Link to="/elozmenyek" title="Előzmények" className="icon-link">🕒</Link>
 
             
@@ -150,6 +154,25 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
         )}
 
       </nav>
+
+      {isChatOpen && (
+        <div className="chat-modal-bg" onClick={() => setIsChatOpen(false)}>
+          <div className="chat-modal" onClick={e => e.stopPropagation()}>
+            <div className="chat-modal-header">
+              <span>Chat</span>
+              <button className="chat-modal-close" onClick={() => setIsChatOpen(false)}>✖</button>
+            </div>
+            <div style={{padding: '0 20px'}}>
+              <UserSelect onSelect={setSelectedUser} selectedUserId={selectedUser?.user_id} />
+            </div>
+            <div style={{padding: '0 20px'}}>
+              {selectedUser && (
+                <Chat key={selectedUser.user_id} currentUser={{user_id: Number(sessionStorage.getItem('userId')), name: username || '', email: '', password: ''}} selectedUser={selectedUser} />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
     </header>
 

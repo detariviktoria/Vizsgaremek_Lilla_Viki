@@ -7,7 +7,8 @@ module.exports = (sequelize) => {
   const Kupon = require("./Kupon")(sequelize);
   const Felhasznalo_AjandekElozmeny = require("./Elozmeny")(sequelize);
   const Felhasznalo_KedvencAjandek = require("./Kedvenc")(sequelize);
-  const Meghivo = require("./Meghivo")(sequelize);  
+  const Meghivo = require("./Meghivo")(sequelize);
+  const ChatMessage = require("./ChatMessage")(sequelize);
   // Asszociációk
 
   // Ajandek <-> Stilus (many to many)
@@ -182,6 +183,7 @@ module.exports = (sequelize) => {
     Kupon,
     Felhasznalo_AjandekElozmeny,
     Felhasznalo_KedvencAjandek,
-    Meghivo
+    Meghivo,
+    ChatMessage
   };
 };
