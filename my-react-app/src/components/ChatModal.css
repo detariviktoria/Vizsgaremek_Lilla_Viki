@@ -6,10 +6,23 @@
   cursor: pointer;
   vertical-align: middle;
   transition: color 0.2s;
+  position: relative;
 }
 
 .chat-icon-btn:hover {
   color: #e57373;
+}
+
+.chat-unread-dot {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.75rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #e53935;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
 .chat-modal-bg {

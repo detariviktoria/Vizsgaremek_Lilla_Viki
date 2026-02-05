@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ import './Header.css';
 import './ChatModal.css';
 
 import type { User } from "../api";
+import socket from "../socket";
 
 
 
@@ -37,6 +38,40 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const [hasUnread, setHasUnread] = useState(false);
+
+  const currentUserId = Number(sessionStorage.getItem('userId') || 0);
+
+  // Socket csatlakozás a felhasználó saját szobájához
+  useEffect(() => {
+    if (!currentUserId) return;
+    socket.emit("join", currentUserId);
+  }, [currentUserId]);
+
+  // Új privát üzenetek figyelése értesítéshez
+  useEffect(() => {
+    if (!currentUserId) return;
+
+    const handler = (msg: { from: number; to: number; message: string }) => {
+      // Ha nekünk jön üzenet, és a chat nincs nyitva, jelenjen meg a piros jelzés
+      if (msg.to === currentUserId && !isChatOpen) {
+        setHasUnread(true);
+      }
+    };
+
+    socket.on("private message", handler);
+    return () => {
+      socket.off("private message", handler);
+    };
+  }, [currentUserId, isChatOpen]);
+
+  // Ha megnyitjuk a chatet, töröljük az értesítést
+  useEffect(() => {
+    if (isChatOpen) {
+      setHasUnread(false);
+    }
+  }, [isChatOpen]);
 
 
 
@@ -96,7 +131,10 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
           <>
 
             <Link to="/kedvencek" title="Kedvencek" className="icon-link">❤️</Link>
-            <button className="chat-icon-btn" onClick={() => setIsChatOpen(true)} title="Chat">💬</button>
+            <button className="chat-icon-btn" onClick={() => setIsChatOpen(true)} title="Chat">
+              💬
+              {hasUnread && <span className="chat-unread-dot" />}
+            </button>
             <Link to="/baratok" title="Barátok" className="icon-link">👥</Link>
             <Link to="/elozmenyek" title="Előzmények" className="icon-link">🕒</Link>
 

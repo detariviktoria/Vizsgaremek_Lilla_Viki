@@ -1,33 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using VizsgaAdminWpf;
 
-namespace VizsgaAdminWpf.Test
-{
-    [TestClass]
-    internal class AjandekTests
-    {
-        [TestMethod]
-        public void Ajandek_PropertySet_GetCorrectValues()
-        {
-            var ajandek = new Ajandek
-            {
-                id = 1,
-                nev = "Bögre",
-                ar = 2500,
-                leiras = "Vicces felirat",
-                kategoria = "Ajándék",
-                image_url = "kep.jpg",
-                link_url = "http://pelda.hu"
-            };
+namespace VizsgaAdminWpf.Test;
 
-            Assert.AreEqual(1, ajandek.id);
-            Assert.AreEqual("Bögre", ajandek.nev);
-            Assert.AreEqual(2500, ajandek.ar);
-        }
+[TestFixture]
+public class AjandekTests
+{
+    [Test]
+    public void Ajandek_PropertySet_GetCorrectValues()
+    {
+        var ajandek = new Ajandek
+        {
+            id = 1,
+            nev = "Bögre",
+            ar = 2500,
+            leiras = "Vicces felirat",
+            kategoria = "Ajándék",
+            image_url = "kep.jpg",
+            link_url = "http://pelda.hu"
+        };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(ajandek.id, Is.EqualTo(1));
+            Assert.That(ajandek.nev, Is.EqualTo("Bögre"));
+            Assert.That(ajandek.ar, Is.EqualTo(2500));
+        });
     }
 }
