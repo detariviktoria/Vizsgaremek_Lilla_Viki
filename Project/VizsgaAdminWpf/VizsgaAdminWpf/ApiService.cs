@@ -12,12 +12,10 @@ namespace VizsgaAdminWpf
     public class ApiService
     {
         private static readonly HttpClient client;
-        // Közös BaseAddress beállítása, így a hívásoknál csak relatív útvonalat használunk
         private const string BaseUrl = "http://localhost:3000/";
 
         static ApiService()
         {
-            // Saját HttpClient, proxy nélkül, hogy a rendszer proxy/beállítások ne zavarjanak bele
             var handler = new SocketsHttpHandler
             {
                 UseProxy = false
@@ -54,7 +52,8 @@ namespace VizsgaAdminWpf
             try
             {
                 var payload = new Dictionary<string, object?> { ["name"] = name, ["email"] = email };
-                if (!string.IsNullOrWhiteSpace(password)) payload["password"] = password;
+                if (!string.IsNullOrWhiteSpace(password)) 
+                    payload["password"] = password;
                 var json = JsonSerializer.Serialize(payload, JsonOptions);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await client.PutAsync($"users/{id}/admin", content);
@@ -171,7 +170,6 @@ namespace VizsgaAdminWpf
             }
         }
 
-        // --- ÚJ: Alkalmak lekérdezése ---
         public async Task<List<string>> GetAlkalmak()
         {
             var response = await client.GetAsync("alkalmak");
@@ -180,7 +178,6 @@ namespace VizsgaAdminWpf
             return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
         }
 
-        // --- ÚJ: Stílusok lekérdezése ---
         public async Task<List<string>> GetStilusok()
         {
             var response = await client.GetAsync("stilusok");
@@ -189,7 +186,7 @@ namespace VizsgaAdminWpf
             return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
         }
 
-        // --- ÚJ: Célcsoportok lekérdezése ---
+
         public async Task<List<string>> GetCelcsoportok()
         {
             var response = await client.GetAsync("celcsoportok");
@@ -198,7 +195,7 @@ namespace VizsgaAdminWpf
             return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
         }
 
-        // --- ÚJ: Ajándék szűrések ---
+
         public async Task<List<AjandekDTO>> GetAjandekokByAlkalom(string alkalom)
         {
             var response = await client.GetAsync($"ajandekok/alkalom/{WebUtility.UrlEncode(alkalom)}");
@@ -221,7 +218,7 @@ namespace VizsgaAdminWpf
             return JsonSerializer.Deserialize<List<AjandekDTO>>(json, JsonOptions) ?? new List<AjandekDTO>();
         }
 
-        // --- ÚJ: Felhasználói műveletek ---
+
         public async Task<LoginResponse?> Login(string username, string password)
         {
             var json = JsonSerializer.Serialize(new { username, password });
@@ -254,7 +251,6 @@ namespace VizsgaAdminWpf
             return JsonSerializer.Deserialize<User>(respJson);
         }
 
-        // --- ÚJ: Kedvencek ---
         public async Task<List<AjandekDTO>> GetKedvencek(int userId)
         {
             var response = await client.GetAsync($"kedvencek/{userId}");
@@ -275,7 +271,7 @@ namespace VizsgaAdminWpf
             response.EnsureSuccessStatusCode();
         }
 
-        // --- ÚJ: Előzmények ---
+
         public async Task<List<AjandekDTO>> GetElozmenyek(int userId)
         {
             var response = await client.GetAsync($"elozmenyek/{userId}");
@@ -291,7 +287,7 @@ namespace VizsgaAdminWpf
             response.EnsureSuccessStatusCode();
         }
 
-        // --- ÚJ: Meghívó küldése ---
+
         public async Task SendInvite(string email, int userId)
         {
             var json = JsonSerializer.Serialize(new { email, userId });
@@ -301,40 +297,5 @@ namespace VizsgaAdminWpf
         }
     }
 
-    public class UploadResponse
-    {
-        public string? message { get; set; }
-        public string? filename { get; set; }
-    }
 
-    public class AjandekDTO
-    {
-        public int? id { get; set; }
-        public string? nev { get; set; }
-        public string? leiras { get; set; }
-        public int? ar { get; set; }
-        public string? kategoria { get; set; }
-        public string? image_url { get; set; }
-        public string? link_url { get; set; }
-    }
-
-    public class User
-    {
-        public int? id { get; set; }
-        public string? name { get; set; }
-        public string? email { get; set; }
-        public string? password { get; set; }
-    }
-
-    public class UserListDto
-    {
-        public int? user_id { get; set; }
-        public string? name { get; set; }
-        public string? email { get; set; }
-    }
-    public class LoginResponse
-    {
-        public string? username { get; set; }
-        public int? userId { get; set; }
-    }
 }
