@@ -194,8 +194,7 @@ export default function Home() {
 
       <Header />
 
-      <div className="home-container">
-
+      <div className="home-container animate-fade-in">
         <div className="search-section">
 
            <div className="search-bar-home">
@@ -624,19 +623,11 @@ export default function Home() {
 
           <div className="main-cards">
 
-
-
-            <div className="card" onClick={() => navigate('/elmeny')}>
-
-
+            <div className="card animate-slide-up transition-all duration-300 hover:scale-105 active:scale-95" onClick={() => navigate('/elmeny')}>
 
               <img src="/Képek/elmeny.jpg" alt="Élményajándékok" />
 
-
-
               <div className="card-title">Élményajándékok</div>
-
-
 
             </div>
 
@@ -646,17 +637,11 @@ export default function Home() {
 
 
 
-            <div className="card" onClick={() => navigate('/targy')}>
-
-
+            <div className="card animate-slide-up transition-all duration-300 hover:scale-105 active:scale-95 [animation-delay:100ms]" onClick={() => navigate('/targy')}>
 
               <img src="/Képek/targy.jpg" alt="Tárgyi ajándékok" />
 
-
-
               <div className="card-title">Tárgyi ajándékok</div>
-
-
 
             </div>            
 

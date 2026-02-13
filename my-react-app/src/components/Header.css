@@ -64,6 +64,38 @@ nav a:hover {
   color: palevioletred;
 }
 
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-icons > * {
+  margin: 0 !important;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+}
+
+.auth-btn {
+  background: none;
+  border: none;
+  margin-left: 15px;
+  color: #333;
+  font-weight: 500;
+  font-size: clamp(12px, 3vw, 16px);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.auth-btn:hover {
+  color: palevioletred;
+}
+
 .welcome-text {
   color: palevioletred;
   font-weight: bold;
@@ -80,16 +112,19 @@ nav a:hover {
 
 .icon-link {
   font-size: 1.5rem;
-  margin-left: 15px;
   text-decoration: none;
   display: flex;
   align-items: center;
+  transition: transform 0.2s;
+}
+
+.icon-link:hover {
+  transform: scale(1.1);
 }
 
 /* Dropdown menü stílusok */
 .menu-container {
   position: relative;
-  margin-left: 15px;
 }
 
 .settings-btn {
@@ -136,23 +171,6 @@ nav a:hover {
   color: palevioletred;
 }
 
-nav a.back-btn {
-  background-color: palevioletred;
-  color: white !important;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 6px 12px;
-  border-radius: 8px;
-  margin-left: 15px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-nav a.back-btn:hover {
-  background-color: #8d465d;
-}
-
 /* Tablet és mobil nézethez */
 @media (max-width: 768px) {
   header {
@@ -173,9 +191,12 @@ nav a.back-btn:hover {
     font-size: 16px;
   }
 
+  .nav-icons {
+    gap: 8px;
+  }
+
   .icon-link {
     font-size: 1.2rem;
-    margin-left: 10px;
   }
 
   .settings-btn {

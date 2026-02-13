@@ -353,3 +353,14 @@ C:\Users\gebhardt.lilla\Desktop\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net
 C:\Users\gebhardt.lilla\Desktop\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\zh-Hant\Microsoft.TestPlatform.AdapterUtilities.resources.dll
 C:\Users\gebhardt.lilla\Desktop\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.gentestingplatformentrypointinputcache.cache
 C:\Users\gebhardt.lilla\Desktop\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.genautoregisteredextensionsinputcache.cache
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\.msCoverageSourceRootsMapping_VizsgaAdminWpf.Test
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.csproj.AssemblyReference.cache
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.gentestingplatformentrypointinputcache.cache
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.genautoregisteredextensionsinputcache.cache
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.AssemblyInfoInputs.cache
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.AssemblyInfo.cs
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.csproj.CoreCompileInputs.cache
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.dll
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\refint\VizsgaAdminWpf.Test.dll
+C:\Users\gebhardt.lilla\Downloads\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.pdb

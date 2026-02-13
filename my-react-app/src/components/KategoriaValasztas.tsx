@@ -424,9 +424,9 @@ export default function KategoriaValasztas() {
 
     <>
 
-      <Header title={pageTitle} showBack />
+      <Header title={pageTitle} />
 
-      <div className="main-content-container">
+      <div className="main-content-container animate-fade-in">
         
         {/* Szűrő Panel */}
         <div className={`filter-panel ${isFilterOpen ? 'open' : 'closed'}`}>

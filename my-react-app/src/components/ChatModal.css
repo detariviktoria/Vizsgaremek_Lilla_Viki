@@ -2,11 +2,13 @@
   background: none;
   border: none;
   font-size: 1.7rem;
-  margin-right: 1rem;
+  margin: 0;
   cursor: pointer;
   vertical-align: middle;
   transition: color 0.2s;
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .chat-icon-btn:hover {
@@ -15,14 +17,14 @@
 
 .chat-unread-dot {
   position: absolute;
-  top: 0.1rem;
-  right: 0.75rem;
-  width: 10px;
-  height: 10px;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background-color: #e53935;
+  background-color: #ff4d4d;
   border: 2px solid #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .chat-modal-bg {

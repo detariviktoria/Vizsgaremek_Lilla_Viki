@@ -27,8 +27,6 @@ function App() {
         <Route path="/elmeny" element={<KategoriaValasztas />} />
         <Route path="/targy" element={<KategoriaValasztas />} />
         <Route path="/tovabb" element={<Tovabb />} />
-        <Route path="/bejelentkezes" element={<Bejelentkezes />} />
-        <Route path="/regisztracio" element={<Regisztracio />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/kedvencek" element={<Kedvencek />} />

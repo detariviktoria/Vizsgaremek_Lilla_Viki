@@ -51,19 +51,20 @@ const Kedvencek = () => {
   return (
     <>
       <Header />
-      <div className="kedvencek-container">
-        <h1 className="kedvencek-cim">Kedvenc Ajándékaim</h1>
+      <div className="kedvencek-container animate-fade-in">
+        <h1 className="kedvencek-cim animate-slide-up">Kedvenc Ajándékaim</h1>
         {kedvencek.length === 0 ? (
-          <div className="nincs-adat">Még nincsenek kedvenc ajándékaid.</div>
+          <div className="nincs-adat animate-fade-in">Még nincsenek kedvenc ajándékaid.</div>
         ) : (
           <div className="kedvencek-grid">
-            {kedvencek.map((ajandek) => (
-              <AjandekKartya 
-                key={ajandek.id} 
-                ajandek={ajandek} 
-                isKedvenc={true} 
-                onKedvencValtozas={fetchKedvencek} // Újratöltjük a listát törlés után
-              />
+            {kedvencek.map((ajandek, index) => (
+              <div key={ajandek.id} className="animate-scale-in" style={{ animationDelay: `${index * 50}ms` }}>
+                <AjandekKartya 
+                  ajandek={ajandek} 
+                  isKedvenc={true} 
+                  onKedvencValtozas={fetchKedvencek} 
+                />
+              </div>
             ))}
           </div>
         )}

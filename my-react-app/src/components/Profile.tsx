@@ -156,10 +156,10 @@ export default function Profile() {
   }
 
   return (
-    <div className="profile-page">
+    <div className="profile-page animate-fade-in">
       <Header title="Profilom" />
       <div className="profile-container">
-        <div className="profile-card">
+        <div className="profile-card animate-scale-in">
           <div className="profile-header">
             <div className="profile-avatar">
               {user?.name ? user.name.charAt(0).toUpperCase() : '?'}

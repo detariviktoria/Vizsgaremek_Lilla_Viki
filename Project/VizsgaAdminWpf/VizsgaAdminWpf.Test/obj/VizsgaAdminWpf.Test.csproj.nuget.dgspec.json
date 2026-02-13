@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {}
+    "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {}
   },
   "projects": {
-    "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {
+    "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
+        "projectUniqueName": "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
         "projectName": "VizsgaAdminWpf.Test",
-        "projectPath": "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
+        "projectPath": "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
         "packagesPath": "C:\\Users\\gebhardt.lilla\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\obj\\",
+        "outputPath": "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {
-              "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
-                "projectPath": "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj"
+              "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
+                "projectPath": "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj"
               }
             }
           }
@@ -87,14 +87,14 @@
         }
       }
     },
-    "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
+    "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
+        "projectUniqueName": "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
         "projectName": "VizsgaAdminWpf",
-        "projectPath": "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
+        "projectPath": "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
         "packagesPath": "C:\\Users\\gebhardt.lilla\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gebhardt.lilla\\Desktop\\VizsgaAdminWpf\\VizsgaAdminWpf\\obj\\",
+        "outputPath": "C:\\Users\\gebhardt.lilla\\Downloads\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

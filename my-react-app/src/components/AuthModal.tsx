@@ -57,8 +57,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         setMessageColor('green');
         setTimeout(() => {
           onClose();
-          navigate('/');
-        }, 500);
+          window.location.reload();
+        }, 800);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Hibás felhasználónév vagy jelszó!';
@@ -122,8 +122,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
   };
 
   return (
-    <div className="modal show" onClick={(e) => e.target === e.currentTarget && handleCloseModal()}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="modal show animate-fade-in" onClick={(e) => e.target === e.currentTarget && handleCloseModal()}>
+      <div className="modal-content animate-scale-in" onClick={(e) => e.stopPropagation()}>
         <span className="close-modal" onClick={handleCloseModal}>&times;</span>
         <div id="modal-tabs">
           <button
@@ -141,12 +141,12 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         </div>
 
         {activeTab === 'login' && (
-          <form className="login-form" id="modal-login-form" onSubmit={handleLogin}>
+          <form className="login-form animate-slide-up" id="modal-login-form" onSubmit={handleLogin}>
             <h2>Bejelentkezés</h2>
-            <input type="text" name="username" placeholder="Felhasználónév" required />
-            <input type="password" name="password" placeholder="Jelszó" required />
+            <input type="text" name="username" placeholder="Felhasználónév" required className="transition-all duration-300 focus:scale-105" />
+            <input type="password" name="password" placeholder="Jelszó" required className="transition-all duration-300 focus:scale-105" />
             {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
-            <button type="submit">Belépés</button>
+            <button type="submit" className="transition-all duration-300 hover:scale-105 active:scale-95">Belépés</button>
             <div className="forgot-password-link">
               <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('forgot'); setMessage(''); }}>Elfelejtetted a jelszavad?</a>
             </div>
@@ -157,14 +157,14 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         )}
 
         {activeTab === 'register' && (
-          <form className="login-form" id="modal-register-form" onSubmit={handleRegister}>
+          <form className="login-form animate-slide-up" id="modal-register-form" onSubmit={handleRegister}>
             <h2>Regisztráció</h2>
-            <input type="email" name="email" placeholder="Email" required />
-            <input type="text" name="username" placeholder="Felhasználónév" required />
-            <input type="password" name="password" placeholder="Jelszó" required />
-            <input type="password" name="confirmPassword" placeholder="Jelszó megerősítése" required />
+            <input type="email" name="email" placeholder="Email" required className="transition-all duration-300 focus:scale-105" />
+            <input type="text" name="username" placeholder="Felhasználónév" required className="transition-all duration-300 focus:scale-105" />
+            <input type="password" name="password" placeholder="Jelszó" required className="transition-all duration-300 focus:scale-105" />
+            <input type="password" name="confirmPassword" placeholder="Jelszó megerősítése" required className="transition-all duration-300 focus:scale-105" />
             {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
-            <button type="submit">Regisztráció</button>
+            <button type="submit" className="transition-all duration-300 hover:scale-105 active:scale-95">Regisztráció</button>
             <div className="switch-link">
               Már van fiókom, <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('login'); }}>bejelentkezek</a>.
             </div>
@@ -172,7 +172,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         )}
 
         {activeTab === 'forgot' && (
-          <form className="login-form" id="modal-forgot-form" onSubmit={handleForgotPassword}>
+          <form className="login-form animate-slide-up" id="modal-forgot-form" onSubmit={handleForgotPassword}>
             <h2>Elfelejtett jelszó</h2>
             <p className="form-info">Add meg az e-mail címed, amivel regisztráltál, és küldünk egy linket a jelszó visszaállításához.</p>
             <input 
@@ -184,7 +184,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
               required 
             />
             {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
-            <button type="submit">Visszaállító link küldése</button>
+            <button type="submit" className="transition-all duration-300 hover:scale-105 active:scale-95">Visszaállító link küldése</button>
             <div className="switch-link">
               Vissza a <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('login'); setMessage(''); }}>bejelentkezéshez</a>.
             </div>

@@ -48,10 +48,10 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="profile-page">
+    <div className="profile-page animate-fade-in opacity-0">
       <Header title="Jelszó visszaállítása" showBack />
       <div className="profile-container">
-        <div className="profile-card">
+        <div className="profile-card animate-scale-in opacity-0">
           <div className="profile-header">
             <h2>Új jelszó megadása</h2>
           </div>
@@ -83,7 +83,7 @@ export default function ResetPassword() {
                 </div>
               )}
 
-              <button type="submit" className="save-btn" style={{ width: '100%' }} disabled={isSubmitting}>
+              <button type="submit" className="save-btn transition-all duration-300 hover:scale-105 active:scale-95" style={{ width: '100%' }} disabled={isSubmitting}>
                 {isSubmitting ? 'Folyamatban...' : 'Jelszó mentése'}
               </button>
             </form>

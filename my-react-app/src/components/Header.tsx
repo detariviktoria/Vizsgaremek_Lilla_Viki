@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 
@@ -8,11 +8,13 @@ import Chat from './Chat';
 
 import UserSelect from './UserSelect';
 
+import AuthModal from './AuthModal';
+
 import './Header.css';
 
 import './ChatModal.css';
 
-import type { User } from "../api";
+import { api, type User } from "../api";
 import socket from "../socket";
 
 
@@ -21,27 +23,32 @@ interface HeaderProps {
 
   title?: string;
 
-  showBack?: boolean;
-
 }
 
 
 
-export default function Header({ title = 'Ajándékajánló', showBack = false }: HeaderProps) {
+export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
-  const { username, logout, remainingTime } = useAuth();
+  const { username, userId, logout, remainingTime } = useAuth();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [isChatOpen, setIsChatOpen] = useState(false);
 
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
+
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const [hasUnread, setHasUnread] = useState(false);
 
-  const currentUserId = Number(sessionStorage.getItem('userId') || 0);
+  const currentUserId = userId;
+
+  const isAuthPage = location.pathname === '/bejelentkezes' || location.pathname === '/regisztracio';
 
   // Socket csatlakozás a felhasználó saját szobájához
   useEffect(() => {
@@ -54,9 +61,9 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
     if (!currentUserId) return;
 
     const handler = (msg: { from: number; to: number; message: string }) => {
-      // Ha nekünk jön üzenet, és a chat nincs nyitva, jelenjen meg a piros jelzés
-      if (msg.to === currentUserId && !isChatOpen) {
-        setHasUnread(true);
+      // Ha nekünk jön üzenet, és a chat nincs nyitva, vagy más van megnyitva, frissítsük az állapotot
+      if (msg.to === currentUserId) {
+        checkUnread();
       }
     };
 
@@ -66,14 +73,17 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
     };
   }, [currentUserId, isChatOpen]);
 
-  // Ha megnyitjuk a chatet, töröljük az értesítést
+  // Kezdeti olvasatlan üzenetek ellenőrzése
+  const checkUnread = () => {
+    if (!currentUserId) return;
+    api.getUnreadChatCount(currentUserId).then(data => {
+      setHasUnread(data.unreadCount > 0);
+    }).catch(console.error);
+  };
+
   useEffect(() => {
-    if (isChatOpen) {
-      setHasUnread(false);
-    }
-  }, [isChatOpen]);
-
-
+    checkUnread();
+  }, [currentUserId]);
 
   const handleLogout = async () => {
 
@@ -100,7 +110,7 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
       <div className="header-left">
         <Link to="/" className="logo-link">
           <div className="logo">
-            <img src="/images/logo.webp" alt="logo" />
+            <img src="/Képek/logo.webp" alt="logo" />
             {title}
           </div>
         </Link>
@@ -128,7 +138,7 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
 
         {username ? (
 
-          <>
+          <div className="nav-icons">
 
             <Link to="/kedvencek" title="Kedvencek" className="icon-link">❤️</Link>
             <button className="chat-icon-btn" onClick={() => setIsChatOpen(true)} title="Chat">
@@ -171,27 +181,24 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
 
             </div>
 
-          </>
+          </div>
 
         ) : (
 
-          <>
-
-            <Link to="/bejelentkezes">Bejelentkezés</Link>
-
-            <Link to="/regisztracio">Regisztráció</Link>
-
-          </>
-
-        )}
-
-        {showBack && (
-
-          <Link to="/" className="back-btn">Vissza</Link>
+          <div className="nav-links">
+            <button className="auth-btn" onClick={() => { setAuthTab('login'); setIsAuthModalOpen(true); }}>Bejelentkezés</button>
+            <button className="auth-btn" onClick={() => { setAuthTab('register'); setIsAuthModalOpen(true); }}>Regisztráció</button>
+          </div>
 
         )}
 
       </nav>
+
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+        initialTab={authTab} 
+      />
 
       {isChatOpen && (
         <div className="chat-modal-bg" onClick={() => setIsChatOpen(false)}>
@@ -205,7 +212,12 @@ export default function Header({ title = 'Ajándékajánló', showBack = false }
             </div>
             <div style={{padding: '0 20px'}}>
               {selectedUser && (
-                <Chat key={selectedUser.user_id} currentUser={{user_id: Number(sessionStorage.getItem('userId')), name: username || '', email: '', password: ''}} selectedUser={selectedUser} />
+                <Chat 
+                  key={selectedUser.user_id} 
+                  currentUser={{user_id: Number(userId), name: username || '', email: '', password: ''}} 
+                  selectedUser={selectedUser}
+                  onMessagesRead={checkUnread}
+                />
               )}
             </div>
           </div>

@@ -59,7 +59,7 @@ const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = fals
   const imageUrl = ajandek.image_url ? `${API_BASE_URL}/images/${ajandek.image_url.split('/').pop()}` : 'https://via.placeholder.com/300x200?text=Nincs+kép';
 
   return (
-    <div className="ajandek-kartya">
+    <div className="ajandek-kartya animate-fade-in opacity-0 transition-all duration-300 hover:scale-105 hover:shadow-xl">
       <div className="ajandek-kep-container">
         <img src={imageUrl} alt={ajandek.nev} className="ajandek-kep" />
         {userId && (

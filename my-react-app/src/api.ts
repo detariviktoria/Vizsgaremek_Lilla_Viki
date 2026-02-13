@@ -346,4 +346,17 @@ export const api = {
     if (!response.ok) throw new Error('Hiba az üzenet küldésekor');
     return await response.json();
   },
+  getUnreadChatCount: async (userId: number): Promise<{ unreadCount: number }> => {
+    const response = await fetch(`${API_BASE_URL}/api/chat/unread/${userId}`);
+    if (!response.ok) throw new Error('Hiba az olvasatlan üzenetek lekérésekor');
+    return await response.json();
+  },
+  markChatAsRead: async (fromUserId: number, toUserId: number): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/api/chat/read`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fromUserId, toUserId })
+    });
+    if (!response.ok) throw new Error('Hiba az üzenetek olvasottnak jelölésekor');
+  },
 };

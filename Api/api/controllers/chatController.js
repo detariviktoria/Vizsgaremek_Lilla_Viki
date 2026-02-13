@@ -48,3 +48,41 @@ exports.getHistory = async (req, res) => {
   }
 };
 
+// Olvasatlan üzenetek száma egy felhasználó számára
+exports.getUnreadCount = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const count = await db.ChatMessage.count({
+      where: {
+        to_user_id: userId,
+        is_read: false,
+      },
+    });
+    res.json({ unreadCount: count });
+  } catch (error) {
+    console.error("Hiba az olvasatlan üzenetek lekérésekor:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Üzenetek olvasottnak jelölése
+exports.markAsRead = async (req, res) => {
+  try {
+    const { fromUserId, toUserId } = req.body;
+    await db.ChatMessage.update(
+      { is_read: true },
+      {
+        where: {
+          from_user_id: fromUserId,
+          to_user_id: toUserId,
+          is_read: false,
+        },
+      }
+    );
+    res.json({ message: "Üzenetek olvasottnak jelölve." });
+  } catch (error) {
+    console.error("Hiba az üzenetek olvasottnak jelölésekor:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
