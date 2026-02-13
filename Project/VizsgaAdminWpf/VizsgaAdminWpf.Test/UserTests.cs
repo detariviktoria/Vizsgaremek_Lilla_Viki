@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿﻿﻿﻿using NUnit.Framework;
 using VizsgaAdminWpf;
 
 namespace VizsgaAdminWpf.Test
@@ -28,18 +28,21 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public void GetUserById_Id1()
+        public async Task GetUserById_Id1()
         {
             var apiService = new ApiService();
-            var users = apiService.GetUsers().Result;
-            var viktoria = users.FirstOrDefault(u => u.user_id == 1);
+            var users = await apiService.GetUsers();
+            var viktoria = users?.FirstOrDefault(u => u.user_id == 1);
 
             Assert.Multiple(() =>
             {
                 Assert.That(viktoria, Is.Not.Null, "Viktória user nem található!");
-                Assert.That(viktoria.user_id, Is.EqualTo(1));
-                Assert.That(viktoria.name, Is.EqualTo("Viktória"));
-                Assert.That(viktoria.email, Is.EqualTo("viktoria@mail.com"));
+                if (viktoria != null)
+                {
+                    Assert.That(viktoria.user_id, Is.EqualTo(1));
+                    Assert.That(viktoria.name, Is.EqualTo("Viktória"));
+                    Assert.That(viktoria.email, Is.EqualTo("viktoria@mail.com"));
+                }
             });
         }
 
