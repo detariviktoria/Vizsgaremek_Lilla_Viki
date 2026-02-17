@@ -1,7 +1,3 @@
-// seeds/ajandekSeed.js
-
-// A bulkCreate a Sequelize-ban egy tömbnyi rekord egyszerre
-// történő beszúrására szolgáló metódus. Röviden: tömeges INSERT az adatbázisba.
 const db = require('../../config/db');
 
 const ajandekok = [
@@ -319,7 +315,6 @@ const ajandekAlkalomok = [
 
 
 
-// ===== AJÁNDÉK ↔ CÉLCSOPORT =====
 const ajandekCelcsoportok = [
 // 1. Vidám bögre
 { ajandek_id: 1, celcsoport_id: 2 }, // felnőttek
@@ -610,8 +605,6 @@ const seedAll = async () => {
     // Fontos: individualHooks: true, hogy lefusson a jelszó hashelés!
 
     await db.Felhasznalo.bulkCreate(felhasznalok, { individualHooks: true });
-
-
 
     await db.Ajandek.bulkCreate(ajandekok);
 

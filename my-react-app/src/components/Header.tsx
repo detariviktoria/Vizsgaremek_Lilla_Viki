@@ -46,6 +46,9 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
   const [hasUnread, setHasUnread] = useState(false);
 
+  const [highlightUserId, setHighlightUserId] = useState<number | undefined>(undefined);
+  const [highlightUserName, setHighlightUserName] = useState<string | undefined>(undefined);
+
   const currentUserId = userId;
 
   const isAuthPage = location.pathname === '/bejelentkezes' || location.pathname === '/regisztracio';
@@ -81,9 +84,39 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
     }).catch(console.error);
   };
 
+  // Olvasatlan üzenetek feladóinak lekérése
+  const fetchUnreadSenders = async () => {
+    if (!currentUserId) return;
+    try {
+      const response = await fetch(`http://localhost:3000/api/chat/unread-senders/${currentUserId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setHighlightUserId(data[0]); // csak az elsőt emeljük ki
+        } else {
+          setHighlightUserId(undefined);
+        }
+      }
+    } catch (e) {
+      setHighlightUserId(undefined);
+    }
+  };
+  useEffect(() => { fetchUnreadSenders(); }, [currentUserId, isChatOpen]);
+
   useEffect(() => {
     checkUnread();
   }, [currentUserId]);
+
+  // Whenever highlightUserId changes, fetch the user's name
+  useEffect(() => {
+    if (highlightUserId) {
+      api.getUser(highlightUserId).then(user => {
+        setHighlightUserName(user.name);
+      }).catch(() => setHighlightUserName(undefined));
+    } else {
+      setHighlightUserName(undefined);
+    }
+  }, [highlightUserId]);
 
   const handleLogout = async () => {
 
@@ -106,6 +139,13 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   return (
 
     <header>
+
+      {/* Értesítés új üzenetről, ha van kiemelt feladó és a chat nincs nyitva */}
+      {highlightUserId && highlightUserName && !isChatOpen && (
+        <div style={{background:'#ff69b4',color:'white',padding:'10px',fontWeight:700,textAlign:'center'}}>
+          {highlightUserName} üzenetet küldött neked!
+        </div>
+      )}
 
       <div className="header-left">
         <Link to="/" className="logo-link">
@@ -208,7 +248,7 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
               <button className="chat-modal-close" onClick={() => setIsChatOpen(false)}>✖</button>
             </div>
             <div style={{padding: '0 20px'}}>
-              <UserSelect onSelect={setSelectedUser} selectedUserId={selectedUser?.user_id} />
+              <UserSelect onSelect={setSelectedUser} selectedUserId={selectedUser?.user_id} highlightUserId={highlightUserId} />
             </div>
             <div style={{padding: '0 20px'}}>
               {selectedUser && (

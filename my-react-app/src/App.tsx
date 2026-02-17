@@ -14,11 +14,15 @@ import Chat from './components/Chat';
 import './App.css';
 
 function App() {
+  // v7 future flags workaround
+  const future = {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  };
+
   return (
-    <BrowserRouter>
+    <BrowserRouter future={future}>
       <Routes>
-
-
         <Route path="/" element={<Home />} />
         <Route path="/ajandekok" element={<KategoriaValasztas />} />
         <Route path="/alkalom/:nev" element={<KategoriaValasztas />} />
@@ -33,7 +37,9 @@ function App() {
         <Route path="/elozmenyek" element={<Elozmenyek />} />
         <Route path="/baratok" element={<Baratok />} />
         <Route path="/profil" element={<Profile />} />
-        <Route path="/chat" element={<Chat />} />
+        {/* A Chat route csak akkor működik hibamentesen, ha van currentUser és selectedUser. Itt egy példa fallback-kel: */}
+        <Route path="/chat" element={<div style={{padding: 20, color: 'red'}}>A chat oldal csak a megfelelő helyről elérhető.</div>} />
+        <Route path="/regisztracio" element={<Regisztracio />} />
       </Routes>
     </BrowserRouter>
   );

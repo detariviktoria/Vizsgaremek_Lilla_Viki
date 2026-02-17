@@ -155,24 +155,18 @@ export default function KategoriaValasztas() {
         setCelcsoportok(celcsoportData);
 
 
-
-
-
-
-
         // Max ár meghatározása
+        if (filteredData.length > 0) {
+          const prices = filteredData.map(a => a.ar || 0);
+          const max = Math.max(...prices);
+          setMaxPriceLimit(max);
+          setPriceRange({ min: 0, max: max });
+        } else {
+          setMaxPriceLimit(100000);
+          setPriceRange({ min: 0, max: 100000 });
+        }
 
 
-
-        const max = Math.max(...filteredData.map(a => a.ar || 0));
-
-        setMaxPriceLimit(max);
-
-        setPriceRange({ min: 0, max: max });
-
-
-
-        // Kedvencek betöltése
 
         if (userId) {
 
@@ -195,9 +189,6 @@ export default function KategoriaValasztas() {
   }, [userId, categoryFilter]);
 
 
-
-  // URL paraméterek kezelése (Path param + Query params)
-
   useEffect(() => {
 
     if (allAjandekok.length === 0) return;
@@ -217,9 +208,6 @@ export default function KategoriaValasztas() {
     let shouldFilter = false;
 
 
-
-    // 1. Path paraméter (régi működés: /alkalom/Karácsony)
-
     if (nev) {
 
         const decodedNev = decodeURIComponent(nev);
@@ -235,8 +223,6 @@ export default function KategoriaValasztas() {
     }
 
 
-
-    // 2. Query paraméterek (új működés: ?alkalom=...&stilus=...)
 
     const paramAlkalom = searchParams.getAll('alkalom');
 
@@ -296,25 +282,14 @@ export default function KategoriaValasztas() {
 
 
 
-    // Állapot frissítése
-
-    setSelectedAlkalmak(initAlkalmak);
-
-    setSelectedStilusok(initStilusok);
-
-    setSelectedCelcsoportok(initCelcsoportok);
-
-    setPriceRange({ min: initMinPrice, max: initMaxPrice });
-
-
-
+    // Állapot frissítése - Csak ha tényleg van mit szűrni az URL-ből
     if (shouldFilter) {
-
+        setSelectedAlkalmak(initAlkalmak);
+        setSelectedStilusok(initStilusok);
+        setSelectedCelcsoportok(initCelcsoportok);
+        setPriceRange({ min: initMinPrice, max: initMaxPrice });
         filterWithParams(initAlkalmak, initStilusok, initCelcsoportok, initMinPrice, initMaxPrice);
-
     }
-
-
 
   }, [allAjandekok, nev, searchParams, alkalmak, stilusok, celcsoportok, maxPriceLimit]);
 
@@ -329,81 +304,47 @@ export default function KategoriaValasztas() {
 
 
   const filterWithParams = async (alk: string[], stil: string[], cel: string[], minP: number, maxP: number) => {
+    try {
+      let filteredIds = new Set<number>();
 
-    let filteredIds = new Set<number>();
+      if (alk.length === 0 && stil.length === 0 && cel.length === 0) {
+          allAjandekok.forEach(a => {
+            if (a.id !== undefined) filteredIds.add(a.id);
+          });
+      } else {
+          const promises: Promise<Ajandek[]>[] = [];
+          
+          alk.forEach(a => {
+            if (a) promises.push(api.getAjandekokByAlkalom(a));
+          });
+          stil.forEach(s => {
+            if (s) promises.push(api.getAjandekokByStilus(s));
+          });
+          cel.forEach(c => {
+            if (c) promises.push(api.getAjandekokByCelcsoport(c));
+          });
 
-    let isFirstFilter = true;
+          const results = await Promise.all(promises);
+          results.forEach(items => {
+              if (Array.isArray(items)) {
+                items.forEach(a => {
+                    if (a && a.id !== undefined) filteredIds.add(a.id);
+                });
+              }
+          });
+      }
 
+      const finalResult = allAjandekok.filter(a => 
+          a.id !== undefined && 
+          filteredIds.has(a.id) && 
+          (a.ar || 0) >= minP && 
+          (a.ar || 0) <= maxP
+      );
 
-
-    const addToSet = (items: Ajandek[]) => {
-
-        const ids = items.map(a => a.id!);
-
-        if (isFirstFilter) {
-
-            ids.forEach(id => filteredIds.add(id));
-
-            isFirstFilter = false;
-
-        } else {
-
-            ids.forEach(id => filteredIds.add(id));
-
-        }
-
-    };
-
-
-
-    if (alk.length === 0 && stil.length === 0 && cel.length === 0) {
-
-        allAjandekok.forEach(a => filteredIds.add(a.id!));
-
-    } else {
-
-        for (const alkalom of alk) {
-
-            const data = await api.getAjandekokByAlkalom(alkalom);
-
-            addToSet(data);
-
-        }
-
-        for (const stilus of stil) {
-
-            const data = await api.getAjandekokByStilus(stilus);
-
-            addToSet(data);
-
-        }
-
-        for (const celcsoport of cel) {
-
-            const data = await api.getAjandekokByCelcsoport(celcsoport);
-
-            addToSet(data);
-
-        }
-
+      setFilteredAjandekok(finalResult);
+    } catch (error) {
+      console.error('Hiba a szűrés során:', error);
     }
-
-
-
-    const finalResult = allAjandekok.filter(a => 
-
-        filteredIds.has(a.id!) && 
-
-        (a.ar || 0) >= minP && 
-
-        (a.ar || 0) <= maxP
-
-    );
-
-
-
-    setFilteredAjandekok(finalResult);
-
   };
 
   const toggleSection = (section: keyof typeof openSections) => {
@@ -446,14 +387,20 @@ export default function KategoriaValasztas() {
                         <input 
                             type="number" 
                             value={priceRange.min} 
-                            onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
+                            onChange={(e) => {
+                              const val = Number(e.target.value);
+                              if (!isNaN(val)) setPriceRange({ ...priceRange, min: val });
+                            }}
                             min={0} max={priceRange.max}
                         />
                         <span>-</span>
                         <input 
                             type="number" 
                             value={priceRange.max} 
-                            onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
+                            onChange={(e) => {
+                              const val = Number(e.target.value);
+                              if (!isNaN(val)) setPriceRange({ ...priceRange, max: val });
+                            }}
                             min={priceRange.min} max={maxPriceLimit}
                         />
                     </div>

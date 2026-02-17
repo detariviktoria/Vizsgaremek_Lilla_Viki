@@ -5,12 +5,14 @@ import "./UserSelect.css";
 type UserSelectProps = {
   onSelect: (user: User) => void;
   selectedUserId?: number;
+  highlightUserId?: number;
 };
 
-const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId }) => {
+const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highlightUserId }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false); // <-- IDE KERÜL!
 
   useEffect(() => {
     fetchUsers();
@@ -34,24 +36,53 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId }) => 
   const currentUserId = Number(sessionStorage.getItem('userId'));
   const filteredUsers = users.filter(u => u.user_id !== currentUserId);
 
+  // Rendezés: ha van kiemelt felhasználó (pl. aki küldött nekünk új üzenetet), tegyük az elejére
+  const orderedUsers = [...filteredUsers].sort((a, b) => {
+    if (highlightUserId && a.user_id === highlightUserId) return -1;
+    if (highlightUserId && b.user_id === highlightUserId) return 1;
+    return a.name.localeCompare(b.name);
+  });
+
   if (loading) return <div>Felhasználók betöltése...</div>;
   if (error) return <div style={{color:'red'}}>{error}</div>;
+
+  // Saját custom dropdown
+  const selected = orderedUsers.find(u => u.user_id === selectedUserId);
 
   return (
     <div className="user-select">
       <label>Válassz felhasználót a chathez:</label>
-      <select
-        value={selectedUserId || ""}
-        onChange={e => {
-          const user = filteredUsers.find(u => u.user_id === Number(e.target.value));
-          if (user) onSelect(user);
-        }}
-      >
-        <option value="">-- Válassz --</option>
-        {filteredUsers.map(user => (
-          <option key={user.user_id} value={user.user_id}>{user.name}</option>
-        ))}
-      </select>
+      <div className="custom-dropdown" tabIndex={0} onBlur={() => setOpen(false)}>
+        <div
+          className="custom-dropdown-selected"
+          onClick={() => setOpen(o => !o)}
+        >
+          {selected ? (highlightUserId === selected.user_id ? `${selected.name} (ÚJ)` : selected.name) : "-- Válassz --"}
+        </div>
+        {open && (
+          <ul className="custom-dropdown-list">
+            <li
+              className={!selectedUserId ? "custom-dropdown-option selected" : "custom-dropdown-option"}
+              onClick={() => { onSelect(undefined as any); setOpen(false); }}
+            >
+              -- Válassz --
+            </li>
+            {orderedUsers.map(user => (
+              <li
+                key={user.user_id}
+                className={
+                  "custom-dropdown-option" +
+                  (highlightUserId === user.user_id ? " highlighted-user-option" : "") +
+                  (selectedUserId === user.user_id ? " selected" : "")
+                }
+                onClick={() => { onSelect(user); setOpen(false); }}
+              >
+                {highlightUserId === user.user_id ? `${user.name} (ÚJ)` : user.name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

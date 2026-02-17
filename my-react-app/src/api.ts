@@ -29,7 +29,8 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/alkalmak`);
       if (!response.ok) throw new Error('Hiba az alkalmak lekérésekor');
-      return await response.json();
+      const data = await response.json();
+      return data.map((item: any) => typeof item === 'string' ? item : item.nev);
     } catch (error) {
       console.error('Hiba az alkalmak lekérésekor:', error);
       throw error;
@@ -40,7 +41,8 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/stilusok`);
       if (!response.ok) throw new Error('Hiba a stílusok lekérésekor');
-      return await response.json();
+      const data = await response.json();
+      return data.map((item: any) => typeof item === 'string' ? item : item.nev);
     } catch (error) {
       console.error('Hiba a stílusok lekérésekor:', error);
       throw error;
@@ -51,7 +53,8 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/celcsoportok`);
       if (!response.ok) throw new Error('Hiba a célcsoportok lekérésekor');
-      return await response.json();
+      const data = await response.json();
+      return data.map((item: any) => typeof item === 'string' ? item : item.nev);
     } catch (error) {
       console.error('Hiba a célcsoportok lekérésekor:', error);
       throw error;

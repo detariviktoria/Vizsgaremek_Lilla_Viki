@@ -37,7 +37,7 @@ export default function ResetPassword() {
       setMessage('A jelszavad sikeresen megváltozott!');
       setMessageColor('green');
       setTimeout(() => {
-        navigate('/bejelentkezes');
+        navigate('/', { state: { showLogin: true } });
       }, 3000);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Hiba történt a jelszó visszaállításakor.');
@@ -49,7 +49,7 @@ export default function ResetPassword() {
 
   return (
     <div className="profile-page animate-fade-in opacity-0">
-      <Header title="Jelszó visszaállítása" showBack />
+      <Header title="Jelszó visszaállítása" />
       <div className="profile-container">
         <div className="profile-card animate-scale-in opacity-0">
           <div className="profile-header">
