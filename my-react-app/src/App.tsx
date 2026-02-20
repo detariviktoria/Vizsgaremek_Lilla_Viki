@@ -39,7 +39,7 @@ function App() {
         <Route path="/profil" element={<Profile />} />
         {/* A Chat route csak akkor működik hibamentesen, ha van currentUser és selectedUser. Itt egy példa fallback-kel: */}
         <Route path="/chat" element={<div style={{padding: 20, color: 'red'}}>A chat oldal csak a megfelelő helyről elérhető.</div>} />
-        <Route path="/regisztracio" element={<Regisztracio />} />
+        {/* <Route path="/regisztracio" element={<Regisztracio />} /> */}
       </Routes>
     </BrowserRouter>
   );

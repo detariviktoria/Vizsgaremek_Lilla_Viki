@@ -3,8 +3,6 @@ h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\n
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.AssemblyInfoInputs.cache
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.AssemblyInfo.cs
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.csproj.CoreCompileInputs.cache
-h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\.msCoverageSourceRootsMapping_VizsgaAdminWpf.Test
-h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\CoverletSourceRootsMapping_VizsgaAdminWpf.Test
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\testhost.dll
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\VizsgaAdminWpf.deps.json
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\VizsgaAdminWpf.runtimeconfig.json
@@ -30,7 +28,6 @@ h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\n
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\Microsoft.VisualStudio.TestPlatform.Common.dll
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\nunit.framework.dll
-h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\nunit.framework.legacy.dll
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\cs\Microsoft.TestPlatform.CoreUtilities.resources.dll
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\cs\Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\de\Microsoft.TestPlatform.CoreUtilities.resources.dll
@@ -105,3 +102,4 @@ h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\n
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.pdb
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\VizsgaAdminWpf.Test.genruntimeconfig.cache
 h:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\obj\Debug\net8.0-windows\ref\VizsgaAdminWpf.Test.dll
+H:\Vizsgaremek_Lilla_Viki\Project\VizsgaAdminWpf\VizsgaAdminWpf.Test\bin\Debug\net8.0-windows\NuGet.Frameworks.dll

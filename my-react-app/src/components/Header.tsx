@@ -53,7 +53,6 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
   const isAuthPage = location.pathname === '/bejelentkezes' || location.pathname === '/regisztracio';
 
-  // Socket csatlakozás a felhasználó saját szobájához
   useEffect(() => {
     if (!currentUserId) return;
     socket.emit("join", currentUserId);
