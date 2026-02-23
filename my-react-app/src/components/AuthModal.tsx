@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -14,6 +14,13 @@ interface AuthModalProps {
 
 export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: AuthModalProps) {
   const [activeTab, setActiveTab] = useState<'login' | 'register' | 'forgot'> (initialTab);
+
+  useEffect(() => {
+    if (isOpen) {
+      setActiveTab(initialTab);
+      setMessage('');
+    }
+  }, [isOpen, initialTab]);
 
   const { login } = useAuth();
   const [email, setEmail] = useState('');

@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const fs = require("fs");
 const db = require("./config/db");
@@ -20,10 +20,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // sendBeacon támogatása
+app.use(cookieParser());
 
 // app.use(express.static(path.join(__dirname, "../Web")));
-
-app.use(express.static(path.join(__dirname, "../my-react-app/dist")));
 
 // Képek mappa statikus kiszolgálása
 
@@ -36,13 +35,6 @@ app.use('/Képek', express.static(path.join(__dirname, "../Képek")));
 
 
 
-
-// Session middleware
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true
-}));
 
 // Route-ok importálása
 const userRoutes = require("./api/routes/userRoutes");
@@ -108,29 +100,22 @@ app.use("/kedvencek", kedvencekRoutes);
 
 app.use("/ajandekok", ajandekRoutes);
 
-
-
 app.use("/upload", uploadRoutes);
 
-app.use('/api/chat', chatRoutes);
+app.use("/chat", chatRoutes);
 
-// Minden egyéb kérést irányítsunk az index.html-re (SPA támogatás)
+// Minden egyéb kérést irányítsunk egy egyszerű üzenetre (mivel a frontend külön fut)
 
-// A path-to-regexp újabb verziói miatt a '*' helyett regexet vagy '/*' formátumot érdemes használni
+app.get("/", (req, res) => {
+  res.send("<h1>Fut a szerver</h1>");
+});
 
-app.get(/.*/, (req, res) => {
-  const indexPath = path.join(__dirname, "../my-react-app/dist/index.html");
-  
-  // Ellenőrizzük, hogy létezik-e a fájl
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    // Ha nincs buildelve a frontend, csak API választ küldünk
-    res.status(404).json({ 
-      error: "Not Found", 
-      message: "API endpoint not found. Frontend is not built. Please run 'npm run build' in the my-react-app directory." 
-    });
+// SPA támogatás törölve, ha nem API hívás, akkor 404
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/users') || req.path.startsWith('/ajandekok') || req.path.startsWith('/chat')) {
+    return next();
   }
+  res.status(404).json({ error: "Not Found", message: "Az API végpont nem található." });
 });
 
 

@@ -1,6 +1,9 @@
-﻿﻿﻿﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using NUnit.Framework;
 using VizsgaAdminWpf;
-
 namespace VizsgaAdminWpf.Test
 {
     [TestFixture]
@@ -40,8 +43,8 @@ namespace VizsgaAdminWpf.Test
                 if (viktoria != null)
                 {
                     Assert.That(viktoria.user_id, Is.EqualTo(1));
-                    Assert.That(viktoria.name, Is.EqualTo("Viktória"));
-                    Assert.That(viktoria.email, Is.EqualTo("viktoria@mail.com"));
+                    Assert.That(viktoria.name, Is.EqualTo("Teszt Elek"));
+                    Assert.That(viktoria.email, Is.EqualTo("teszt@example.com"));
                 }
             });
         }

@@ -55,7 +55,7 @@
   background: #eee;
 }
 .highlighted-user-option {
-  background: #ff69b4 !important;
-  color: white !important;
+  color: red !important;
   font-weight: bold;
+  background: #fff0f0 !important;
 }

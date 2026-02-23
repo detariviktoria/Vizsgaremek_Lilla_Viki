@@ -1,6 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using NUnit.Framework;
 using VizsgaAdminWpf;
-
 namespace VizsgaAdminWpf.Test
 {
     [TestFixture]

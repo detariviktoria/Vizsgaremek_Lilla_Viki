@@ -203,3 +203,58 @@ nav a:hover {
     font-size: 1.2rem;
   }
 }
+
+/* Floating notification */
+.floating-notification {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: palevioletred;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(219, 112, 147, 0.5);
+  cursor: pointer;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: bold;
+  animation: notificationSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.floating-notification:hover {
+  background-color: #d65a8a;
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(219, 112, 147, 0.6);
+}
+
+.notification-icon {
+  font-size: 1.5rem;
+}
+
+@keyframes notificationSlideIn {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-notification {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}

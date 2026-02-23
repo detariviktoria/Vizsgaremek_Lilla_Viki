@@ -40,13 +40,11 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
-
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const [hasUnread, setHasUnread] = useState(false);
 
-  const [highlightUserId, setHighlightUserId] = useState<number | undefined>(undefined);
+  const [highlightUserIds, setHighlightUserIds] = useState<number[]>([]);
   const [highlightUserName, setHighlightUserName] = useState<string | undefined>(undefined);
 
   const currentUserId = userId;
@@ -55,7 +53,20 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
   useEffect(() => {
     if (!currentUserId) return;
-    socket.emit("join", currentUserId);
+    
+    const joinRoom = () => {
+      console.log(`Socket connected, joining room for user ${currentUserId}`);
+      socket.emit("join", currentUserId);
+    };
+
+    if (socket.connected) {
+      joinRoom();
+    }
+
+    socket.on("connect", joinRoom);
+    return () => {
+      socket.off("connect", joinRoom);
+    };
   }, [currentUserId]);
 
   // Új privát üzenetek figyelése értesítéshez
@@ -81,23 +92,19 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
     api.getUnreadChatCount(currentUserId).then(data => {
       setHasUnread(data.unreadCount > 0);
     }).catch(console.error);
+    fetchUnreadSenders(); // Frissítsük a feladókat is
   };
 
   // Olvasatlan üzenetek feladóinak lekérése
   const fetchUnreadSenders = async () => {
     if (!currentUserId) return;
     try {
-      const response = await fetch(`http://localhost:3000/api/chat/unread-senders/${currentUserId}`);
-      if (response.ok) {
-        const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setHighlightUserId(data[0]); // csak az elsőt emeljük ki
-        } else {
-          setHighlightUserId(undefined);
-        }
-      }
+      const data = await api.getUnreadSenders(currentUserId);
+      console.log("Olvasatlan feladók:", data);
+      setHighlightUserIds(data || []);
     } catch (e) {
-      setHighlightUserId(undefined);
+      console.error("Hiba az olvasatlan feladók lekérésekor:", e);
+      setHighlightUserIds([]);
     }
   };
   useEffect(() => { fetchUnreadSenders(); }, [currentUserId, isChatOpen]);
@@ -106,16 +113,16 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
     checkUnread();
   }, [currentUserId]);
 
-  // Whenever highlightUserId changes, fetch the user's name
+  // Whenever highlightUserIds changes, fetch the first user's name for the banner
   useEffect(() => {
-    if (highlightUserId) {
-      api.getUser(highlightUserId).then(user => {
+    if (highlightUserIds.length > 0) {
+      api.getUser(highlightUserIds[0]).then(user => {
         setHighlightUserName(user.name);
       }).catch(() => setHighlightUserName(undefined));
     } else {
       setHighlightUserName(undefined);
     }
-  }, [highlightUserId]);
+  }, [highlightUserIds]);
 
   const handleLogout = async () => {
 
@@ -138,13 +145,6 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   return (
 
     <header>
-
-      {/* Értesítés új üzenetről, ha van kiemelt feladó és a chat nincs nyitva */}
-      {highlightUserId && highlightUserName && !isChatOpen && (
-        <div style={{background:'#ff69b4',color:'white',padding:'10px',fontWeight:700,textAlign:'center'}}>
-          {highlightUserName} üzenetet küldött neked!
-        </div>
-      )}
 
       <div className="header-left">
         <Link to="/" className="logo-link">
@@ -225,8 +225,7 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
         ) : (
 
           <div className="nav-links">
-            <button className="auth-btn" onClick={() => { setAuthTab('login'); setIsAuthModalOpen(true); }}>Bejelentkezés</button>
-            <button className="auth-btn" onClick={() => { setAuthTab('register'); setIsAuthModalOpen(true); }}>Regisztráció</button>
+            <button className="auth-btn" onClick={() => { setIsAuthModalOpen(true); }}>Bejelentkezés</button>
           </div>
 
         )}
@@ -236,8 +235,21 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
-        initialTab={authTab} 
+        initialTab="login" 
       />
+
+      {/* Floating Notification in Bottom-Right */}
+      {highlightUserIds.length > 0 && highlightUserName && !isChatOpen && (
+        <button 
+          className="floating-notification"
+          onClick={() => setIsChatOpen(true)}
+        >
+          <span className="notification-icon">💬</span>
+          <span>
+            {highlightUserName} {highlightUserIds.length > 1 ? `és még ${highlightUserIds.length - 1} személy` : ''} üzenetet küldött!
+          </span>
+        </button>
+      )}
 
       {isChatOpen && (
         <div className="chat-modal-bg" onClick={() => setIsChatOpen(false)}>
@@ -247,7 +259,7 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
               <button className="chat-modal-close" onClick={() => setIsChatOpen(false)}>✖</button>
             </div>
             <div style={{padding: '0 20px'}}>
-              <UserSelect onSelect={setSelectedUser} selectedUserId={selectedUser?.user_id} highlightUserId={highlightUserId} />
+              <UserSelect onSelect={setSelectedUser} selectedUserId={selectedUser?.user_id} highlightUserIds={highlightUserIds} />
             </div>
             <div style={{padding: '0 20px'}}>
               {selectedUser && (

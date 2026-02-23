@@ -1,0 +1,16 @@
+  socket.on("private message", ({ from, to, message }) => {
+    // Előzmény mentése API-n keresztül (opcionális, de REST API már tudja)
+    io.to("user_" + to).emit("private message", { from, to, message });
+    io.to("user_" + from).emit("private message", { from, to, message }); // saját ablakban is jelenjen meg
+  });
+ez legyen meg frontenden is, hogy mindig frissitse
+
+
+ha érkezik backendről egy private mess nevű event akk a chat div-be szűrjon be egy másik divet amiben a socketben lévő payload üzenete van
+
+ez alapján csináld:socket.on('chat message', (msg) => {
+    const item = document.createElement('li');
+    item.textContent = msg;
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  });

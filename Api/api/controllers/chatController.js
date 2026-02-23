@@ -86,3 +86,24 @@ exports.markAsRead = async (req, res) => {
   }
 };
 
+// Olvasatlan üzenetek feladóinak listája
+exports.getUnreadSenders = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const senders = await db.ChatMessage.findAll({
+      attributes: [[db.Sequelize.fn('DISTINCT', db.Sequelize.col('from_user_id')), 'from_user_id']],
+      where: {
+        to_user_id: userId,
+        is_read: false,
+      },
+      raw: true
+    });
+    const ids = senders.map(s => Number(s.from_user_id));
+    console.log(`Olvasatlan üzenetek feladói (${userId} számára):`, ids);
+    res.json(ids);
+  } catch (error) {
+    console.error("Hiba az olvasatlan feladók lekérésekor:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+

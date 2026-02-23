@@ -1,10 +1,13 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 
 const db = require("../../config/db");
 
 const { sendEmail } = require('../utilities/emailService');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret-key-change-this-in-production';
 
 
 
@@ -23,9 +26,20 @@ exports.loginUser = async (req, res) => {
       return res.status(401).json({ message: "Hibás felhasználónév vagy jelszó!" });
     }
 
-    // Session-be mentjük a felhasználó adatait
-    req.session.userId = user.user_id;
-    req.session.username = user.name;
+    // JWT token generálása
+    const token = jwt.sign(
+      { id: user.user_id, username: user.name },
+      JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    // Cookie-ba mentjük a tokent
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 2 * 60 * 60 * 1000 // 2 óra
+    });
 
     res.json({ username: user.name, userId: user.user_id });
   } catch (error) {
@@ -96,10 +110,6 @@ exports.updateUserAdmin = async (req, res) => {
 
     await user.save();
 
-    if (req.session && parseInt(req.session.userId) === parseInt(id)) {
-      req.session.username = user.name;
-    }
-
     res.json({ message: "Felhasználó adatai frissítve!", user: { id: user.user_id, name: user.name, email: user.email } });
   } catch (error) {
     console.error('Hiba a felhasználó (admin) frissítésekor:', error);
@@ -140,11 +150,6 @@ exports.updateUser = async (req, res) => {
     }
 
     await user.save();
-
-    // Ha a név változott, frissítsük a session-t is
-    if (name && req.session.userId == id) {
-      req.session.username = name;
-    }
 
     res.json({ message: "Felhasználó adatai frissítve!", user: { id: user.user_id, name: user.name, email: user.email } });
   } catch (error) {
@@ -349,19 +354,22 @@ exports.createUser = async (req, res) => {
 
 // Kijelentkezés
 exports.logoutUser = (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ error: 'Hiba a kijelentkezéskor' });
-    }
-    res.json({ message: 'Sikeresen kijelentkezve' });
-  });
+  res.clearCookie('token');
+  res.json({ message: 'Sikeresen kijelentkezve' });
 };
 
-// Session ellenőrzés
+// Auth ellenőrzés (korábban checkSession)
 exports.checkSession = (req, res) => {
-  if (req.session.userId) {
-    res.json({ username: req.session.username, userId: req.session.userId });
-  } else {
-    res.status(401).json({ message: 'Nincs aktív session' });
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: 'Nincs aktív bejelentkezés' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    res.json({ username: decoded.username, userId: decoded.id });
+  } catch (err) {
+    res.clearCookie('token');
+    res.status(401).json({ message: 'Érvénytelen token' });
   }
 };

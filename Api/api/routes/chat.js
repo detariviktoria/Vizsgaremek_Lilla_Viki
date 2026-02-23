@@ -12,6 +12,9 @@ router.get("/history/:user1Id/:user2Id", chatController.getHistory);
 // Olvasatlan üzenetek száma
 router.get("/unread/:userId", chatController.getUnreadCount);
 
+// Olvasatlan üzenetek feladóinak listája
+router.get("/unread-senders/:userId", chatController.getUnreadSenders);
+
 // Üzenetek olvasottnak jelölése
 router.post("/read", chatController.markAsRead);
 

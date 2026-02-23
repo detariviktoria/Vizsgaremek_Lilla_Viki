@@ -197,8 +197,6 @@ export default function Home() {
   // --- Add these handlers for modal toggle ---
   const handleShowLogin = () => setShowAuthModal('login');
 
-  const handleShowRegister = () => setShowAuthModal('register');
-
   const handleCloseAuthModal = () => setShowAuthModal(null);
 
 
@@ -209,7 +207,7 @@ export default function Home() {
 
       <Header />
 
-      {/* Login/Register buttons at the top, always visible */}
+      {/* Login buttons at the top, always visible */}
 
       <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '16px 0' }}>
 
@@ -222,18 +220,6 @@ export default function Home() {
         >
 
           Bejelentkezés
-
-        </button>
-
-        <button
-
-          onClick={handleShowRegister}
-
-          style={{ background: showAuthModal === 'register' ? '#1976d2' : '#eee', color: showAuthModal === 'register' ? '#fff' : '#333', padding: '8px 16px', border: 'none', borderRadius: 4, fontWeight: 600 }}
-
-        >
-
-          Regisztráció
 
         </button>
 

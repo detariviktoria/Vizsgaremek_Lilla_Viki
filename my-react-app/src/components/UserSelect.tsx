@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import type { User } from "../api";
+import { api, type User } from "../api";
 import "./UserSelect.css";
 
 type UserSelectProps = {
   onSelect: (user: User) => void;
   selectedUserId?: number;
-  highlightUserId?: number;
+  highlightUserIds?: number[];
 };
 
-const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highlightUserId }) => {
+const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highlightUserIds = [] }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,9 +22,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3000/users");
-      if (!response.ok) throw new Error("Hiba a felhasználók lekérésekor");
-      const data = await response.json();
+      const data = await api.getUsers();
       setUsers(data);
     } catch (err: any) {
       setError(err.message);
@@ -38,8 +36,10 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
 
   // Rendezés: ha van kiemelt felhasználó (pl. aki küldött nekünk új üzenetet), tegyük az elejére
   const orderedUsers = [...filteredUsers].sort((a, b) => {
-    if (highlightUserId && a.user_id === highlightUserId) return -1;
-    if (highlightUserId && b.user_id === highlightUserId) return 1;
+    const aHighlighted = highlightUserIds.some(id => Number(id) === Number(a.user_id));
+    const bHighlighted = highlightUserIds.some(id => Number(id) === Number(b.user_id));
+    if (aHighlighted && !bHighlighted) return -1;
+    if (!aHighlighted && bHighlighted) return 1;
     return a.name.localeCompare(b.name);
   });
 
@@ -49,15 +49,23 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
   // Saját custom dropdown
   const selected = orderedUsers.find(u => u.user_id === selectedUserId);
 
+  const isHighlighted = (userId?: number) => {
+    if (!userId) return false;
+    return highlightUserIds.some(id => Number(id) === Number(userId));
+  };
+
   return (
     <div className="user-select">
       <label>Válassz felhasználót a chathez:</label>
       <div className="custom-dropdown" tabIndex={0} onBlur={() => setOpen(false)}>
         <div
-          className="custom-dropdown-selected"
+          className={
+            "custom-dropdown-selected" + 
+            (selected && isHighlighted(selected.user_id) ? " highlighted-user-option" : "")
+          }
           onClick={() => setOpen(o => !o)}
         >
-          {selected ? (highlightUserId === selected.user_id ? `${selected.name} (ÚJ)` : selected.name) : "-- Válassz --"}
+          {selected ? (isHighlighted(selected.user_id) ? `${selected.name} (ÚJ)` : selected.name) : "-- Válassz --"}
         </div>
         {open && (
           <ul className="custom-dropdown-list">
@@ -72,12 +80,12 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
                 key={user.user_id}
                 className={
                   "custom-dropdown-option" +
-                  (highlightUserId === user.user_id ? " highlighted-user-option" : "") +
+                  (isHighlighted(user.user_id) ? " highlighted-user-option" : "") +
                   (selectedUserId === user.user_id ? " selected" : "")
                 }
                 onClick={() => { onSelect(user); setOpen(false); }}
               >
-                {highlightUserId === user.user_id ? `${user.name} (ÚJ)` : user.name}
+                {isHighlighted(user.user_id) ? `${user.name} (ÚJ)` : user.name}
               </li>
             ))}
           </ul>

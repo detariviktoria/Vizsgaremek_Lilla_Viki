@@ -17,13 +17,16 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
 
   // Előzmények lekérése, ha partner változik
   useEffect(() => {
-    if (currentUser?.user_id && selectedUser?.user_id) {
-      api.getChatHistory(currentUser.user_id, selectedUser.user_id)
+    const cId = currentUser?.user_id;
+    const sId = selectedUser?.user_id;
+
+    if (cId && sId) {
+      api.getChatHistory(cId, sId)
         .then(setMessages)
         .catch(console.error);
       
       // Üzenetek olvasottnak jelölése
-      api.markChatAsRead(selectedUser.user_id, currentUser.user_id)
+      api.markChatAsRead(sId, cId)
         .then(() => {
           if (onMessagesRead) onMessagesRead();
         })
@@ -31,12 +34,29 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
     } else {
       setMessages([]);
     }
-  }, [currentUser?.user_id, selectedUser?.user_id]);
+  }, [currentUser?.user_id, selectedUser?.user_id, onMessagesRead]);
 
   // Privát üzenetek fogadása
   useEffect(() => {
+    console.log("Chat component mounted/updated, setting up socket handler for user", currentUser?.user_id);
+    
     const handler = (msg: { from: number; to: number; message: string }) => {
-      if (msg.from === selectedUser?.user_id && msg.to === currentUser.user_id) {
+      console.log("Socket message received in Chat component:", msg);
+      const cId = currentUser?.user_id;
+      const sId = selectedUser?.user_id;
+
+      if (!cId || !sId) {
+        console.log("Missing cId or sId in handler, skipping.");
+        return;
+      }
+
+      // Csak akkor adjuk hozzá, ha a kiválasztott beszélgetéshez tartozik (vagy mi küldtük neki, vagy ő nekünk)
+      const isRelevant = 
+        (Number(msg.from) === Number(sId) && Number(msg.to) === Number(cId)) ||
+        (Number(msg.from) === Number(cId) && Number(msg.to) === Number(sId));
+
+      if (isRelevant) {
+        console.log("Message is relevant, adding to state.");
         setMessages((prev) => [
           ...prev,
           {
@@ -47,16 +67,21 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
           },
         ]);
 
-        // Ha nyitva van a chat ezzel a személlyel, azonnal olvasottnak jelöljük
-        api.markChatAsRead(msg.from, currentUser.user_id)
-          .then(() => {
-            if (onMessagesRead) onMessagesRead();
-          })
-          .catch(console.error);
+        // Ha a partner küldte és nyitva van a chat, azonnal olvasottnak jelöljük
+        if (Number(msg.from) === Number(sId)) {
+          api.markChatAsRead(msg.from, cId)
+            .then(() => {
+              if (onMessagesRead) onMessagesRead();
+            })
+            .catch(console.error);
+        }
+      } else {
+        console.log("Message is not relevant to current conversation.");
       }
     };
     socket.on("private message", handler);
     return () => {
+      console.log("Removing socket handler in Chat component.");
       socket.off("private message", handler);
     };
   }, [currentUser?.user_id, selectedUser?.user_id, onMessagesRead]);
@@ -70,30 +95,21 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (input.trim() && selectedUser?.user_id) {
+    const cId = currentUser.user_id;
+    const sId = selectedUser?.user_id;
+
+    if (input.trim() && cId && sId) {
       const trimmed = input.trim();
 
-      // Azonnali megjelenítés a saját ablakban
-      setMessages((prev) => [
-        ...prev,
-        {
-          from_user_id: currentUser.user_id!,
-          to_user_id: selectedUser.user_id!,
-          message: trimmed,
-          created_at: new Date().toISOString(),
-        },
-      ]);
-      
-
-      // Socket üzenet a másik felhasználónak
+      // Socket üzenet küldése - a backend visszaküldi nekünk is, így a handler fogja megjeleníteni
       socket.emit("private message", {
-        from: currentUser.user_id,
-        to: selectedUser.user_id,
+        from: cId,
+        to: sId,
         message: trimmed,
       });
 
-      // REST API mentés
-      api.sendChatMessage(currentUser.user_id!, selectedUser.user_id, trimmed)
+      // REST API mentés az adatbázisba
+      api.sendChatMessage(cId, sId, trimmed)
         .catch(console.error);
 
       setInput("");
@@ -126,7 +142,7 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
         }}
       >
         {messages.map((msg, i) => {
-          const isMe = msg.from_user_id === currentUser.user_id;
+          const isMe = currentUser.user_id && Number(msg.from_user_id) === Number(currentUser.user_id);
           return (
             <div
               key={i}
