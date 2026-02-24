@@ -1,3 +1,6 @@
 token.txt
 .env
 *.key
+.vs/
+bin/
+obj/
