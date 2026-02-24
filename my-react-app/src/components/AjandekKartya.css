@@ -96,3 +96,35 @@
 .kedvenc-ikon.inaktiv {
   color: #ccc;
 }
+
+@media (max-width: 900px) {
+  .ajandek-kep-container {
+    height: 140px;
+  }
+  .ajandek-info {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ajandek-kartya {
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .ajandek-kep-container {
+    height: 90px;
+  }
+  .ajandek-info {
+    padding: 4px;
+  }
+  .ajandek-nev {
+    font-size: 0.95rem;
+  }
+  .ajandek-ar {
+    font-size: 0.9rem;
+  }
+  .ajandek-gomb {
+    padding: 7px;
+    font-size: 13px;
+  }
+}

@@ -53,16 +53,13 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
   useEffect(() => {
     if (!currentUserId) return;
-    
+    // Mindig join-oljon, ha van userId
     const joinRoom = () => {
-      console.log(`Socket connected, joining room for user ${currentUserId}`);
       socket.emit("join", currentUserId);
     };
-
     if (socket.connected) {
       joinRoom();
     }
-
     socket.on("connect", joinRoom);
     return () => {
       socket.off("connect", joinRoom);
@@ -72,14 +69,12 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   // Új privát üzenetek figyelése értesítéshez
   useEffect(() => {
     if (!currentUserId) return;
-
     const handler = (msg: { from: number; to: number; message: string }) => {
       // Ha nekünk jön üzenet, és a chat nincs nyitva, vagy más van megnyitva, frissítsük az állapotot
       if (msg.to === currentUserId) {
         checkUnread();
       }
     };
-
     socket.on("private message", handler);
     return () => {
       socket.off("private message", handler);
@@ -100,20 +95,14 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
     if (!currentUserId) return;
     try {
       const data = await api.getUnreadSenders(currentUserId);
-      console.log("Olvasatlan feladók:", data);
       setHighlightUserIds(data || []);
     } catch (e) {
-      console.error("Hiba az olvasatlan feladók lekérésekor:", e);
       setHighlightUserIds([]);
     }
   };
   useEffect(() => { fetchUnreadSenders(); }, [currentUserId, isChatOpen]);
+  useEffect(() => { checkUnread(); }, [currentUserId]);
 
-  useEffect(() => {
-    checkUnread();
-  }, [currentUserId]);
-
-  // Whenever highlightUserIds changes, fetch the first user's name for the banner
   useEffect(() => {
     if (highlightUserIds.length > 0) {
       api.getUser(highlightUserIds[0]).then(user => {

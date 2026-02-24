@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import socket from "../socket";
 import { api, type User } from "../api";
+import "./Chat.css";
 
 interface ChatProps {
   currentUser: User;
@@ -117,46 +118,14 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "100%",
-        margin: "10px 0",
-        border: "1px solid #eee",
-        borderRadius: "12px",
-        padding: "12px",
-        backgroundColor: "#fff4fa",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
-      }}
-    >
-      <div
-        style={{
-          height: 250,
-          overflowY: "auto",
-          marginBottom: 12,
-          background: "white",
-          padding: "10px",
-          borderRadius: "8px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px"
-        }}
-      >
+    <div className="chat-container">
+      <div className="chat-messages">
         {messages.map((msg, i) => {
           const isMe = currentUser.user_id && Number(msg.from_user_id) === Number(currentUser.user_id);
           return (
             <div
               key={i}
-              style={{
-                alignSelf: isMe ? "flex-end" : "flex-start",
-                backgroundColor: isMe ? "palevioletred" : "#f0f0f0",
-                color: isMe ? "white" : "#333",
-                padding: "8px 12px",
-                borderRadius: isMe ? "14px 14px 2px 14px" : "14px 14px 14px 2px",
-                maxWidth: "80%",
-                fontSize: "14px",
-                lineHeight: "1.4",
-                boxShadow: "0 1px 2px rgba(0,0,0,0.1)"
-              }}
+              className={isMe ? "chat-message-me" : "chat-message-other"}
             >
               {!isMe && <div style={{fontSize: '10px', marginBottom: '2px', opacity: 0.7}}>{selectedUser?.name}</div>}
               {msg.message}
