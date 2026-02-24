@@ -1,3 +1,30 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+}
+
 /* Reset */
 * {
   margin: 0;
@@ -8,7 +35,8 @@
 body {
   font-family: Arial, sans-serif;
   color: #333;
-  cursor: url("/Képek/hello-kitty_cursor.png"), auto;
+  /* Visszaállítva alapértelmezett kurzorra */
+  cursor: default;
   /* Ugyanaz a háttér, mint a régi backend főoldalon */
   background-color: lightcoral;
   margin: 0;
@@ -280,7 +308,6 @@ nav a.back-btn:hover {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  cursor: url("/Képek/hello-kitty_cursor.png"), auto;
   text-align: center;
 }
 
@@ -305,7 +332,6 @@ nav a.back-btn:hover {
 }
 
 .subcategories {
-  cursor: url("/Képek/hello-kitty_cursor.png"), auto;
   margin: 40px auto 0 auto;
   padding-top: 0;
   max-width: 500px;
@@ -489,21 +515,18 @@ main {
 }
 
 .modal.show {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
   background: #fff4fa;
-  margin: 60px auto;
   padding: 38px 35px 20px 35px;
   border-radius: 14px;
   min-width: 320px;
   max-width: 350px;
   box-shadow: 0 2px 12px rgba(200, 50, 70, 0.17);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   margin: 0;
 }
 

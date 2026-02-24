@@ -1,8 +1,11 @@
 const express = require("express");
 const cors = require("cors");
-const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const path = require("path");
+const fs = require("fs");
 const db = require("./config/db");
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 const app = express();
 
 // CORS és JSON parser middleware
@@ -19,10 +22,12 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // sendBeacon támogatása
+app.use(cookieParser());
+
+// Swagger dokumentáció útvonala
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // app.use(express.static(path.join(__dirname, "../Web")));
-
-app.use(express.static(path.join(__dirname, "../my-react-app/dist")));
 
 // Képek mappa statikus kiszolgálása
 
@@ -35,13 +40,6 @@ app.use('/Képek', express.static(path.join(__dirname, "../Képek")));
 
 
 
-
-// Session middleware
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true
-}));
 
 // Route-ok importálása
 const userRoutes = require("./api/routes/userRoutes");
@@ -68,6 +66,8 @@ const ajandekRoutes = require("./api/routes/ajandekRoutes");
 const uploadRoutes = require("./api/routes/uploadRoutes");
 
 const inviteRoutes = require("./api/routes/inviteRoutes");
+
+const chatRoutes = require('./api/routes/chat');
 
 
 
@@ -105,18 +105,22 @@ app.use("/kedvencek", kedvencekRoutes);
 
 app.use("/ajandekok", ajandekRoutes);
 
-
-
 app.use("/upload", uploadRoutes);
 
-// Minden egyéb kérést irányítsunk az index.html-re (SPA támogatás)
+app.use("/chat", chatRoutes);
 
-// A path-to-regexp újabb verziói miatt a '*' helyett regexet vagy '/*' formátumot érdemes használni
+// Minden egyéb kérést irányítsunk egy egyszerű üzenetre (mivel a frontend külön fut)
 
-app.get(/.*/, (req, res) => {
+app.get("/", (req, res) => {
+  res.send("<h1>Fut a szerver</h1>");
+});
 
-  res.sendFile(path.join(__dirname, "../my-react-app/dist/index.html"));
-
+// SPA támogatás törölve, ha nem API hívás, akkor 404
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/users') || req.path.startsWith('/ajandekok') || req.path.startsWith('/chat')) {
+    return next();
+  }
+  res.status(404).json({ error: "Not Found", message: "Az API végpont nem található." });
 });
 
 

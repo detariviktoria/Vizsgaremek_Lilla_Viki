@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic; 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +19,7 @@ namespace VizsgaAdminWpf
     {
         ApiService apiService = new ApiService();
         string currentImageFilename = "";
+        UserItem? _selectedUser = null;
 
         class AjandekItem
         {
@@ -36,10 +37,20 @@ namespace VizsgaAdminWpf
             }
         }
 
+        class UserItem
+        {
+            public int UserId { get; set; }
+            public string Name { get; set; } = "";
+            public string Email { get; set; } = "";
+
+            public override string ToString() => (Name ?? "") + " – " + (Email ?? "");
+        }
+
         public AdminWindow()
         {
             InitializeComponent();
             listBoxGifts.SelectionChanged += listBoxGifts_SelectionChanged;
+            listBoxUsers.SelectionChanged += listBoxUsers_SelectionChanged;
         }
 
         private void AdminWindow_Loaded(object sender, RoutedEventArgs e)
@@ -47,7 +58,17 @@ namespace VizsgaAdminWpf
             _ = LoadGifts();
         }
 
-        // Make this return Task so exceptions can be propagated and awaited
+        private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!ReferenceEquals(sender, tabMain))
+                return;
+
+            if (tabMain.SelectedIndex == 1)
+            {
+                _ = LoadUsers(null);
+            }
+        }
+
         private async Task LoadGifts()
         {
             listBoxGifts.Items.Clear();
@@ -79,7 +100,6 @@ namespace VizsgaAdminWpf
             catch (Exception ex)
             {
                 MessageBox.Show($"Nem sikerült betölteni az ajándékokat.\n\nHiba: {ex.Message}\n\nLehetséges okok:\n- Az API (http://localhost:3000) nem fut\n- Hibás a backend\n- Hibás válasz érkezett\n\nRészletek: {ex}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
-                Debug.WriteLine("LoadGifts hiba: " + ex.ToString());
             }
         }
 
@@ -88,7 +108,6 @@ namespace VizsgaAdminWpf
             if (listBoxGifts.SelectedItem == null) return;
 
             var selected = (AjandekItem)listBoxGifts.SelectedItem;
-
             txtNev.Text = selected.Nev ?? "";
             txtAr.Text = (selected.Ar ?? 0).ToString();
             txtLeiras.Text = selected.Leiras ?? "";
@@ -113,132 +132,148 @@ namespace VizsgaAdminWpf
             }
         }
 
+        // ========== AJÁNDÉKOK GOMBOK ==========
+
+        // Kép feltöltése az API-n keresztül
         private async void btnUploadImage_Click(object sender, RoutedEventArgs e)
         {
-            var ofd = new OpenFileDialog();
-            ofd.Filter = "Képfájlok|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
-
-            bool? result = ofd.ShowDialog();
-            if (result == true)
+            var openFile = new OpenFileDialog
             {
-                // előnézet
-                try
-                {
-                    imageGift.Source = new BitmapImage(new Uri(ofd.FileName, UriKind.Absolute));
-                }
-                catch
-                {
-                    imageGift.Source = null;
-                }
+                Filter = "Képfájlok|*.jpg;*.jpeg;*.png;*.webp;*.bmp|Minden fájl|*.*"
+            };
 
+            if (openFile.ShowDialog() == true)
+            {
                 try
                 {
-                    string uploaded = await apiService.UploadImage(ofd.FileName);
-                    currentImageFilename = uploaded;
-                    MessageBox.Show("Kép feltöltve.");
+                    var filename = await apiService.UploadImage(openFile.FileName);
+                    currentImageFilename = filename ?? "";
+
+                    if (!string.IsNullOrEmpty(currentImageFilename))
+                    {
+                        try
+                        {
+                            var uri = new Uri($"http://localhost:3000/images/{currentImageFilename}", UriKind.Absolute);
+                            imageGift.Source = new BitmapImage(uri);
+                        }
+                        catch
+                        {
+                            imageGift.Source = null;
+                        }
+                    }
+
+                    MessageBox.Show("Kép feltöltve!", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Nem sikerült feltölteni a képet.\n\nHiba: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Debug.WriteLine("UploadImage hiba: " + ex.ToString());
+                    MessageBox.Show($"Hiba a kép feltöltésekor: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
 
+        // Új ajándék hozzáadása
         private async void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (string.IsNullOrWhiteSpace(txtNev.Text))
             {
-                var uj = new AjandekDTO
-                {
-                    nev = txtNev.Text,
-                    ar = int.TryParse(txtAr.Text, out int arValue) ? arValue : 0,
-                    leiras = txtLeiras.Text,
-                    kategoria = txtKategoria.Text,
-                    image_url = currentImageFilename,
-                    link_url = ""
-                };
-
-                await apiService.CreateAjandek(uj);
-                MessageBox.Show("Hozzáadva.");
-                await LoadGifts();
-                ClearFields();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Nem sikerült hozzáadni.\n\nHiba: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
-                Debug.WriteLine("btnAdd hiba: " + ex.ToString());
-            }
-        }
-
-        private async void btnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            if (listBoxGifts.SelectedItem == null)
-            {
-                MessageBox.Show("Előbb válassz ajándékot.");
+                MessageBox.Show("A név megadása kötelező.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            if (!int.TryParse(txtAr.Text, out var ar))
+            {
+                MessageBox.Show("Az árnak számnak kell lennie.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var ajandek = new AjandekDTO
+            {
+                nev = txtNev.Text,
+                ar = ar,
+                leiras = txtLeiras.Text,
+                kategoria = txtKategoria.Text,
+                image_url = currentImageFilename
+            };
+
             try
             {
-                var selected = (AjandekItem)listBoxGifts.SelectedItem;
-
-                var mod = new AjandekDTO
-                {
-                    id = selected.Id ?? 0,
-                    nev = txtNev.Text,
-                    ar = int.TryParse(txtAr.Text, out int arValue) ? arValue : 0,
-                    leiras = txtLeiras.Text,
-                    kategoria = txtKategoria.Text,
-                    image_url = currentImageFilename,
-                    link_url = selected.LinkUrl ?? ""
-                };
-
-                await apiService.UpdateAjandek(selected.Id ?? 0, mod);
-                MessageBox.Show("Módosítva.");
-                await LoadGifts();
+                await apiService.CreateAjandek(ajandek);
+                MessageBox.Show("Ajándék hozzáadva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
                 ClearFields();
+                await LoadGifts();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Nem sikerült módosítani.\n\nHiba: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
-                Debug.WriteLine("btnEdit hiba: " + ex.ToString());
+                MessageBox.Show($"Nem sikerült az ajándék hozzáadása.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        // Kiválasztott ajándék módosítása
+        private async void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (listBoxGifts.SelectedItem is not AjandekItem selected || selected.Id == null)
+            {
+                MessageBox.Show("Előbb válassz ki egy ajándékot.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!int.TryParse(txtAr.Text, out var ar))
+            {
+                MessageBox.Show("Az árnak számnak kell lennie.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var ajandek = new AjandekDTO
+            {
+                id = selected.Id,
+                nev = txtNev.Text,
+                ar = ar,
+                leiras = txtLeiras.Text,
+                kategoria = txtKategoria.Text,
+                image_url = currentImageFilename
+            };
+
+            try
+            {
+                await apiService.UpdateAjandek(selected.Id.Value, ajandek);
+                MessageBox.Show("Ajándék módosítva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                await LoadGifts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nem sikerült az ajándék módosítása.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Ajándék törlése API hívással
         private async Task DeleteGift(int id)
         {
             try
             {
                 await apiService.DeleteAjandek(id);
-                MessageBox.Show("Törölve.");
-                await LoadGifts();
-                ClearFields();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Nem sikerült törölni.\n\nHiba: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
-                Debug.WriteLine("DeleteGift hiba: " + ex.ToString());
+                MessageBox.Show($"Nem sikerült az ajándék törlése.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        // Törlés gomb eseménykezelő
         private async void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxGifts.SelectedItem == null)
+            if (listBoxGifts.SelectedItem is not AjandekItem selected || selected.Id == null)
             {
-                MessageBox.Show("Előbb válassz ajándékot.");
+                MessageBox.Show("Előbb válassz ki egy ajándékot.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            var selected = (AjandekItem)listBoxGifts.SelectedItem;
-            var result = MessageBox.Show(
-                "Biztosan törlöd: " + (selected.Nev ?? "") + " ?",
-                "Megerősítés",
-                MessageBoxButton.YesNo);
+            var result = MessageBox.Show("Biztosan törölni szeretnéd ezt az ajándékot?", "Megerősítés",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                await DeleteGift(selected.Id ?? 0);
+                await DeleteGift(selected.Id.Value);
+                await LoadGifts();
             }
         }
 
@@ -255,7 +290,138 @@ namespace VizsgaAdminWpf
             txtKategoria.Text = "";
             currentImageFilename = "";
             imageGift.Source = null;
-            listBoxGifts.SelectedItem = null;
+        }
+
+        // ========== FELHASZNÁLÓK ==========
+        private async Task LoadUsers(int? userIdToKeep)
+        {
+            listBoxUsers.Items.Clear();
+            //_selectedUser = null;
+
+            try
+            {
+                var users = await apiService.GetUsers();
+                if (users == null) return;
+
+                UserItem? toSelect = null;
+                foreach (var u in users)
+                {
+                    var userItem = new UserItem
+                    {
+                        UserId = u.user_id ?? 0,
+                        Name = u.name ?? "",
+                        Email = u.email ?? ""
+                    };
+                    listBoxUsers.Items.Add(userItem);
+                    if (userIdToKeep.HasValue && userItem.UserId == userIdToKeep.Value)
+                        toSelect = userItem;
+                }
+
+                if (toSelect != null)
+                {
+                    listBoxUsers.SelectedItem = toSelect;
+                    _selectedUser = toSelect;
+                    txtUserNev.Text = toSelect.Name;
+                    txtUserEmail.Text = toSelect.Email;
+                    txtUserPassword.Password = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nem sikerült betölteni a felhasználókat.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void listBoxUsers_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Find the ListBoxItem that was clicked (works when clicking elements inside the item template)
+            var lb = sender as ListBox;
+            if (lb == null) return;
+
+            var dep = (DependencyObject)e.OriginalSource;
+            var item = ItemsControl.ContainerFromElement(lb, dep) as ListBoxItem;
+            if (item == null)
+            {
+                // try walking up the visual tree
+                while (dep != null && dep is not ListBoxItem)
+                    dep = VisualTreeHelper.GetParent(dep);
+                item = dep as ListBoxItem;
+            }
+
+            if (item != null)
+            {
+                // Select the item's data and focus the item so selection highlight remains
+                lb.SelectedItem = item.DataContext;
+                item.Focus();
+                e.Handled = true;
+
+                if (item.DataContext is UserItem u)
+                {
+                    _selectedUser = u;
+                }
+            }
+        }
+
+        private void listBoxUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxUsers.SelectedItem is UserItem u)
+            {
+                _selectedUser = u;
+                txtUserNev.Text = u.Name;
+                txtUserEmail.Text = u.Email;
+                txtUserPassword.Password = "";
+
+                // Ensure the ListBox keeps keyboard focus so the selected item remains highlighted (blue)
+                try
+                {
+                    listBoxUsers.Focus();
+                }
+                catch { }
+            }
+            // Ha null (pl. fókuszvesztés): _selectedUser marad – így Módosít továbbra is működik
+        }
+
+        private async void btnUserRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            await LoadUsers(null);
+        }
+
+        private async void btnUserModosit_Click(object sender, RoutedEventArgs e)
+        {
+            var u = _selectedUser ?? listBoxUsers.SelectedItem as UserItem;
+            if (u == null)
+            {
+                MessageBox.Show("Előbb válassz felhasználót.");
+                return;
+            }
+            _selectedUser = u;
+            var name = txtUserNev.Text?.Trim() ?? "";
+            var email = txtUserEmail.Text?.Trim() ?? "";
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email))
+            {
+                MessageBox.Show("A név és az e-mail megadása kötelező.");
+                return;
+            }
+
+            try
+            {
+                var pwd = string.IsNullOrWhiteSpace(txtUserPassword.Password) ? null : txtUserPassword.Password;
+                await apiService.UpdateUserAdmin(u.UserId, name, email, pwd);
+                MessageBox.Show("Felhasználó adatai frissítve.");
+                var userIdToKeep = u.UserId;
+                await LoadUsers(userIdToKeep);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Nem sikerült módosítani.\n\nHiba: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ClearUserFields()
+        {
+            txtUserNev.Text = "";
+            txtUserEmail.Text = "";
+            txtUserPassword.Password = "";
         }
     }
 }

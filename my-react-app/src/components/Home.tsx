@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 
-import { useNavigate, createSearchParams } from 'react-router-dom';
+import { useNavigate, createSearchParams, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 
 import Header from './Header';
 
 import InviteModal from './InviteModal';
+
+import AuthModal from './AuthModal';
 
 import { api } from '../api';
 
@@ -19,6 +21,8 @@ import './KategoriaValasztas.css';
 export default function Home() {
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const { username, isChecking } = useAuth();
 
@@ -66,6 +70,8 @@ export default function Home() {
 
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
+  const [showAuthModal, setShowAuthModal] = useState<null | 'login' | 'register'>(null);
+
 
 
   useEffect(() => {
@@ -97,12 +103,14 @@ export default function Home() {
 
 
         // Max ár meghatározása
-
-        const max = Math.max(...ajandekData.map(a => a.ar || 0));
-
-        setMaxPriceLimit(max);
-
-        setPriceRange({ min: 0, max: max });
+        if (ajandekData.length > 0) {
+          const max = Math.max(...ajandekData.map(a => a.ar || 0));
+          setMaxPriceLimit(max);
+          setPriceRange({ min: 0, max: max });
+        } else {
+          setMaxPriceLimit(100000);
+          setPriceRange({ min: 0, max: 100000 });
+        }
 
 
 
@@ -117,6 +125,14 @@ export default function Home() {
     fetchData();
 
   }, []);
+
+
+
+  useEffect(() => {
+    if (location.state && location.state.showLogin) {
+      setShowAuthModal('login');
+    }
+  }, [location.state]);
 
 
 
@@ -171,20 +187,17 @@ export default function Home() {
 
 
     navigate({
-
-
-
       pathname: '/ajandekok',
-
-
-
       search: createSearchParams(params).toString()
-
-
-
     });
-
   };
+
+
+
+  // --- Add these handlers for modal toggle ---
+  const handleShowLogin = () => setShowAuthModal('login');
+
+  const handleCloseAuthModal = () => setShowAuthModal(null);
 
 
 
@@ -194,29 +207,45 @@ export default function Home() {
 
       <Header />
 
-      <div className="home-container">
+      {/* Login buttons at the top, always visible */}
 
-        <div className="search-section">
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '16px 0' }}>
 
-           <div className="search-bar-home">
+        <button
 
-            <i className="search-icon">🔍</i>
+          onClick={handleShowLogin}
 
-            <input type="text" placeholder="Keresés ajándékokra..." />
+          style={{ background: showAuthModal === 'login' ? '#1976d2' : '#eee', color: showAuthModal === 'login' ? '#fff' : '#333', padding: '8px 16px', border: 'none', borderRadius: 4, fontWeight: 600 }}
 
-          </div>
+        >
 
-        </div>
+          Bejelentkezés
+
+        </button>
+
+      </div>
+
+      {/* Auth modal (login/register) */}
+
+      {showAuthModal && (
+
+        <AuthModal
+
+          isOpen={true}
+
+          onClose={handleCloseAuthModal}
+
+          initialTab={showAuthModal}
+
+        />
+
+      )}
 
 
 
+      <div className="home-container animate-fade-in">
+        
         <div className="content-grid">
-
-
-
-          {/* Szűrő Panel */}
-
-
 
           <div className={`filter-panel ${isFilterOpen ? 'open' : 'closed'}`}>
 
@@ -235,13 +264,6 @@ export default function Home() {
 
 
             </div>
-
-
-
-
-
-
-
             {isFilterOpen && (
 
 
@@ -275,53 +297,23 @@ export default function Home() {
 
 
                           <input 
-
-
-
                               type="number" 
-
-
-
                               value={priceRange.min} 
-
-
-
-                              onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
-
-
-
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (!isNaN(val)) setPriceRange({ ...priceRange, min: val });
+                              }}
                               min={0} max={priceRange.max}
-
-
-
                           />
-
-
-
                           <span>-</span>
-
-
-
                           <input 
-
-
-
                               type="number" 
-
-
-
                               value={priceRange.max} 
-
-
-
-                              onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-
-
-
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (!isNaN(val)) setPriceRange({ ...priceRange, max: val });
+                              }}
                               min={priceRange.min} max={maxPriceLimit}
-
-
-
                           />
 
 
@@ -624,19 +616,11 @@ export default function Home() {
 
           <div className="main-cards">
 
-
-
-            <div className="card" onClick={() => navigate('/elmeny')}>
-
-
+            <div className="card animate-slide-up transition-all duration-300 hover:scale-105 active:scale-95" onClick={() => navigate('/elmeny')}>
 
               <img src="/Képek/elmeny.jpg" alt="Élményajándékok" />
 
-
-
               <div className="card-title">Élményajándékok</div>
-
-
 
             </div>
 
@@ -646,17 +630,11 @@ export default function Home() {
 
 
 
-            <div className="card" onClick={() => navigate('/targy')}>
-
-
+            <div className="card animate-slide-up transition-all duration-300 hover:scale-105 active:scale-95 [animation-delay:100ms]" onClick={() => navigate('/targy')}>
 
               <img src="/Képek/targy.jpg" alt="Tárgyi ajándékok" />
 
-
-
               <div className="card-title">Tárgyi ajándékok</div>
-
-
 
             </div>            
 

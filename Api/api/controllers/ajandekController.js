@@ -1,5 +1,6 @@
 const ajandekService = require('../services/ajandekService');
 const db = require('../../config/db'); // Néhány speciális lekérdezéshez még kellhet, ha nem mozgatunk át mindent
+const { validationResult } = require('express-validator');
 
 exports.getAjandekok = async (req, res) => {
   try {
@@ -26,6 +27,11 @@ exports.getAjandekById = async (req, res) => {
 };
 
 exports.createAjandek = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
     const ajandek = await ajandekService.create(req.body);
     res.status(201).json(ajandek);
@@ -36,6 +42,11 @@ exports.createAjandek = async (req, res) => {
 };
 
 exports.updateAjandek = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { id } = req.params;
   try {
     await ajandekService.update(id, req.body);

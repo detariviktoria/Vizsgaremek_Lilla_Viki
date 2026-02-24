@@ -71,19 +71,19 @@ export default function Tovabb() {
   return (
     <>
       <Header title="Tovább oldal" />
-      <main>
-        <h2>Ajándékok kategória szerint</h2>
-        <button id="elmenyBtn" onClick={() => handleCategoryClick('élmény')}>
+      <main className="animate-fade-in opacity-0">
+        <h2 className="animate-slide-up opacity-0">Ajándékok kategória szerint</h2>
+        <button id="elmenyBtn" className="animate-slide-up opacity-0 [animation-delay:100ms] transition-all duration-300 hover:scale-105 active:scale-95" onClick={() => handleCategoryClick('élmény')}>
           Élmény ajándékok
         </button>
-        <button id="targyBtn" onClick={() => handleCategoryClick('tárgy')}>
+        <button id="targyBtn" className="animate-slide-up opacity-0 [animation-delay:150ms] transition-all duration-300 hover:scale-105 active:scale-95" onClick={() => handleCategoryClick('tárgy')}>
           Tárgy ajándékok
         </button>
         {ajandekok.length > 0 && (
-          <div id="ajandekLista">
+          <div id="ajandekLista" className="animate-fade-in opacity-0">
             <div className="ajandek-grid">
               {ajandekok.map((ajandek, index) => (
-                <div key={index} className="ajandek-item">
+                <div key={index} className="ajandek-item animate-scale-in opacity-0" style={{ animationDelay: `${index * 50}ms` }}>
                   {ajandek.image_url ? (
                     <img
                       src={`/Képek/${ajandek.image_url}`}

@@ -1,17 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using VizsgaAdminWpf;
 
 namespace VizsgaAdminWpf.Test
 {
-    [TestClass]
-    internal class AjandekTests
+    [TestFixture]
+    public class AjandekTests
     {
-        [TestMethod]
+        [Test]
         public void Ajandek_PropertySet_GetCorrectValues()
         {
             var ajandek = new Ajandek
@@ -25,9 +24,35 @@ namespace VizsgaAdminWpf.Test
                 link_url = "http://pelda.hu"
             };
 
-            Assert.AreEqual(1, ajandek.id);
-            Assert.AreEqual("Bögre", ajandek.nev);
-            Assert.AreEqual(2500, ajandek.ar);
+            Assert.Multiple(() =>
+            {
+                Assert.That(ajandek.id, Is.EqualTo(1));
+                Assert.That(ajandek.nev, Is.EqualTo("Bögre"));
+                Assert.That(ajandek.ar, Is.EqualTo(2500));
+                Assert.That(ajandek.leiras, Is.EqualTo("Vicces felirat"));
+                Assert.That(ajandek.kategoria, Is.EqualTo("Ajándék"));
+                Assert.That(ajandek.image_url, Is.EqualTo("kep.jpg"));
+                Assert.That(ajandek.link_url, Is.EqualTo("http://pelda.hu"));
+            });
+        }
+
+        [Test]
+        public void Ajandek_EmptyStrings_AreAccepted()
+        {
+            var ajandek = new Ajandek
+            {
+                nev = "",
+                leiras = "",
+                kategoria = "",
+                image_url = "",
+                link_url = ""
+            };
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(ajandek.nev, Is.EqualTo(""));
+                Assert.That(ajandek.leiras, Is.EqualTo(""));
+            });
         }
     }
 }

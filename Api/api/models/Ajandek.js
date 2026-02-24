@@ -28,9 +28,6 @@ module.exports = (sequelize) => {
         allowNull: false,
 
       },
-      stilus_id: {
-        type: DataTypes.INTEGER,
-      },
       image_url: {
 
         type: DataTypes.STRING(255),

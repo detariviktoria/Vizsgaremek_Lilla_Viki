@@ -3,7 +3,6 @@ const { Sequelize } = require("sequelize");
 const { DbError } = require("../api/errors");
 const path = require("path");
 
-// Ellenőrizzük, hogy a .env fájl be van-e töltve
 const dbName = process.env.DB_NAME || 'vizsgaremek';
 const dbUser = process.env.DB_USER || 'root';
 const dbPassword = process.env.DB_PASSWORD || '';
@@ -20,12 +19,8 @@ if (!dbDialect) {
   console.error('DB_DIALECT=mysql');
   process.exit(1);
 }
+ 
 
-// console.log('📋 Adatbázis konfiguráció:');
-// console.log(`   Host: ${dbHost}`);
-// console.log(`   User: ${dbUser}`);
-// console.log(`   Database: ${dbName}`);
-// console.log(`   Dialect: ${dbDialect}`);
 
 const sequelize = new Sequelize(
   dbName,
@@ -57,15 +52,6 @@ const db = {
   }
 })();
 
-// (async () => {
-//   try {
-//     console.log("Adatbázis szinkronizálása folyamatban...");
-//     await db.sequelize.sync({ alter: false });
-//     console.log("Adatbázis szinkronizálása sikeres!");
-//   } catch (error) {
-//     console.error("Adatbázis szinkronizálási hiba:", error);
-//     throw new DbError("Nem sikerült az adatbázist szinkronizálni!");
-//   }
-// })();
+
 
 module.exports = db;

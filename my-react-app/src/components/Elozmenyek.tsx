@@ -60,18 +60,19 @@ const Elozmenyek = () => {
   return (
     <>
       <Header />
-      <div className="elozmenyek-container">
-        <h1 className="elozmenyek-cim">Megtekintett Ajándékok</h1>
+      <div className="elozmenyek-container animate-fade-in">
+        <h1 className="elozmenyek-cim animate-slide-up">Megtekintett Ajándékok</h1>
         {elozmenyek.length === 0 ? (
-          <div className="nincs-adat">Még nincsenek megtekintett ajándékaid.</div>
+          <div className="nincs-adat animate-fade-in">Még nincsenek megtekintett ajándékaid.</div>
         ) : (
           <div className="elozmenyek-grid">
             {elozmenyek.map((ajandek, index) => (
-              <AjandekKartya 
-                key={`${ajandek.id}-${index}`} // Indexet is használunk key-nek, mert egy ajándék többször is szerepelhet az előzményekben
-                ajandek={ajandek} 
-                isKedvenc={ajandek.id ? kedvencekIds.includes(ajandek.id) : false}
-              />
+              <div key={`${ajandek.id}-${index}`} className="animate-scale-in" style={{ animationDelay: `${index * 50}ms` }}>
+                <AjandekKartya 
+                  ajandek={ajandek} 
+                  isKedvenc={ajandek.id ? kedvencekIds.includes(ajandek.id) : false}
+                />
+              </div>
             ))}
           </div>
         )}

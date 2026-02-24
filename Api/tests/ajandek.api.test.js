@@ -2,6 +2,13 @@ jest.mock("../api/db");
 // A biztonság kedvéért a config/db-t is mockoljuk, mivel az app azt használja
 jest.mock("../config/db", () => require("../api/db"));
 
+// Mock auth and admin middlewares
+jest.mock("../api/middlewares/auth", () => (req, res, next) => {
+    req.user = { id: 1, username: "admin", role: "admin" };
+    next();
+});
+jest.mock("../api/middlewares/admin", () => (req, res, next) => next());
+
 const request = require("supertest");
 const app = require("../app");
 const db = require("../api/db");

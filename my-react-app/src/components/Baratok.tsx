@@ -9,6 +9,7 @@ interface Friend {
   name: string;
   status: string;
   accepted: boolean;
+  direction?: 'en_hivtam_meg' | 'engem_hivott_meg';
 }
 
 const Baratok = () => {
@@ -57,20 +58,21 @@ const Baratok = () => {
   return (
     <>
       <Header />
-      <div className="baratok-container">
-        <h1 className="baratok-cim">Meghívott Barátaim</h1>
+      <div className="baratok-container animate-fade-in">
+        <h1 className="baratok-cim animate-slide-up">Baráti meghívások</h1>
         {baratok.length === 0 ? (
-          <div className="nincs-adat">Még nem hívtál meg senkit, vagy senki sem regisztrált a meghívóra.</div>
+          <div className="nincs-adat animate-fade-in">Még nem hívtál meg senkit, és téged sem hívott meg senki.</div>
         ) : (
           <div className="baratok-lista">
             {baratok.map((barat, index) => (
-              <div key={index} className="barat-item">
+              <div key={index} className="barat-item animate-scale-in" style={{ animationDelay: `${index * 50}ms` }}>
                 <div className="barat-info">
                   <div className="barat-email">{barat.email}</div>
                   {barat.name && <div className="barat-name">{barat.name}</div>}
                 </div>
-                <div className={`barat-status ${barat.accepted ? 'elfogadva' : 'fuggo'}`}>
-                  {barat.accepted ? 'Elfogadva' : 'Függőben'}
+                <div className={`barat-status ${barat.accepted ? 'elfogadva' : 'fuggo'}`}> 
+                  {barat.direction === 'en_hivtam_meg' && (barat.accepted ? 'Elfogadva' : 'Függőben')}
+                  {barat.direction === 'engem_hivott_meg' && 'Engem hívott meg'}
                 </div>
               </div>
             ))}
