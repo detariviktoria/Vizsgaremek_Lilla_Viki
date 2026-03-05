@@ -70,8 +70,6 @@ export default function Home() {
 
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-  const [showAuthModal, setShowAuthModal] = useState<null | 'login' | 'register'>(null);
-
 
 
   useEffect(() => {
@@ -125,14 +123,6 @@ export default function Home() {
     fetchData();
 
   }, []);
-
-
-
-  useEffect(() => {
-    if (location.state && location.state.showLogin) {
-      setShowAuthModal('login');
-    }
-  }, [location.state]);
 
 
 
@@ -194,54 +184,11 @@ export default function Home() {
 
 
 
-  // --- Add these handlers for modal toggle ---
-  const handleShowLogin = () => setShowAuthModal('login');
-
-  const handleCloseAuthModal = () => setShowAuthModal(null);
-
-
-
   return (
 
     <>
 
       <Header />
-
-      {/* Login buttons at the top, always visible */}
-
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, margin: '16px 0' }}>
-
-        <button
-
-          onClick={handleShowLogin}
-
-          style={{ background: showAuthModal === 'login' ? '#1976d2' : '#eee', color: showAuthModal === 'login' ? '#fff' : '#333', padding: '8px 16px', border: 'none', borderRadius: 4, fontWeight: 600 }}
-
-        >
-
-          Bejelentkezés
-
-        </button>
-
-      </div>
-
-      {/* Auth modal (login/register) */}
-
-      {showAuthModal && (
-
-        <AuthModal
-
-          isOpen={true}
-
-          onClose={handleCloseAuthModal}
-
-          initialTab={showAuthModal}
-
-        />
-
-      )}
-
-
 
       <div className="home-container animate-fade-in">
         

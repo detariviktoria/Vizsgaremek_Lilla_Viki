@@ -4,6 +4,8 @@ import { Navigate, useSearchParams } from 'react-router-dom';
 
 import Header from './Header';
 
+import AjandekKartya from './AjandekKartya';
+
 import { useAuth } from '../hooks/useAuth';
 
 import { api, type Ajandek } from '../api';
@@ -14,9 +16,11 @@ import './Tovabb.css';
 
 export default function Tovabb() {
 
-  const { username } = useAuth();
+  const { username, userId } = useAuth();
 
   const [ajandekok, setAjandekok] = useState<Ajandek[]>([]);
+
+  const [kedvencekIds, setKedvencekIds] = useState<number[]>([]);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -52,11 +56,17 @@ export default function Tovabb() {
 
     try {
 
-      const allAjandekok = await api.getAjandekok();
+      const [allAjandekok, kedvencData] = await Promise.all([
+        api.getAjandekok(),
+        userId ? api.getKedvencek(userId) : Promise.resolve([])
+      ]);
 
       const filtered = allAjandekok.filter(a => a.kategoria === kategoria);
 
       setAjandekok(filtered);
+      if (userId) {
+        setKedvencekIds(kedvencData.map(k => k.id!).filter(id => id !== undefined));
+      }
 
     } catch (error) {
 
@@ -82,20 +92,12 @@ export default function Tovabb() {
         {ajandekok.length > 0 && (
           <div id="ajandekLista" className="animate-fade-in opacity-0">
             <div className="ajandek-grid">
-              {ajandekok.map((ajandek, index) => (
-                <div key={index} className="ajandek-item animate-scale-in opacity-0" style={{ animationDelay: `${index * 50}ms` }}>
-                  {ajandek.image_url ? (
-                    <img
-                      src={`/Képek/${ajandek.image_url}`}
-                      alt={ajandek.nev}
-                    />
-                  ) : (
-                    <div className="ajandek-placeholder">
-                      Nincs hozzátartozó kép.
-                    </div>
-                  )}
-                  <span>{ajandek.nev}</span>
-                </div>
+              {ajandekok.map((ajandek) => (
+                <AjandekKartya 
+                  key={ajandek.id} 
+                  ajandek={ajandek} 
+                  isKedvenc={ajandek.id ? kedvencekIds.includes(ajandek.id) : false}
+                />
               ))}
             </div>
           </div>

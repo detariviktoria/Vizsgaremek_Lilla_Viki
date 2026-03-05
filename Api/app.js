@@ -46,7 +46,6 @@ const celcsoportRoutes = require("./api/routes/celcsoportRoutes");
 
 const kategoriaRoutes = require("./api/routes/kategoriaRoutes");
 
-const kuponRoutes = require("./api/routes/kuponRoutes");
 
 const elozmenyekRoutes = require("./api/routes/elozmenyekRoutes");
 
@@ -88,7 +87,6 @@ app.use("/celcsoportok", celcsoportRoutes);
 
 app.use("/kategoriak", kategoriaRoutes);
 
-app.use("/kuponok", kuponRoutes);
 
 
 

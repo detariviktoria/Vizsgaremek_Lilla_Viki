@@ -12,7 +12,8 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [open, setOpen] = useState(false); // <-- IDE KERÜL!
+  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -54,40 +55,56 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
     return highlightUserIds.some(id => Number(id) === Number(userId));
   };
 
+  const filteredBySearch = orderedUsers.filter(user => 
+    user.name.toLowerCase().startsWith(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="user-select">
       <label>Válassz felhasználót a chathez:</label>
-      <div className="custom-dropdown" tabIndex={0} onBlur={() => setOpen(false)}>
-        <div
+      <div className="custom-dropdown" onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setOpen(false);
+          setSearchTerm("");
+        }
+      }}>
+        <input
+          type="text"
           className={
             "custom-dropdown-selected" + 
             (selected && isHighlighted(selected.user_id) ? " highlighted-user-option" : "")
           }
-          onClick={() => setOpen(o => !o)}
-        >
-          {selected ? (isHighlighted(selected.user_id) ? `${selected.name} (ÚJ)` : selected.name) : "-- Válassz --"}
-        </div>
+          value={open ? searchTerm : (selected ? (isHighlighted(selected.user_id) ? `${selected.name} (ÚJ)` : selected.name) : "")}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setOpen(true)}
+          onClick={() => setOpen(true)}
+          placeholder={open ? "Keresés..." : "-- Válassz --"}
+          autoComplete="off"
+        />
         {open && (
           <ul className="custom-dropdown-list">
-            <li
-              className={!selectedUserId ? "custom-dropdown-option selected" : "custom-dropdown-option"}
-              onClick={() => { onSelect(undefined as any); setOpen(false); }}
-            >
-              -- Válassz --
-            </li>
-            {orderedUsers.map(user => (
-              <li
-                key={user.user_id}
-                className={
-                  "custom-dropdown-option" +
-                  (isHighlighted(user.user_id) ? " highlighted-user-option" : "") +
-                  (selectedUserId === user.user_id ? " selected" : "")
-                }
-                onClick={() => { onSelect(user); setOpen(false); }}
-              >
-                {isHighlighted(user.user_id) ? `${user.name} (ÚJ)` : user.name}
-              </li>
-            ))}
+            {filteredBySearch.length > 0 ? (
+              filteredBySearch.map(user => (
+                <li
+                  key={user.user_id}
+                  className={
+                    "custom-dropdown-option" +
+                    (isHighlighted(user.user_id) ? " highlighted-user-option" : "") +
+                    (selectedUserId === user.user_id ? " selected" : "")
+                  }
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => { 
+                    onSelect(user); 
+                    setOpen(false); 
+                    setSearchTerm("");
+                  }}
+                >
+                  {isHighlighted(user.user_id) ? `${user.name} (ÚJ)` : user.name}
+                </li>
+              ))
+            ) : (
+              <li className="custom-dropdown-option">Nincs találat</li>
+            )}
           </ul>
         )}
       </div>

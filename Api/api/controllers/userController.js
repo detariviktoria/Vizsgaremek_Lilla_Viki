@@ -286,31 +286,11 @@ exports.createUser = async (req, res) => {
           });
         }
 
-        const couponCode = 'REF-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-
-        
-
-        await db.Kupon.create({
-
-           user_id: ajanlo_id,
-
-           coupon_code: couponCode,
-
-           status: 'active',
-
-           discount: 5000,
-
-           expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 nap
-
-        });
-
-
-
         const referrer = await db.Felhasznalo.findByPk(ajanlo_id);
 
         if (referrer) {
 
-            const subject = 'Gratulálunk! Új kuponod érkezett!';
+            const subject = 'Gratulálunk! Egy ismerősöd csatlakozott!';
 
             const html = `
 
@@ -318,11 +298,7 @@ exports.createUser = async (req, res) => {
 
                 <p>Egy általad meghívott ismerősöd (${name}) sikeresen regisztrált!</p>
 
-                <p>Jutalmad egy 5000 Ft értékű kupon:</p>
-
-                <h2 style="color: #e91e63;">${couponCode}</h2>
-
-                <p>A kupon 30 napig érvényes.</p>
+                <p>Köszönjük, hogy ajánlottad az oldalunkat!</p>
 
             `;
 
@@ -332,7 +308,7 @@ exports.createUser = async (req, res) => {
 
       } catch (err) {
 
-        console.error('Hiba a kupon generálásakor vagy email küldéskor:', err);
+        console.error('Hiba az ajánlói folyamatban:', err);
 
       }
 

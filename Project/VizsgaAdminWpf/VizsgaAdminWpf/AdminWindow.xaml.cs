@@ -75,7 +75,7 @@ namespace VizsgaAdminWpf
 
             try
             {
-                List<AjandekDTO> gifts = await apiService.GetAjandekok();
+                var gifts = await apiService.GetAjandekok();
                 if (gifts == null || gifts.Count == 0)
                 {
                     MessageBox.Show("Az API üres választ adott vagy nem elérhető.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -225,7 +225,7 @@ namespace VizsgaAdminWpf
 
             var ajandek = new AjandekDTO
             {
-                id = selected.Id,
+                id = selected.Id.Value,
                 nev = txtNev.Text,
                 ar = ar,
                 leiras = txtLeiras.Text,

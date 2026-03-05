@@ -613,16 +613,7 @@ ensureMinimumAssociations();
 // --- Töröld az ajándékok stilus_id mezőjét, mert már pivot táblát használunk ---
 ajandekok.forEach(a => { delete a.stilus_id });
 
-// --- Kuponok (példa adatok) ---
-const kuponok = [
 
-  { coupon_id: 1, user_id: 1, coupon_code: 'KU123', status: 'Nem felhasználva', discount: 1000, expiry_date: '2025-12-31' },
-
-  { coupon_id: 2, user_id: 2, coupon_code: 'KU456', status: 'Felhasználva', discount: 1500, expiry_date: '2025-11-30' },
-
-  { coupon_id: 3, user_id: 1, coupon_code: 'KU789', status: 'Nem felhasználva', discount: 2000, expiry_date: '2026-01-15' }
-
-];
 
 const stilusok = [
   { id: 1, nev: 'Vicces' },
@@ -680,7 +671,6 @@ const seedAll = async () => {
 
 
 
-    await db.Kupon.bulkCreate(kuponok);
 
     // ---- PIVOT: Ajándék <-> Alkalom ----
     for (const row of ajandekAlkalomok) {

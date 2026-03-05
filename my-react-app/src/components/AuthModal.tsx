@@ -148,10 +148,10 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         </div>
 
         {activeTab === 'login' && (
-          <form className="login-form animate-slide-up" id="modal-login-form" onSubmit={handleLogin}>
+          <form className={`login-form animate-slide-up ${messageColor === 'red' && message ? 'animate-shake' : ''}`} id="modal-login-form" onSubmit={handleLogin}>
             <h2>Bejelentkezés</h2>
-            <input type="text" name="username" placeholder="Felhasználónév" required className="transition-all duration-300 focus:scale-105" />
-            <input type="password" name="password" placeholder="Jelszó" required className="transition-all duration-300 focus:scale-105" />
+            <input type="text" name="username" placeholder="Felhasználónév" required className={`transition-all duration-300 focus:scale-105 ${messageColor === 'red' && message ? 'input-error' : ''}`} />
+            <input type="password" name="password" placeholder="Jelszó" required className={`transition-all duration-300 focus:scale-105 ${messageColor === 'red' && message ? 'input-error' : ''}`} />
             {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
             <button type="submit" className="transition-all duration-300 hover:scale-105 active:scale-95">Belépés</button>
             <div className="forgot-password-link">
