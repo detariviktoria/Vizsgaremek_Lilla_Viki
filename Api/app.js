@@ -89,11 +89,9 @@ const chatRoutes = require('./api/routes/chat');
 
 // Route-ok regisztrálása
 
-
+app.use("/users", userRoutes);
 
 app.use("/invite", inviteRoutes);
-
-app.use("/users", userRoutes);
 
 app.use("/alkalmak", alkalomRoutes);
 

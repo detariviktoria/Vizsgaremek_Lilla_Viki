@@ -115,8 +115,8 @@ export const useAuth = () => {
 
             // Ha esetleg hiányzott a storage-ból, pótoljuk
 
-            if (!storedUserId) sessionStorage.setItem('userId', session.userId.toString());
-            sessionStorage.setItem('isAdmin', session.isAdmin.toString());
+            if (!storedUserId && session.userId) sessionStorage.setItem('userId', session.userId.toString());
+            if (session.isAdmin !== undefined) sessionStorage.setItem('isAdmin', session.isAdmin.toString());
 
           } else {
 
@@ -278,9 +278,9 @@ export const useAuth = () => {
 
     sessionStorage.setItem('username', user);
 
-    sessionStorage.setItem('userId', id.toString());
+    if (id !== undefined && id !== null) sessionStorage.setItem('userId', id.toString());
 
-    sessionStorage.setItem('isAdmin', admin.toString());
+    if (admin !== undefined && admin !== null) sessionStorage.setItem('isAdmin', admin.toString());
 
     sessionStorage.setItem('sessionStart', Date.now().toString());
 
@@ -288,7 +288,7 @@ export const useAuth = () => {
 
     setUserId(id);
 
-    setIsAdmin(admin);
+    setIsAdmin(!!admin);
 
   };
 

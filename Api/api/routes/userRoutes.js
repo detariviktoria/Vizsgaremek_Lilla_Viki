@@ -59,7 +59,7 @@ const validateUser = [
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-router.get("/", authMiddleware, adminMiddleware, userController.getAllUsers);
+router.get("/", userController.getAllUsers);
 
 /**
  * @swagger
@@ -92,10 +92,6 @@ router.get("/:id", authMiddleware, userController.getUserById);
 router.put("/:id/admin", authMiddleware, adminMiddleware, userController.updateUserAdmin);
 router.put("/:id", authMiddleware, userController.updateUser);
 router.post("/", validateUser, userController.createUser);
-
-
-// Bejelentkezés
-router.post("/login", userController.loginUser);
 
 // Kijelentkezés
 router.post("/logout", userController.logoutUser);
