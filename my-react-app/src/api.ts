@@ -22,6 +22,7 @@ export type User = {
 export type LoginResponse = {
   username: string;
   userId: number;
+  isAdmin: boolean;
 };
 
 export const api = {

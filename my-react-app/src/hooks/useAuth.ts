@@ -11,6 +11,8 @@ export const useAuth = () => {
 
   const [userId, setUserId] = useState<number | null>(null);
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
   const [isChecking, setIsChecking] = useState(true);
 
   const [remainingTime, setRemainingTime] = useState<string>('');
@@ -27,6 +29,8 @@ export const useAuth = () => {
 
         const storedUserId = sessionStorage.getItem('userId');
 
+        const storedIsAdmin = sessionStorage.getItem('isAdmin') === 'true';
+
         const sessionStart = sessionStorage.getItem('sessionStart');
 
 
@@ -42,6 +46,8 @@ export const useAuth = () => {
           setUsername(null);
 
           setUserId(null);
+
+          setIsAdmin(false);
 
           setIsChecking(false);
 
@@ -67,11 +73,15 @@ export const useAuth = () => {
 
           sessionStorage.removeItem('userId');
 
+          sessionStorage.removeItem('isAdmin');
+
           sessionStorage.removeItem('sessionStart');
 
           setUsername(null);
 
           setUserId(null);
+
+          setIsAdmin(false);
 
           setIsChecking(false);
 
@@ -101,9 +111,12 @@ export const useAuth = () => {
 
             setUserId(session.userId);
 
+            setIsAdmin(session.isAdmin);
+
             // Ha esetleg hiányzott a storage-ból, pótoljuk
 
             if (!storedUserId) sessionStorage.setItem('userId', session.userId.toString());
+            sessionStorage.setItem('isAdmin', session.isAdmin.toString());
 
           } else {
 
@@ -113,11 +126,15 @@ export const useAuth = () => {
 
             sessionStorage.removeItem('userId');
 
+            sessionStorage.removeItem('isAdmin');
+
             sessionStorage.removeItem('sessionStart');
 
             setUsername(null);
 
             setUserId(null);
+
+            setIsAdmin(false);
 
           }
 
@@ -129,11 +146,15 @@ export const useAuth = () => {
 
           sessionStorage.removeItem('userId');
 
+          sessionStorage.removeItem('isAdmin');
+
           sessionStorage.removeItem('sessionStart');
 
           setUsername(null);
 
           setUserId(null);
+
+          setIsAdmin(false);
 
         }
 
@@ -145,11 +166,15 @@ export const useAuth = () => {
 
         sessionStorage.removeItem('userId');
 
+        sessionStorage.removeItem('isAdmin');
+
         sessionStorage.removeItem('sessionStart');
 
         setUsername(null);
 
         setUserId(null);
+
+        setIsAdmin(false);
 
       } finally {
 
@@ -247,19 +272,23 @@ export const useAuth = () => {
 
 
 
-  const login = (user: string, id: number) => {
+  const login = (user: string, id: number, admin: boolean) => {
 
-    console.log('📝 Login:', user, id);
+    console.log('📝 Login:', user, id, admin);
 
     sessionStorage.setItem('username', user);
 
     sessionStorage.setItem('userId', id.toString());
+
+    sessionStorage.setItem('isAdmin', admin.toString());
 
     sessionStorage.setItem('sessionStart', Date.now().toString());
 
     setUsername(user);
 
     setUserId(id);
+
+    setIsAdmin(admin);
 
   };
 
@@ -283,16 +312,20 @@ export const useAuth = () => {
 
     sessionStorage.removeItem('userId');
 
+    sessionStorage.removeItem('isAdmin');
+
     sessionStorage.removeItem('sessionStart');
 
     setUsername(null);
 
     setUserId(null);
 
+    setIsAdmin(false);
+
   };
 
 
 
-  return { username, userId, login, logout, isChecking, remainingTime };
+  return { username, userId, isAdmin, login, logout, isChecking, remainingTime };
 
 };

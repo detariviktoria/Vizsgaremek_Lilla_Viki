@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-jwt-secret-key-change-this-in-production');
-    req.user = decoded; // { id: user_id, username: name }
+    req.user = decoded; // { id: user_id, username: name, isAdmin: boolean }
     next();
   } catch (err) {
     res.clearCookie('token');
@@ -17,4 +17,11 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+const adminMiddleware = (req, res, next) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.status(403).json({ message: 'Hozzáférés megtagadva: Admin jogosultság szükséges' });
+  }
+  next();
+};
+
+module.exports = { authMiddleware, adminMiddleware };

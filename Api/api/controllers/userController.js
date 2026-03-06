@@ -28,7 +28,7 @@ exports.loginUser = async (req, res) => {
 
     // JWT token generálása
     const token = jwt.sign(
-      { id: user.user_id, username: user.name },
+      { id: user.user_id, username: user.name, isAdmin: user.is_admin },
       JWT_SECRET,
       { expiresIn: '2h' }
     );
@@ -41,7 +41,7 @@ exports.loginUser = async (req, res) => {
       maxAge: 2 * 60 * 60 * 1000 // 2 óra
     });
 
-    res.json({ username: user.name, userId: user.user_id });
+    res.json({ username: user.name, userId: user.user_id, isAdmin: user.is_admin });
   } catch (error) {
     console.error('Bejelentkezési hiba:', error);
     res.status(500).json({ error: error.message });
@@ -343,7 +343,7 @@ exports.checkSession = (req, res) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    res.json({ username: decoded.username, userId: decoded.id });
+    res.json({ username: decoded.username, userId: decoded.id, isAdmin: decoded.isAdmin });
   } catch (err) {
     res.clearCookie('token');
     res.status(401).json({ message: 'Érvénytelen token' });
