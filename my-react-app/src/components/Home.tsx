@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 
-import { useNavigate, createSearchParams } from 'react-router-dom';
+import { useNavigate, createSearchParams, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
 
 import Header from './Header';
 
 import InviteModal from './InviteModal';
+
+import AuthModal from './AuthModal';
 
 import { api } from '../api';
 
@@ -19,6 +21,8 @@ import './KategoriaValasztas.css';
 export default function Home() {
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const { username, isChecking } = useAuth();
 
@@ -97,12 +101,14 @@ export default function Home() {
 
 
         // Max ár meghatározása
-
-        const max = Math.max(...ajandekData.map(a => a.ar || 0));
-
-        setMaxPriceLimit(max);
-
-        setPriceRange({ min: 0, max: max });
+        if (ajandekData.length > 0) {
+          const max = Math.max(...ajandekData.map(a => a.ar || 0));
+          setMaxPriceLimit(max);
+          setPriceRange({ min: 0, max: max });
+        } else {
+          setMaxPriceLimit(100000);
+          setPriceRange({ min: 0, max: 100000 });
+        }
 
 
 
@@ -171,19 +177,9 @@ export default function Home() {
 
 
     navigate({
-
-
-
       pathname: '/ajandekok',
-
-
-
       search: createSearchParams(params).toString()
-
-
-
     });
-
   };
 
 
@@ -194,29 +190,9 @@ export default function Home() {
 
       <Header />
 
-      <div className="home-container">
-
-        <div className="search-section">
-
-           <div className="search-bar-home">
-
-            <i className="search-icon">🔍</i>
-
-            <input type="text" placeholder="Keresés ajándékokra..." />
-
-          </div>
-
-        </div>
-
-
-
+      <div className="home-container animate-fade-in">
+        
         <div className="content-grid">
-
-
-
-          {/* Szűrő Panel */}
-
-
 
           <div className={`filter-panel ${isFilterOpen ? 'open' : 'closed'}`}>
 
@@ -235,13 +211,6 @@ export default function Home() {
 
 
             </div>
-
-
-
-
-
-
-
             {isFilterOpen && (
 
 
@@ -275,53 +244,23 @@ export default function Home() {
 
 
                           <input 
-
-
-
                               type="number" 
-
-
-
                               value={priceRange.min} 
-
-
-
-                              onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
-
-
-
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (!isNaN(val)) setPriceRange({ ...priceRange, min: val });
+                              }}
                               min={0} max={priceRange.max}
-
-
-
                           />
-
-
-
                           <span>-</span>
-
-
-
                           <input 
-
-
-
                               type="number" 
-
-
-
                               value={priceRange.max} 
-
-
-
-                              onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-
-
-
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (!isNaN(val)) setPriceRange({ ...priceRange, max: val });
+                              }}
                               min={priceRange.min} max={maxPriceLimit}
-
-
-
                           />
 
 
@@ -624,19 +563,11 @@ export default function Home() {
 
           <div className="main-cards">
 
-
-
-            <div className="card" onClick={() => navigate('/elmeny')}>
-
-
+            <div className="card animate-slide-up transition-all duration-300 hover:scale-105 active:scale-95" onClick={() => navigate('/elmeny')}>
 
               <img src="/Képek/elmeny.jpg" alt="Élményajándékok" />
 
-
-
               <div className="card-title">Élményajándékok</div>
-
-
 
             </div>
 
@@ -646,17 +577,11 @@ export default function Home() {
 
 
 
-            <div className="card" onClick={() => navigate('/targy')}>
-
-
+            <div className="card animate-slide-up transition-all duration-300 hover:scale-105 active:scale-95 [animation-delay:100ms]" onClick={() => navigate('/targy')}>
 
               <img src="/Képek/targy.jpg" alt="Tárgyi ajándékok" />
 
-
-
               <div className="card-title">Tárgyi ajándékok</div>
-
-
 
             </div>            
 

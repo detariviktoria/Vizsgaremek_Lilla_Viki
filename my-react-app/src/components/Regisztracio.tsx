@@ -10,7 +10,7 @@ export default function Regisztracio() {
 
   return (
     <>
-      <Header title="Regisztráció" showBack />
+      <Header title="Regisztráció" />
       <AuthModal isOpen={showModal} onClose={() => navigate('/')} initialTab="register" />
     </>
   );

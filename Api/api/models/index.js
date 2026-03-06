@@ -4,10 +4,10 @@ module.exports = (sequelize) => {
   const Stilus = require("./Stilus")(sequelize);
   const Celcsoport = require("./Celcsoport")(sequelize);
   const Ajandek = require("./Ajandek")(sequelize);
-  const Kupon = require("./Kupon")(sequelize);
   const Felhasznalo_AjandekElozmeny = require("./Elozmeny")(sequelize);
   const Felhasznalo_KedvencAjandek = require("./Kedvenc")(sequelize);
-  const Meghivo = require("./Meghivo")(sequelize);  
+  const Meghivo = require("./Meghivo")(sequelize);
+  const ChatMessage = require("./ChatMessage")(sequelize);
   // Asszociációk
 
   // Ajandek <-> Stilus (many to many)
@@ -62,16 +62,6 @@ module.exports = (sequelize) => {
     foreignKey: "celcsoport_id",
     otherKey: "ajandek_id",
     as: "ajandekok",
-  });
-
-  // Kupon -> Felhasznalo (belongs to)
-  Kupon.belongsTo(Felhasznalo, {
-    foreignKey: "user_id",
-    as: "felhasznalo",
-  });
-  Felhasznalo.hasMany(Kupon, {
-    foreignKey: "user_id",
-    as: "kuponok",
   });
 
   // Meghivo -> Felhasznalo (belongs to - küldő)
@@ -179,9 +169,9 @@ module.exports = (sequelize) => {
     Stilus,
     Celcsoport,
     Ajandek,
-    Kupon,
     Felhasznalo_AjandekElozmeny,
     Felhasznalo_KedvencAjandek,
-    Meghivo
+    Meghivo,
+    ChatMessage
   };
 };

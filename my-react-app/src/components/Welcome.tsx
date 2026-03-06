@@ -21,10 +21,10 @@ export default function Welcome() {
   return (
     <>
       <Header title="Kategóriaválasztás" />
-      <div className="main-content-container">
+      <div className="main-content-container animate-fade-in opacity-0">
         <div className="middle-content">
-          <h1 id="welcome-message">Üdvözöllek az oldalon, {username}!</h1>
-          <button id="tovabb_gomb" onClick={() => navigate('/tovabb')}>
+          <h1 id="welcome-message" className="animate-slide-up opacity-0">Üdvözöllek az oldalon, {username}!</h1>
+          <button id="tovabb_gomb" className="animate-slide-up opacity-0 [animation-delay:200ms] transition-all duration-300 hover:scale-105 active:scale-95" onClick={() => navigate('/tovabb')}>
             Tovább
           </button>
         </div>

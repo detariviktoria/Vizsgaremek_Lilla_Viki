@@ -11,6 +11,17 @@ interface AjandekKartyaProps {
   onKedvencValtozas?: () => void; // Callback, ha változik a kedvenc státusz (pl. listából törlésnél)
 }
 
+export const SkeletonKartya: React.FC = () => (
+  <div className="skeleton-kartya animate-fade-in">
+    <div className="skeleton-kep"></div>
+    <div className="skeleton-info">
+      <div className="skeleton-nev"></div>
+      <div className="skeleton-ar"></div>
+      <div className="skeleton-gomb"></div>
+    </div>
+  </div>
+);
+
 const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = false, onKedvencValtozas }) => {
   const { userId } = useAuth();
   const [kedvenc, setKedvenc] = useState(isKedvenc);
@@ -59,7 +70,7 @@ const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = fals
   const imageUrl = ajandek.image_url ? `${API_BASE_URL}/images/${ajandek.image_url.split('/').pop()}` : 'https://via.placeholder.com/300x200?text=Nincs+kép';
 
   return (
-    <div className="ajandek-kartya">
+    <div className="ajandek-kartya animate-fade-in opacity-0 transition-all duration-300 hover:scale-105 hover:shadow-xl">
       <div className="ajandek-kep-container">
         <img src={imageUrl} alt={ajandek.nev} className="ajandek-kep" />
         {userId && (

@@ -1,6 +1,7 @@
 const { sendEmail } = require('../utilities/emailService');
-
 const db = require('../../config/db');
+const path = require('path');
+const fs = require('fs');
 
 
 
@@ -26,14 +27,27 @@ exports.sendInvite = async (req, res, next) => {
 
     const subject = 'Meghívó a Vizsgaremek oldalra';
     const html = `
-      <h1>Szia!</h1>
-      <p>${kuldo.name} meghívott téged a Vizsgaremek oldalra.</p>
-      <p>Kattints az alábbi linkre a regisztrációhoz:</p>
-      <a href="${inviteLink}">${inviteLink}</a>
-      <p>Ha regisztrálsz, ${kuldo.name} egy 5000 Ft-os kupont kap!</p>
+      <div style="text-align: center; font-family: sans-serif;">
+        <img src="cid:kupon" alt="Kupon" style="max-width: 100%; height: auto; border-radius: 10px;" />
+        <br><br>
+        <a href="${inviteLink}" style="display: inline-block; padding: 10px 20px; background-color: #ff69b4; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Regisztráció</a>
+      </div>
     `;
 
-    const success = await sendEmail(email, subject, html);
+    // Ellenőrizzük, hogy a kupon képe tényleg létezik-e az assets mappában
+    const attachmentPath = path.join(__dirname, '../assets/kupon.jpg');
+    const attachments = [];
+    if (fs.existsSync(attachmentPath)) {
+      attachments.push({
+        filename: 'kupon.jpg',
+        path: attachmentPath,
+        cid: 'kupon'
+      });
+    } else {
+      console.warn('Kupon kép nem található, a meghívó csatolmány nélkül lesz elküldve:', attachmentPath);
+    }
+
+    const success = await sendEmail(email, subject, html, attachments);
 
     if (success) {
       // Mentjük a meghívót az adatbázisba
@@ -46,7 +60,8 @@ exports.sendInvite = async (req, res, next) => {
 
       res.status(200).json({ message: 'Meghívó sikeresen elküldve!' });
     } else {
-      res.status(500).json({ message: 'Hiba történt az email küldésekor.' });
+      // Adjunk hasznosabb hibajelzést a kliensnek (anélkül, hogy érzékeny adatokat küldenénk)
+      res.status(500).json({ message: 'Hiba történt az email küldésekor. Ellenőrizd a szerver konzolját az .env és email beállítások miatt.' });
     }
 
   } catch (error) {
@@ -75,7 +90,6 @@ exports.getInvitedFriends = async (req, res, next) => {
 
     // 2. Minden meghívóhoz ellenőrizzük, hogy regisztrált-e már
     for (const meghivo of meghivok) {
-      // Keresünk felhasználót ezzel az email címmel, aki ezt a felhasználót ajánlotta
       const regisztraltBarat = await db.Felhasznalo.findOne({
         where: {
           email: meghivo.email,
@@ -85,14 +99,13 @@ exports.getInvitedFriends = async (req, res, next) => {
       });
 
       if (regisztraltBarat) {
-        // Ha regisztrált, akkor elfogadva
         friendsList.push({
           email: meghivo.email,
           name: regisztraltBarat.name,
           status: 'Elfogadva',
-          accepted: true
+          accepted: true,
+          direction: 'en_hivtam_meg'
         });
-        // Frissítjük a meghívó státuszát, ha még nem volt frissítve
         if (!meghivo.elfogadva) {
           await meghivo.update({
             elfogadva: true,
@@ -100,14 +113,32 @@ exports.getInvitedFriends = async (req, res, next) => {
           });
         }
       } else {
-        // Ha még nem regisztrált, akkor függőben
         friendsList.push({
           email: meghivo.email,
           name: null,
           status: 'Függőben',
-          accepted: false
+          accepted: false,
+          direction: 'en_hivtam_meg'
         });
       }
+    }
+
+    // 3. Lekérjük azokat, akik engem hívtak meg (én vagyok az ajanlo_id)
+    const engemMeghivok = await db.Felhasznalo.findAll({
+      where: {
+        ajanlo_id: parseInt(userId)
+      },
+      attributes: ['user_id', 'name', 'email']
+    });
+
+    for (const barat of engemMeghivok) {
+      friendsList.push({
+        email: barat.email,
+        name: barat.name,
+        status: 'Engem hívott meg',
+        accepted: true,
+        direction: 'engem_hivott_meg'
+      });
     }
 
     res.status(200).json(friendsList);

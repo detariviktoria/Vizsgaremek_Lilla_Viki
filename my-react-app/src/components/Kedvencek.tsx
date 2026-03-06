@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { api, type Ajandek } from '../api';
-import AjandekKartya from './AjandekKartya';
+import AjandekKartya, { SkeletonKartya } from './AjandekKartya';
 import Header from './Header';
 import './Kedvencek.css';
 
@@ -34,7 +35,12 @@ const Kedvencek = () => {
     return (
       <>
         <Header />
-        <div className="loading">Betöltés...</div>
+        <div className="kedvencek-container">
+          <h1 className="kedvencek-cim">Kedvenc Ajándékaim</h1>
+          <div className="kedvencek-grid">
+            {[...Array(4)].map((_, i) => <SkeletonKartya key={i} />)}
+          </div>
+        </div>
       </>
     );
   }
@@ -43,7 +49,11 @@ const Kedvencek = () => {
     return (
       <>
         <Header />
-        <div className="nincs-adat">Kérlek jelentkezz be a kedvencek megtekintéséhez!</div>
+        <div className="nincs-adat-container animate-fade-in">
+          <div className="nincs-adat-ikon">🔒</div>
+          <div className="nincs-adat">Kérlek jelentkezz be a kedvencek megtekintéséhez!</div>
+          <Link to="/" className="vissza-gomb">Vissza a főoldalra</Link>
+        </div>
       </>
     );
   }
@@ -51,19 +61,24 @@ const Kedvencek = () => {
   return (
     <>
       <Header />
-      <div className="kedvencek-container">
-        <h1 className="kedvencek-cim">Kedvenc Ajándékaim</h1>
+      <div className="kedvencek-container animate-fade-in">
+        <h1 className="kedvencek-cim animate-slide-up">Kedvenc Ajándékaim</h1>
         {kedvencek.length === 0 ? (
-          <div className="nincs-adat">Még nincsenek kedvenc ajándékaid.</div>
+          <div className="nincs-adat-container animate-fade-in">
+            <div className="nincs-adat-ikon">💝</div>
+            <div className="nincs-adat">Még nincsenek kedvenc ajándékaid.</div>
+            <Link to="/ajandekok" className="vissza-gomb">Böngéssz az ajándékok között</Link>
+          </div>
         ) : (
           <div className="kedvencek-grid">
-            {kedvencek.map((ajandek) => (
-              <AjandekKartya 
-                key={ajandek.id} 
-                ajandek={ajandek} 
-                isKedvenc={true} 
-                onKedvencValtozas={fetchKedvencek} // Újratöltjük a listát törlés után
-              />
+            {kedvencek.map((ajandek, index) => (
+              <div key={ajandek.id} className="animate-scale-in" style={{ animationDelay: `${index * 50}ms` }}>
+                <AjandekKartya 
+                  ajandek={ajandek} 
+                  isKedvenc={true} 
+                  onKedvencValtozas={fetchKedvencek} 
+                />
+              </div>
             ))}
           </div>
         )}

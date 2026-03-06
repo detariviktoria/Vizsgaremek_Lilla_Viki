@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "H:\\Vizsgaremek_Lilla_Viki\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {}
+    "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {}
   },
   "projects": {
-    "H:\\Vizsgaremek_Lilla_Viki\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
+    "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "H:\\Vizsgaremek_Lilla_Viki\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
+        "projectUniqueName": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
         "projectName": "VizsgaAdminWpf",
-        "projectPath": "H:\\Vizsgaremek_Lilla_Viki\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
-        "packagesPath": "C:\\Users\\detari.viktoria\\.nuget\\packages\\",
-        "outputPath": "H:\\Vizsgaremek_Lilla_Viki\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\obj\\",
+        "projectPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
+        "packagesPath": "C:\\Users\\gebhardt.lilla\\.nuget\\packages\\",
+        "outputPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\detari.viktoria\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\gebhardt.lilla\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

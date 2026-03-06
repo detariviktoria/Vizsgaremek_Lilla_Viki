@@ -11,7 +11,7 @@ export default function Bejelentkezes() {
 
   return (
     <>
-      <Header title="Bejelentkezés" showBack />
+      <Header title="Bejelentkezés" />
       <AuthModal isOpen={true} onClose={handleCloseModal} initialTab="login" />
     </>
   );

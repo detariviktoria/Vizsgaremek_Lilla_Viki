@@ -1,13 +1,8 @@
 .kedvencek-container {
-
   max-width: 1200px;
-
   margin: 0 auto;
-
   padding: 20px;
-
   margin-top: 100px;
-
 }
 
 .kedvencek-cim {
@@ -23,13 +18,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-}
-
-.nincs-adat {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #666;
-  margin-top: 50px;
+  align-items: stretch;
 }
 
 .loading {
@@ -37,4 +26,30 @@
   font-size: 1.5rem;
   color: #e91e63;
   margin-top: 50px;
+}
+
+@media (max-width: 900px) {
+  .kedvencek-container {
+    padding: 10px;
+    margin-top: 70px;
+  }
+  .kedvencek-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .kedvencek-container {
+    padding: 4px;
+    margin-top: 50px;
+  }
+  .kedvencek-cim {
+    font-size: 1.2rem;
+    padding-bottom: 4px;
+  }
+  .kedvencek-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 }

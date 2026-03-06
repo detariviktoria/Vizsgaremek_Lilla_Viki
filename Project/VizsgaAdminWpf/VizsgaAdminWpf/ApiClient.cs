@@ -13,9 +13,15 @@ namespace VizsgaAdminWpf
 
         public ApiClient()
         {
-            _httpClient = new HttpClient();
-            // A helyes URI: http://localhost:3000/
-            _httpClient.BaseAddress = new Uri("http://localhost:3000/");
+            var handler = new SocketsHttpHandler
+            {
+                UseProxy = false
+            };
+
+            _httpClient = new HttpClient(handler)
+            {
+                BaseAddress = new Uri("http://localhost:3000/")
+            };
         }
 
         public async Task<List<AjandekDTO>> GetAjandekokAsync()
@@ -23,7 +29,7 @@ namespace VizsgaAdminWpf
             var response = await _httpClient.GetAsync("ajandekok");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<AjandekDTO>>(json);
+            return JsonSerializer.Deserialize<List<AjandekDTO>>(json) ?? new List<AjandekDTO>();
         }
 
         public async Task<string> LoginAsync(string username, string password)

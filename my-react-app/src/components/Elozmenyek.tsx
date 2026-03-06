@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { api, type Ajandek } from '../api';
-import AjandekKartya from './AjandekKartya';
+import AjandekKartya, { SkeletonKartya } from './AjandekKartya';
 import Header from './Header';
 import './Elozmenyek.css';
 
@@ -19,7 +20,6 @@ const Elozmenyek = () => {
       }
 
       try {
-        // Lekérjük az előzményeket ÉS a kedvenceket is, hogy tudjuk, melyiknél legyen piros a szív
         const [elozmenyData, kedvencData] = await Promise.all([
           api.getElozmenyek(userId),
           api.getKedvencek(userId)
@@ -43,7 +43,12 @@ const Elozmenyek = () => {
     return (
       <>
         <Header />
-        <div className="loading">Betöltés...</div>
+        <div className="elozmenyek-container">
+          <h1 className="elozmenyek-cim">Megtekintett Ajándékok</h1>
+          <div className="elozmenyek-grid">
+            {[...Array(4)].map((_, i) => <SkeletonKartya key={i} />)}
+          </div>
+        </div>
       </>
     );
   }
@@ -52,7 +57,11 @@ const Elozmenyek = () => {
     return (
       <>
         <Header />
-        <div className="nincs-adat">Kérlek jelentkezz be az előzmények megtekintéséhez!</div>
+        <div className="nincs-adat-container animate-fade-in">
+          <div className="nincs-adat-ikon">🔒</div>
+          <div className="nincs-adat">Kérlek jelentkezz be az előzmények megtekintéséhez!</div>
+          <Link to="/" className="vissza-gomb">Vissza a főoldalra</Link>
+        </div>
       </>
     );
   }
@@ -60,18 +69,23 @@ const Elozmenyek = () => {
   return (
     <>
       <Header />
-      <div className="elozmenyek-container">
-        <h1 className="elozmenyek-cim">Megtekintett Ajándékok</h1>
+      <div className="elozmenyek-container animate-fade-in">
+        <h1 className="elozmenyek-cim animate-slide-up">Megtekintett Ajándékok</h1>
         {elozmenyek.length === 0 ? (
-          <div className="nincs-adat">Még nincsenek megtekintett ajándékaid.</div>
+          <div className="nincs-adat-container animate-fade-in">
+            <div className="nincs-adat-ikon">👀</div>
+            <div className="nincs-adat">Még nincsenek megtekintett ajándékaid.</div>
+            <Link to="/ajandekok" className="vissza-gomb">Kezdj el böngészni</Link>
+          </div>
         ) : (
           <div className="elozmenyek-grid">
             {elozmenyek.map((ajandek, index) => (
-              <AjandekKartya 
-                key={`${ajandek.id}-${index}`} // Indexet is használunk key-nek, mert egy ajándék többször is szerepelhet az előzményekben
-                ajandek={ajandek} 
-                isKedvenc={ajandek.id ? kedvencekIds.includes(ajandek.id) : false}
-              />
+              <div key={`${ajandek.id}-${index}`} className="animate-scale-in" style={{ animationDelay: `${index * 50}ms` }}>
+                <AjandekKartya 
+                  ajandek={ajandek} 
+                  isKedvenc={ajandek.id ? kedvencekIds.includes(ajandek.id) : false}
+                />
+              </div>
             ))}
           </div>
         )}
