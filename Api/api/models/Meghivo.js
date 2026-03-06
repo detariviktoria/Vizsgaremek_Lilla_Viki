@@ -5,12 +5,12 @@ module.exports = (sequelize) => {
 
   Meghivo.init(
     {
-      meghivo_id: {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      kuldo_id: {
+      from_user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -18,9 +18,17 @@ module.exports = (sequelize) => {
           key: "user_id",
         },
       },
+      to_user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "Felhasznalo",
+          key: "user_id",
+        },
+      },
       email: {
         type: DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
         validate: {
           isEmail: {
             args: true,

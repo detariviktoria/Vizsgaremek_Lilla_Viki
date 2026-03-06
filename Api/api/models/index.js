@@ -75,14 +75,40 @@ module.exports = (sequelize) => {
     as: "kuponok",
   });
 
-  // Meghivo -> Felhasznalo (belongs to - küldő)
+  // Meghivo -> Felhasznalo
   Meghivo.belongsTo(Felhasznalo, {
-    foreignKey: "kuldo_id",
-    as: "kuldo",
+    foreignKey: "from_user_id",
+    as: "sender",
+  });
+  Meghivo.belongsTo(Felhasznalo, {
+    foreignKey: "to_user_id",
+    as: "receiver",
   });
   Felhasznalo.hasMany(Meghivo, {
-    foreignKey: "kuldo_id",
-    as: "kuldottMeghivok",
+    foreignKey: "from_user_id",
+    as: "sentInvites",
+  });
+  Felhasznalo.hasMany(Meghivo, {
+    foreignKey: "to_user_id",
+    as: "receivedInvites",
+  });
+
+  // ChatMessage -> Felhasznalo
+  ChatMessage.belongsTo(Felhasznalo, {
+    foreignKey: "from_user_id",
+    as: "sender",
+  });
+  ChatMessage.belongsTo(Felhasznalo, {
+    foreignKey: "to_user_id",
+    as: "receiver",
+  });
+  Felhasznalo.hasMany(ChatMessage, {
+    foreignKey: "from_user_id",
+    as: "sentMessages",
+  });
+  Felhasznalo.hasMany(ChatMessage, {
+    foreignKey: "to_user_id",
+    as: "receivedMessages",
   });
  // -------------------------------------------------
     // FELHASZNÁLÓ <-> AJÁNDÉK ELŐZMÉNY (N:N + extra mező)

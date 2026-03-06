@@ -14,3 +14,6 @@ ez alapján csináld:socket.on('chat message', (msg) => {
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
   });
+
+
+- minden magyar nyelven legyen backendben és azután azok alapján hivatkozzunk frontend részed a szukséges részekre mert sok helyen angol nyelven vannak a táblák ami osszezavarhato lehet

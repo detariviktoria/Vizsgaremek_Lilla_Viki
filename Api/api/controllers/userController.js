@@ -260,7 +260,7 @@ exports.createUser = async (req, res) => {
       // Frissítjük a meghívó státuszát, ha létezik
       const meghivo = await db.Meghivo.findOne({
         where: {
-          kuldo_id: parseInt(ajanlo_id),
+          from_user_id: parseInt(ajanlo_id),
           email: email,
           elfogadva: false
         },
@@ -269,6 +269,7 @@ exports.createUser = async (req, res) => {
 
       if (meghivo) {
         await meghivo.update({
+          to_user_id: user.user_id,
           elfogadva: true,
           elfogadva_datum: new Date()
         }, { transaction });

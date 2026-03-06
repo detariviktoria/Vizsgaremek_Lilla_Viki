@@ -13,10 +13,18 @@ module.exports = (sequelize) => {
       from_user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "Felhasznalo",
+          key: "user_id",
+        },
       },
       to_user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "Felhasznalo",
+          key: "user_id",
+        },
       },
       message: {
         type: DataTypes.TEXT,
