@@ -7,6 +7,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: 100%;
 }
 
 .ajandek-kartya:hover {
@@ -19,6 +21,7 @@
   height: 200px;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
 }
 
 .ajandek-kep {
@@ -32,7 +35,6 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .ajandek-nev {
@@ -40,6 +42,11 @@
   font-weight: bold;
   margin-bottom: 10px;
   color: #333;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 2.8rem; /* 2 sor magasság kb. */
 }
 
 .ajandek-ar {
@@ -47,6 +54,7 @@
   color: #e91e63;
   font-weight: bold;
   margin-bottom: 15px;
+  margin-top: auto;
 }
 
 .ajandek-gomb {
@@ -91,6 +99,64 @@
 
 .kedvenc-ikon.aktiv {
   color: #e91e63;
+  animation: heartbeat 0.8s ease-in-out;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Skeleton loader styles */
+.skeleton-kartya {
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 350px;
+  width: 100%;
+}
+
+.skeleton-kep {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-info {
+  padding: 15px;
+}
+
+.skeleton-nev {
+  height: 20px;
+  width: 80%;
+  background: #e0e0e0;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.skeleton-ar {
+  height: 15px;
+  width: 40%;
+  background: #e0e0e0;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.skeleton-gomb {
+  height: 35px;
+  width: 100%;
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .kedvenc-ikon.inaktiv {

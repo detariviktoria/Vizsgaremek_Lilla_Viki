@@ -11,6 +11,8 @@ export const useAuth = () => {
 
   const [userId, setUserId] = useState<number | null>(null);
 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
   const [isChecking, setIsChecking] = useState(true);
 
   const [remainingTime, setRemainingTime] = useState<string>('');
@@ -23,140 +25,54 @@ export const useAuth = () => {
 
       try {
 
+        // Tab-specifikus tárolás: sessionStorage használata, hogy több fülön több user lehessen
         const storedUsername = sessionStorage.getItem('username');
-
         const storedUserId = sessionStorage.getItem('userId');
-
+        const storedIsAdmin = sessionStorage.getItem('isAdmin') === 'true';
         const sessionStart = sessionStorage.getItem('sessionStart');
 
-
-
         // Ha nincs username vagy sessionStart, kijelentkezve
-
         if (!storedUsername || !sessionStart) {
-
-          console.log('❌ Nincs sessionStorage-ben username vagy sessionStart - kijelentkezve');
-
-          await api.logout();
-
           setUsername(null);
-
           setUserId(null);
-
+          setIsAdmin(false);
           setIsChecking(false);
-
           return;
-
         }
 
-
-
-        // Ellenőrizd, hogy lejárt-e a session
-
+        // Ellenőrizd, hogy lejárt-e a session (kliens oldali timeout)
         const now = Date.now();
-
         const start = parseInt(sessionStart, 10);
-
         if (now - start > SESSION_TIMEOUT) {
-
           console.log('⏰ Session lejárt - kijelentkezés');
-
-          await api.logout();
-
-          sessionStorage.removeItem('username');
-
-          sessionStorage.removeItem('userId');
-
-          sessionStorage.removeItem('sessionStart');
-
-          setUsername(null);
-
-          setUserId(null);
-
-          setIsChecking(false);
-
+          await logout();
           return;
-
         }
 
-
-
-        // Ha van username és a session nem járt le, ellenőrizd a szerver oldali session-t
-
-        console.log('🔍 Session ellenőrzés...');
-
+        // Szerver oldali ellenőrzés
         const session = await api.checkSession();
 
-        console.log('✅ Session válasz:', session);
-
-
-
         if (session && session.username) {
-
-          if (session.username === storedUsername) {
-
-            console.log('👤 Bejelentkezve mint:', session.username);
-
-            setUsername(session.username);
-
-            setUserId(session.userId);
-
-            // Ha esetleg hiányzott a storage-ból, pótoljuk
-
-            if (!storedUserId) sessionStorage.setItem('userId', session.userId.toString());
-
-          } else {
-
-            console.log('⚠️ Session nem egyezik, kijelentkezés...');
-
-            sessionStorage.removeItem('username');
-
-            sessionStorage.removeItem('userId');
-
-            sessionStorage.removeItem('sessionStart');
-
-            setUsername(null);
-
-            setUserId(null);
-
-          }
-
+          // Itt a kulcs: a szerver session-jét fogadjuk el igaznak!
+          setUsername(session.username);
+          setUserId(session.userId);
+          setIsAdmin(session.isAdmin);
+          
+          // Frissítjük a storage-ot a szerver válasza alapján
+          sessionStorage.setItem('username', session.username);
+          sessionStorage.setItem('userId', session.userId.toString());
+          sessionStorage.setItem('isAdmin', session.isAdmin.toString());
         } else {
-
-          console.log('❌ Nincs aktív szerver oldali session');
-
-          sessionStorage.removeItem('username');
-
-          sessionStorage.removeItem('userId');
-
-          sessionStorage.removeItem('sessionStart');
-
+          // Ha a szerver szerint nincs session, akkor mi is kiléptetünk
           setUsername(null);
-
           setUserId(null);
-
+          setIsAdmin(false);
         }
-
       } catch (error) {
-
         console.error('🚨 Hiba a session ellenőrzéskor:', error);
-
-        sessionStorage.removeItem('username');
-
-        sessionStorage.removeItem('userId');
-
-        sessionStorage.removeItem('sessionStart');
-
-        setUsername(null);
-
-        setUserId(null);
-
       } finally {
-
         setIsChecking(false);
-
       }
-
     };
 
 
@@ -247,19 +163,23 @@ export const useAuth = () => {
 
 
 
-  const login = (user: string, id: number) => {
+  const login = (user: string, id: number, admin: boolean) => {
 
-    console.log('📝 Login:', user, id);
+    console.log('📝 Login:', user, id, admin);
 
     sessionStorage.setItem('username', user);
 
-    sessionStorage.setItem('userId', id.toString());
+    if (id !== undefined && id !== null) sessionStorage.setItem('userId', id.toString());
+
+    if (admin !== undefined && admin !== null) sessionStorage.setItem('isAdmin', admin.toString());
 
     sessionStorage.setItem('sessionStart', Date.now().toString());
 
     setUsername(user);
 
     setUserId(id);
+
+    setIsAdmin(!!admin);
 
   };
 
@@ -283,16 +203,21 @@ export const useAuth = () => {
 
     sessionStorage.removeItem('userId');
 
+    sessionStorage.removeItem('isAdmin');
+
     sessionStorage.removeItem('sessionStart');
+    sessionStorage.removeItem('token');
 
     setUsername(null);
 
     setUserId(null);
 
+    setIsAdmin(false);
+
   };
 
 
 
-  return { username, userId, login, logout, isChecking, remainingTime };
+  return { username, userId, isAdmin, login, logout, isChecking, remainingTime };
 
 };

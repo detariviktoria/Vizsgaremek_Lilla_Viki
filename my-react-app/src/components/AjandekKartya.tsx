@@ -11,6 +11,17 @@ interface AjandekKartyaProps {
   onKedvencValtozas?: () => void; // Callback, ha változik a kedvenc státusz (pl. listából törlésnél)
 }
 
+export const SkeletonKartya: React.FC = () => (
+  <div className="skeleton-kartya animate-fade-in">
+    <div className="skeleton-kep"></div>
+    <div className="skeleton-info">
+      <div className="skeleton-nev"></div>
+      <div className="skeleton-ar"></div>
+      <div className="skeleton-gomb"></div>
+    </div>
+  </div>
+);
+
 const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = false, onKedvencValtozas }) => {
   const { userId } = useAuth();
   const [kedvenc, setKedvenc] = useState(isKedvenc);
