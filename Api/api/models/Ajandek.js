@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
         autoIncrement: true,
       },
       nev: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
       leiras: {
@@ -22,19 +22,11 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       kategoria: {
-
         type: DataTypes.ENUM("tárgy", "élmény"),
-
         allowNull: false,
-
-      },
-      stilus_id: {
-        type: DataTypes.INTEGER,
       },
       image_url: {
-
         type: DataTypes.STRING(255),
-
       },
       link_url: {
         type: DataTypes.STRING(255),

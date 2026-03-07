@@ -112,11 +112,14 @@
 .edit-group.vertical {
   flex-direction: column;
   align-items: stretch;
+  gap: 12px;
+  padding: 10px 0;
 }
 
 .edit-actions {
   display: flex;
   gap: 10px;
+  margin-top: 5px;
 }
 
 .cancel-btn {

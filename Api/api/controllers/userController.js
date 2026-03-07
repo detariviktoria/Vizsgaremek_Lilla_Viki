@@ -28,7 +28,7 @@ exports.loginUser = async (req, res) => {
 
     // JWT token generálása
     const token = jwt.sign(
-      { id: user.user_id, username: user.name },
+      { id: user.user_id, username: user.name, isAdmin: user.is_admin },
       JWT_SECRET,
       { expiresIn: '2h' }
     );
@@ -41,7 +41,7 @@ exports.loginUser = async (req, res) => {
       maxAge: 2 * 60 * 60 * 1000 // 2 óra
     });
 
-    res.json({ username: user.name, userId: user.user_id });
+    res.json({ username: user.name, userId: user.user_id, isAdmin: user.is_admin, token });
   } catch (error) {
     console.error('Bejelentkezési hiba:', error);
     res.status(500).json({ error: error.message });
@@ -225,107 +225,94 @@ exports.resetPassword = async (req, res) => {
 
 
 exports.createUser = async (req, res) => {
-
   const { name, email, password, ajanlo_id } = req.body;
 
+  // Tranzakció indítása az adatintegritás érdekében
+  const t = await db.sequelize.transaction();
+
   try {
-
-    const existingUser = await db.Felhasznalo.findOne({ where: { name } });
-
+    const existingUser = await db.Felhasznalo.findOne({ where: { name }, transaction: t });
     if (existingUser) {
-
+      await t.rollback();
       return res.status(400).json({ message: "Ez a felhasználónév már foglalt." });
-
     }
 
-
-
-    const existingEmail = await db.Felhasznalo.findOne({ where: { email } });
-
+    const existingEmail = await db.Felhasznalo.findOne({ where: { email }, transaction: t });
     if (existingEmail) {
-
+      await t.rollback();
       return res.status(400).json({ message: "Ezzel az email címmel már regisztráltak." });
-
     }
-
-
 
     const user = await db.Felhasznalo.create({
-
       name,
-
       email,
-
       password,
-
       ajanlo_id: ajanlo_id || null
+    }, { transaction: t });
 
-    });
-
-
-
-    // Ha van ajánló, generáljunk kupont és küldjünk emailt
-
+    // Ha van ajánló, frissítsük a meghívó státuszát és generáljunk egy közös kuponkódot
     if (ajanlo_id) {
+      const meghivo = await db.Meghivo.findOne({
+        where: {
+          kuldo_id: parseInt(ajanlo_id),
+          email: email,
+          elfogadva: false
+        },
+        transaction: t
+      });
 
-      try {
+      if (meghivo) {
+        const code = 'GIFT-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 30);
 
-        // Frissítjük a meghívó státuszát, ha létezik
-        const meghivo = await db.Meghivo.findOne({
-          where: {
-            kuldo_id: parseInt(ajanlo_id),
-            email: email,
-            elfogadva: false
-          }
-        });
+        await meghivo.update({
+          meghivott_id: user.user_id,
+          elfogadva: true,
+          elfogadva_datum: new Date(),
+          kupon_kod: code,
+          lejarat_datum: expiry
+        }, { transaction: t });
 
-        if (meghivo) {
-          await meghivo.update({
-            elfogadva: true,
-            elfogadva_datum: new Date()
-          });
-        }
+        const expiryStr = expiry.toLocaleDateString('hu-HU');
+        const couponMsg = `Kaptál egy kupont: "${code}", érvényes: ${expiryStr}. Felhasználható legalább 15.000 Ft értékű vásárlás esetén (5.000 Ft kedvezmény).`;
 
-        const referrer = await db.Felhasznalo.findByPk(ajanlo_id);
+        await db.Notification.create({
+          user_id: parseInt(ajanlo_id),
+          message: `Gratulálunk! Ismerősöd (${name}) sikeresen regisztrált. ${couponMsg}`
+        }, { transaction: t });
 
-        if (referrer) {
-
-            const subject = 'Gratulálunk! Egy ismerősöd csatlakozott!';
-
-            const html = `
-
-                <h1>Szia ${referrer.name}!</h1>
-
-                <p>Egy általad meghívott ismerősöd (${name}) sikeresen regisztrált!</p>
-
-                <p>Köszönjük, hogy ajánlottad az oldalunkat!</p>
-
-            `;
-
-            await sendEmail(referrer.email, subject, html);
-
-        }
-
-      } catch (err) {
-
-        console.error('Hiba az ajánlói folyamatban:', err);
-
+        await db.Notification.create({
+          user_id: user.user_id,
+          message: `Üdvözlünk! Mivel meghívóval érkeztél, ${couponMsg}`
+        }, { transaction: t });
       }
-
     }
 
+    // Ha idáig eljutottunk hiba nélkül, véglegesítjük a tranzakciót
+    await t.commit();
 
+    // Az email küldést a tranzakción kívül hagyjuk, mert az külső szolgáltatás
+    if (ajanlo_id) {
+      const referrer = await db.Felhasznalo.findByPk(ajanlo_id);
+      if (referrer) {
+        const subject = 'Gratulálunk! Egy ismerősöd csatlakozott!';
+        const html = `
+            <h1>Szia ${referrer.name}!</h1>
+            <p>Egy általad meghívott ismerősöd (${name}) sikeresen regisztrált!</p>
+            <p>Köszönjük az ajánlást!</p>
+        `;
+        sendEmail(referrer.email, subject, html).catch(err => console.error('Email hiba:', err));
+      }
+    }
 
     res.status(201).json({ message: "Felhasználó létrehozva!", userId: user.user_id });
-
   } catch (error) {
-
+    // Hiba esetén minden változtatást visszavonunk
+    await t.rollback();
     console.error('Hiba a felhasználó létrehozásakor:', error);
-
     res.status(500).json({ error: error.message });
-
   }
-
 };
 
 // Kijelentkezés
@@ -336,16 +323,24 @@ exports.logoutUser = (req, res) => {
 
 // Auth ellenőrzés (korábban checkSession)
 exports.checkSession = (req, res) => {
-  const token = req.cookies.token;
+  // Elsőbbséget élvez az Authorization fejléc (fül-specifikus), utána jön a süti
+  let token = null;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.substring(7);
+  } else if (req.cookies.token) {
+    token = req.cookies.token;
+  }
+
   if (!token) {
     return res.status(401).json({ message: 'Nincs aktív bejelentkezés' });
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    res.json({ username: decoded.username, userId: decoded.id });
+    res.json({ username: decoded.username, userId: decoded.id, isAdmin: decoded.isAdmin });
   } catch (err) {
-    res.clearCookie('token');
+    if (req.cookies.token) res.clearCookie('token');
     res.status(401).json({ message: 'Érvénytelen token' });
   }
 };

@@ -22,6 +22,7 @@ export default function Profile() {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
     oldPassword: '',
   });
 
@@ -80,6 +81,10 @@ export default function Profile() {
       if (field === 'password') {
         if (!formData.password) {
           setIsEditing({ ...isEditing, [field]: false });
+          return;
+        }
+        if (formData.password !== formData.confirmPassword) {
+          setError('Az új jelszavak nem egyeznek!');
           return;
         }
         if (!formData.oldPassword) {
@@ -222,6 +227,19 @@ export default function Profile() {
                       value={formData.password} 
                       onChange={handleChange}
                     />
+                    <input 
+                      type="password" 
+                      name="confirmPassword" 
+                      placeholder="Új jelszó megerősítése"
+                      value={formData.confirmPassword} 
+                      onChange={handleChange}
+                    />
+                    <div className="forgot-password-link" style={{textAlign: 'left', marginBottom: '10px'}}>
+                      <a href="#" style={{color: 'palevioletred', fontSize: '13px', textDecoration: 'none'}} onClick={(e) => { 
+                        e.preventDefault(); 
+                        window.dispatchEvent(new CustomEvent('open-forgot-password'));
+                      }}>Elfelejtetted a jelszavad?</a>
+                    </div>
                     <div className="edit-actions">
                       <button className="save-btn" onClick={() => handleSave('password')}>Mentés</button>
                       <button className="cancel-btn" onClick={() => setIsEditing({...isEditing, password: false})}>Mégse</button>

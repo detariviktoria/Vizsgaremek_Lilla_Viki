@@ -14,12 +14,27 @@ class AjandekService {
   }
 
   async create(data) {
-    const { stilus_ids, ...ajandekData } = data;
-    const ajandek = await db.Ajandek.create(ajandekData);
-    if (stilus_ids && stilus_ids.length > 0) {
-      await ajandek.setStilusok(stilus_ids);
+    const { stilus_ids, alkalom_ids, celcsoport_ids, ...ajandekData } = data;
+    const t = await db.sequelize.transaction();
+    try {
+      const ajandek = await db.Ajandek.create(ajandekData, { transaction: t });
+      
+      if (stilus_ids && stilus_ids.length > 0) {
+        await ajandek.setStilusok(stilus_ids, { transaction: t });
+      }
+      if (alkalom_ids && alkalom_ids.length > 0) {
+        await ajandek.setAlkalmak(alkalom_ids, { transaction: t });
+      }
+      if (celcsoport_ids && celcsoport_ids.length > 0) {
+        await ajandek.setCelcsoportok(celcsoport_ids, { transaction: t });
+      }
+
+      await t.commit();
+      return ajandek;
+    } catch (error) {
+      await t.rollback();
+      throw error;
     }
-    return ajandek;
   }
 
   async update(id, data) {
@@ -28,13 +43,27 @@ class AjandekService {
       throw new Error("Ajándék nem található");
     }
 
-    const { stilus_ids, ...updateData } = data;
-    await ajandek.update(updateData);
+    const { stilus_ids, alkalom_ids, celcsoport_ids, ...updateData } = data;
+    const t = await db.sequelize.transaction();
+    try {
+      await ajandek.update(updateData, { transaction: t });
 
-    if (stilus_ids) {
-      await ajandek.setStilusok(stilus_ids);
+      if (stilus_ids) {
+        await ajandek.setStilusok(stilus_ids, { transaction: t });
+      }
+      if (alkalom_ids) {
+        await ajandek.setAlkalmak(alkalom_ids, { transaction: t });
+      }
+      if (celcsoport_ids) {
+        await ajandek.setCelcsoportok(celcsoport_ids, { transaction: t });
+      }
+
+      await t.commit();
+      return ajandek;
+    } catch (error) {
+      await t.rollback();
+      throw error;
     }
-    return ajandek;
   }
 
   async delete(id) {

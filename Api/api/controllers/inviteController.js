@@ -123,22 +123,21 @@ exports.getInvitedFriends = async (req, res, next) => {
       }
     }
 
-    // 3. Lekérjük azokat, akik engem hívtak meg (én vagyok az ajanlo_id)
-    const engemMeghivok = await db.Felhasznalo.findAll({
-      where: {
-        ajanlo_id: parseInt(userId)
-      },
-      attributes: ['user_id', 'name', 'email']
-    });
-
-    for (const barat of engemMeghivok) {
-      friendsList.push({
-        email: barat.email,
-        name: barat.name,
-        status: 'Engem hívott meg',
-        accepted: true,
-        direction: 'engem_hivott_meg'
+    // 3. Megkeressük, hogy ki hívott meg minket (ha van ilyen)
+    const me = await db.Felhasznalo.findByPk(userId);
+    if (me && me.ajanlo_id) {
+      const referrer = await db.Felhasznalo.findByPk(me.ajanlo_id, {
+        attributes: ['user_id', 'name', 'email']
       });
+      if (referrer) {
+        friendsList.push({
+          email: referrer.email,
+          name: referrer.name,
+          status: 'Engem hívott meg',
+          accepted: true,
+          direction: 'engem_hivott_meg'
+        });
+      }
     }
 
     res.status(200).json(friendsList);

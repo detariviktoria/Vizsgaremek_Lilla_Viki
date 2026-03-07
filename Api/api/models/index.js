@@ -8,6 +8,7 @@ module.exports = (sequelize) => {
   const Felhasznalo_KedvencAjandek = require("./Kedvenc")(sequelize);
   const Meghivo = require("./Meghivo")(sequelize);
   const ChatMessage = require("./ChatMessage")(sequelize);
+  const Notification = require("./Notification")(sequelize);
   // Asszociációk
 
   // Ajandek <-> Stilus (many to many)
@@ -69,10 +70,29 @@ module.exports = (sequelize) => {
     foreignKey: "kuldo_id",
     as: "kuldo",
   });
-  Felhasznalo.hasMany(Meghivo, {
-    foreignKey: "kuldo_id",
-    as: "kuldottMeghivok",
-  });
+    Felhasznalo.hasMany(Meghivo, {
+      foreignKey: "kuldo_id",
+      as: "kuldottMeghivok",
+    });
+    Meghivo.belongsTo(Felhasznalo, {
+      foreignKey: "meghivott_id",
+      as: "meghivott",
+    });
+    Felhasznalo.hasOne(Meghivo, {
+      foreignKey: "meghivott_id",
+      as: "beerkazoMeghivo",
+    });
+
+    // ChatMessage asszociációk
+  ChatMessage.belongsTo(Felhasznalo, { foreignKey: 'from_user_id', as: 'sender' });
+    ChatMessage.belongsTo(Felhasznalo, { foreignKey: 'to_user_id', as: 'receiver' });
+    Felhasznalo.hasMany(ChatMessage, { foreignKey: 'from_user_id', as: 'sentMessages' });
+    Felhasznalo.hasMany(ChatMessage, { foreignKey: 'to_user_id', as: 'receivedMessages' });
+
+    // Értesítés asszociációk
+    Felhasznalo.hasMany(Notification, { foreignKey: 'user_id', as: 'ertesitesek' });
+    Notification.belongsTo(Felhasznalo, { foreignKey: 'user_id', as: 'felhasznalo' });
+
  // -------------------------------------------------
     // FELHASZNÁLÓ <-> AJÁNDÉK ELŐZMÉNY (N:N + extra mező)
     // -------------------------------------------------
@@ -172,6 +192,7 @@ module.exports = (sequelize) => {
     Felhasznalo_AjandekElozmeny,
     Felhasznalo_KedvencAjandek,
     Meghivo,
-    ChatMessage
+    ChatMessage,
+    Notification
   };
 };
