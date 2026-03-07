@@ -77,19 +77,19 @@ module.exports = (sequelize) => {
 
   // Meghivo -> Felhasznalo
   Meghivo.belongsTo(Felhasznalo, {
-    foreignKey: "from_user_id",
+    foreignKey: "kuldo_id",
     as: "sender",
   });
   Meghivo.belongsTo(Felhasznalo, {
-    foreignKey: "to_user_id",
+    foreignKey: "meghivott_id",
     as: "receiver",
   });
   Felhasznalo.hasMany(Meghivo, {
-    foreignKey: "from_user_id",
+    foreignKey: "kuldo_id",
     as: "sentInvites",
   });
   Felhasznalo.hasMany(Meghivo, {
-    foreignKey: "to_user_id",
+    foreignKey: "meghivott_id",
     as: "receivedInvites",
   });
 

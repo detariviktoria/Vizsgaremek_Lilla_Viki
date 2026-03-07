@@ -24,7 +24,7 @@ const { body } = require('express-validator');
  *       403:
  *         description: Nincs jogosultság
  */
-router.get("/", authMiddleware, adminMiddleware, userController.getAllUsers);
+router.get("/", authMiddleware, userController.getAllUsers);
 
 /**
  * @swagger

@@ -29,7 +29,7 @@ exports.loginUser = async (req, res) => {
 
     // JWT token generálása
     const token = jwt.sign(
-      { id: user.user_id, username: user.name, role: user.role },
+      { id: user.user_id, username: user.name, role: user.is_admin ? 'admin' : 'user' },
       JWT_SECRET,
       { expiresIn: '2h' }
     );
@@ -42,7 +42,7 @@ exports.loginUser = async (req, res) => {
       maxAge: 2 * 60 * 60 * 1000 // 2 óra
     });
 
-    res.json({ username: user.name, userId: user.user_id, role: user.role });
+    res.json({ username: user.name, userId: user.user_id, role: user.is_admin ? 'admin' : 'user', isAdmin: !!user.is_admin });
   } catch (error) {
     console.error('Bejelentkezési hiba:', error);
     res.status(500).json({ error: error.message });
@@ -260,30 +260,37 @@ exports.createUser = async (req, res) => {
       // Frissítjük a meghívó státuszát, ha létezik
       const meghivo = await db.Meghivo.findOne({
         where: {
-          from_user_id: parseInt(ajanlo_id),
+          kuldo_id: parseInt(ajanlo_id),
           email: email,
           elfogadva: false
         },
         transaction
       });
 
+      const couponCode = 'REF-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
       if (meghivo) {
         await meghivo.update({
-          to_user_id: user.user_id,
+          meghivott_id: user.user_id,
           elfogadva: true,
-          elfogadva_datum: new Date()
+          elfogadva_datum: new Date(),
+          kupon_kod: couponCode,
+          lejarat_datum: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
         }, { transaction });
       }
 
-      const couponCode = 'REF-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-
-      await db.Kupon.create({
-         user_id: ajanlo_id,
-         coupon_code: couponCode,
-         status: 'active',
-         discount: 5000,
-         expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-      }, { transaction });
+      // Megpróbáljuk a Kupon táblába is elmenteni, ha létezik (kompatibilitás miatt)
+      try {
+        await db.Kupon.create({
+           user_id: ajanlo_id,
+           coupon_code: couponCode,
+           status: 'active',
+           discount: 5000,
+           expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        }, { transaction });
+      } catch (e) {
+        console.warn('Kupon tábla nem létezik, kihagyva.');
+      }
     }
 
     await transaction.commit();
@@ -322,7 +329,7 @@ exports.checkSession = (req, res) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    res.json({ username: decoded.username, userId: decoded.id, role: decoded.role });
+    res.json({ username: decoded.username, userId: decoded.id, role: decoded.role, isAdmin: decoded.role === 'admin' });
   } catch (err) {
     res.clearCookie('token');
     res.status(401).json({ message: 'Érvénytelen token' });

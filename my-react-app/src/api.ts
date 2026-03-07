@@ -22,6 +22,8 @@ export type User = {
 export type LoginResponse = {
   username: string;
   userId: number;
+  role: string;
+  isAdmin: boolean;
 };
 
 export const api = {
@@ -346,6 +348,17 @@ export const api = {
       return await response.json();
     } catch (error) {
       console.error('Hiba a barátok lekérésekor:', error);
+      throw error;
+    }
+  },
+
+  getCoupons: async (userId: number): Promise<any[]> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/coupons/user/${userId}`, { credentials: 'include' });
+      if (!response.ok) throw new Error('Hiba a kuponok lekérésekor');
+      return await response.json();
+    } catch (error) {
+      console.error('Hiba a kuponok lekérésekor:', error);
       throw error;
     }
   },

@@ -57,7 +57,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
 
       if (data && data.username) {
 
-        login(data.username, data.userId);
+        login(data.username, data.userId, data.isAdmin);
 
         setMessage('Sikeres bejelentkezés!');
 

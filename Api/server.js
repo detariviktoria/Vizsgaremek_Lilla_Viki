@@ -18,6 +18,9 @@ const io = new Server(server, {
   }
 });
 
+// Socket.io példány csatolása az app objektumhoz, hogy el lehessen érni a kontrollerekből
+app.set('socketio', io);
+
 io.on("connection", (socket) => {
   console.log("Felhasználó csatlakozott: " + socket.id);
 

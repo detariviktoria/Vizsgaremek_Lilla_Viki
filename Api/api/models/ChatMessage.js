@@ -35,20 +35,26 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
-      created_at: {
+      createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
+        field: 'createdAt'
       },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'updatedAt'
+      }
     },
     {
       sequelize,
       modelName: "ChatMessage",
-      tableName: "message",
-      timestamps: false,
+      tableName: "uzenet",
+      timestamps: true,
     }
   );
 
   return ChatMessage;
 };
-

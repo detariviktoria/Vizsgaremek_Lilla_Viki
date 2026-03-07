@@ -56,12 +56,12 @@ export const useAuth = () => {
           // Itt a kulcs: a szerver session-jét fogadjuk el igaznak!
           setUsername(session.username);
           setUserId(session.userId);
-          setIsAdmin(session.isAdmin);
+          setIsAdmin(!!session.isAdmin);
           
           // Frissítjük a storage-ot a szerver válasza alapján
           sessionStorage.setItem('username', session.username);
-          sessionStorage.setItem('userId', session.userId.toString());
-          sessionStorage.setItem('isAdmin', session.isAdmin.toString());
+          if (session.userId) sessionStorage.setItem('userId', session.userId.toString());
+          if (session.isAdmin !== undefined) sessionStorage.setItem('isAdmin', session.isAdmin.toString());
         } else {
           // Ha a szerver szerint nincs session, akkor mi is kiléptetünk
           setUsername(null);

@@ -52,7 +52,7 @@ exports.sendInvite = async (req, res, next) => {
     if (success) {
       // Mentjük a meghívót az adatbázisba
       await db.Meghivo.create({
-        from_user_id: userId,
+        kuldo_id: userId,
         email: email,
         kuldve_datum: new Date(),
         elfogadva: false
@@ -83,7 +83,7 @@ exports.getInvitedFriends = async (req, res, next) => {
     // 1. Lekérjük az összes meghívót, amit ez a felhasználó küldött
     const meghivok = await db.Meghivo.findAll({
       where: {
-        from_user_id: parseInt(userId)
+        kuldo_id: parseInt(userId)
       },
       order: [['kuldve_datum', 'DESC']]
     });

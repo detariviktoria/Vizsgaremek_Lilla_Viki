@@ -10,21 +10,23 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      from_user_id: {
+      kuldo_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "Felhasznalo",
           key: "user_id",
         },
+        field: 'kuldo_id'
       },
-      to_user_id: {
+      meghivott_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
           model: "Felhasznalo",
           key: "user_id",
         },
+        field: 'meghivott_id'
       },
       email: {
         type: DataTypes.STRING(100),
@@ -35,6 +37,14 @@ module.exports = (sequelize) => {
             msg: "Érvénytelen email cím!",
           },
         },
+      },
+      kupon_kod: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+      },
+      lejarat_datum: {
+        type: DataTypes.DATE,
+        allowNull: true,
       },
       kuldve_datum: {
         type: DataTypes.DATE,
@@ -61,4 +71,3 @@ module.exports = (sequelize) => {
 
   return Meghivo;
 };
-
