@@ -83,12 +83,12 @@ export default function Profile() {
           setIsEditing({ ...isEditing, [field]: false });
           return;
         }
-        if (!formData.oldPassword) {
-          setError('A jelszó módosításához meg kell adnia a régi jelszót!');
-          return;
-        }
         if (formData.password !== formData.confirmPassword) {
           setError('Az új jelszavak nem egyeznek!');
+          return;
+        }
+        if (!formData.oldPassword) {
+          setError('A jelszó módosításához meg kell adnia a régi jelszót!');
           return;
         }
         updateData.password = formData.password;
@@ -134,7 +134,7 @@ export default function Profile() {
           <div className="error-card">
             <h3>Nincs bejelentkezve</h3>
             <p>Kérjük, jelentkezzen be a profilja megtekintéséhez!</p>
-            <button className="login-redirect-btn" onClick={() => window.location.href = '/'}>
+            <button className="login-redirect-btn" onClick={() => window.location.href = '/bejelentkezes'}>
               Bejelentkezés
             </button>
           </div>
@@ -234,14 +234,11 @@ export default function Profile() {
                       value={formData.confirmPassword} 
                       onChange={handleChange}
                     />
-                    <div className="forgot-password-link-container">
-                      <a href="#" className="forgot-password-link" onClick={(e) => {
-                        e.preventDefault();
-                        // Itt hívhatjuk a forgot password logikát
-                        if (user?.email) {
-                          api.forgotPassword(user.email).then(() => alert('Email elküldve!'));
-                        }
-                      }}>Elfelejtettem a jelszavam</a>
+                    <div className="forgot-password-link" style={{textAlign: 'left', marginBottom: '10px'}}>
+                      <a href="#" style={{color: 'palevioletred', fontSize: '13px', textDecoration: 'none'}} onClick={(e) => { 
+                        e.preventDefault(); 
+                        window.dispatchEvent(new CustomEvent('open-forgot-password'));
+                      }}>Elfelejtetted a jelszavad?</a>
                     </div>
                     <div className="edit-actions">
                       <button className="save-btn" onClick={() => handleSave('password')}>Mentés</button>

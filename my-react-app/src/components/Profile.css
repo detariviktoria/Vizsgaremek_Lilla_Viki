@@ -112,11 +112,14 @@
 .edit-group.vertical {
   flex-direction: column;
   align-items: stretch;
+  gap: 12px;
+  padding: 10px 0;
 }
 
 .edit-actions {
   display: flex;
   gap: 10px;
+  margin-top: 5px;
 }
 
 .cancel-btn {
@@ -191,20 +194,6 @@
   color: #999;
   margin-top: 5px;
   font-style: italic;
-}
-
-.forgot-password-link-container {
-  margin: 5px 0 10px 0;
-}
-
-.forgot-password-link {
-  font-size: 13px;
-  color: #e91e63;
-  text-decoration: none;
-}
-
-.forgot-password-link:hover {
-  text-decoration: underline;
 }
 
 .loading-container {
