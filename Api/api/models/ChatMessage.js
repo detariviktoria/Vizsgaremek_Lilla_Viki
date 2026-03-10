@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
     {
       sequelize,
       modelName: "ChatMessage",
-      tableName: "message",
+      tableName: "uzenet",
       timestamps: false,
     }
   );

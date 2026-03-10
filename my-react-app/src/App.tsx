@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import KategoriaValasztas from './components/KategoriaValasztas';
 import Tovabb from './components/Tovabb';
@@ -12,6 +12,21 @@ import Profile from './components/Profile';
 import ResetPassword from './components/ResetPassword';
 import Chat from './components/Chat';
 import './App.css';
+import { useAuth } from './hooks/useAuth';
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { username, isChecking } = useAuth();
+
+  if (isChecking) {
+    return <div className="loading-spinner">Betöltés...</div>;
+  }
+
+  if (!username) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 function App() {
   // v7 future flags workaround
@@ -24,6 +39,8 @@ function App() {
     <BrowserRouter future={future}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/bejelentkezes" element={<Bejelentkezes />} />
+        <Route path="/regisztracio" element={<Regisztracio />} />
         <Route path="/ajandekok" element={<KategoriaValasztas />} />
         <Route path="/alkalom/:nev" element={<KategoriaValasztas />} />
         <Route path="/stilus/:nev" element={<KategoriaValasztas />} />
@@ -33,13 +50,12 @@ function App() {
         <Route path="/tovabb" element={<Tovabb />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/welcome" element={<Welcome />} />
-        <Route path="/kedvencek" element={<Kedvencek />} />
-        <Route path="/elozmenyek" element={<Elozmenyek />} />
-        <Route path="/baratok" element={<Baratok />} />
-        <Route path="/profil" element={<Profile />} />
-        {/* A Chat route csak akkor működik hibamentesen, ha van currentUser és selectedUser. Itt egy példa fallback-kel: */}
-        <Route path="/chat" element={<div style={{padding: 20, color: 'red'}}>A chat oldal csak a megfelelő helyről elérhető.</div>} />
-        {/* <Route path="/regisztracio" element={<Regisztracio />} /> */}
+        <Route path="/kedvencek" element={<ProtectedRoute><Kedvencek /></ProtectedRoute>} />
+        <Route path="/elozmenyek" element={<ProtectedRoute><Elozmenyek /></ProtectedRoute>} />
+        <Route path="/baratok" element={<ProtectedRoute><Baratok /></ProtectedRoute>} />
+        <Route path="/profil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        {/* A Chat route csak akkor működik hibamentesen, ha van currentUser és selectedUser. */}
+        <Route path="/chat" element={<ProtectedRoute><Chat fromUserId={0} toUserId={0} onBack={() => {}} /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

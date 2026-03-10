@@ -4,7 +4,7 @@ class ValidationError extends AppError
 {
     constructor(message = "Validation error occured", options = {})
     {
-        super(message, { statusCode: 403, ...options });
+        super(message, { statusCode: 400, ...options });
     }
 }
 

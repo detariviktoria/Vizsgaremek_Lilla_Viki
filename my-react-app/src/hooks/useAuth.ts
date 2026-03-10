@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 
-const SESSION_TIMEOUT = 10 * 60 * 1000; // 10 perc inaktivitás után
+const SESSION_TIMEOUT = 2 * 60 * 60 * 1000; // 2 óra inaktivitás után
 
 
 
@@ -10,6 +10,8 @@ export const useAuth = () => {
   const [username, setUsername] = useState<string | null>(null);
 
   const [userId, setUserId] = useState<number | null>(null);
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const [isChecking, setIsChecking] = useState(true);
 
@@ -27,6 +29,8 @@ export const useAuth = () => {
 
         const storedUserId = sessionStorage.getItem('userId');
 
+        const storedIsAdmin = sessionStorage.getItem('isAdmin') === 'true';
+
         const sessionStart = sessionStorage.getItem('sessionStart');
 
 
@@ -39,9 +43,13 @@ export const useAuth = () => {
 
           await api.logout();
 
+          sessionStorage.removeItem('token');
+
           setUsername(null);
 
           setUserId(null);
+
+          setIsAdmin(false);
 
           setIsChecking(false);
 
@@ -67,11 +75,17 @@ export const useAuth = () => {
 
           sessionStorage.removeItem('userId');
 
+          sessionStorage.removeItem('isAdmin');
+
+          sessionStorage.removeItem('token');
+
           sessionStorage.removeItem('sessionStart');
 
           setUsername(null);
 
           setUserId(null);
+
+          setIsAdmin(false);
 
           setIsChecking(false);
 
@@ -101,9 +115,12 @@ export const useAuth = () => {
 
             setUserId(session.userId);
 
+            setIsAdmin(session.isAdmin);
+
             // Ha esetleg hiányzott a storage-ból, pótoljuk
 
-            if (!storedUserId) sessionStorage.setItem('userId', session.userId.toString());
+            if (!storedUserId && session.userId) sessionStorage.setItem('userId', session.userId.toString());
+            if (session.isAdmin !== undefined) sessionStorage.setItem('isAdmin', session.isAdmin.toString());
 
           } else {
 
@@ -113,11 +130,17 @@ export const useAuth = () => {
 
             sessionStorage.removeItem('userId');
 
+            sessionStorage.removeItem('isAdmin');
+
+            sessionStorage.removeItem('token');
+
             sessionStorage.removeItem('sessionStart');
 
             setUsername(null);
 
             setUserId(null);
+
+            setIsAdmin(false);
 
           }
 
@@ -129,27 +152,25 @@ export const useAuth = () => {
 
           sessionStorage.removeItem('userId');
 
+          sessionStorage.removeItem('isAdmin');
+
+          sessionStorage.removeItem('token');
+
           sessionStorage.removeItem('sessionStart');
 
           setUsername(null);
 
           setUserId(null);
 
+          setIsAdmin(false);
+
         }
 
       } catch (error) {
 
         console.error('🚨 Hiba a session ellenőrzéskor:', error);
-
-        sessionStorage.removeItem('username');
-
-        sessionStorage.removeItem('userId');
-
-        sessionStorage.removeItem('sessionStart');
-
-        setUsername(null);
-
-        setUserId(null);
+        // Hálózati hiba esetén ne jelentkeztessük ki azonnal, hátha csak átmeneti
+        setIsChecking(false);
 
       } finally {
 
@@ -247,19 +268,25 @@ export const useAuth = () => {
 
 
 
-  const login = (user: string, id: number) => {
+  const login = (user: string, id: number, admin: boolean, token?: string) => {
 
-    console.log('📝 Login:', user, id);
+    console.log('📝 Login:', user, id, admin);
 
     sessionStorage.setItem('username', user);
 
-    sessionStorage.setItem('userId', id.toString());
+    if (id !== undefined && id !== null) sessionStorage.setItem('userId', id.toString());
+
+    if (admin !== undefined && admin !== null) sessionStorage.setItem('isAdmin', admin.toString());
+
+    if (token) sessionStorage.setItem('token', token);
 
     sessionStorage.setItem('sessionStart', Date.now().toString());
 
     setUsername(user);
 
     setUserId(id);
+
+    setIsAdmin(!!admin);
 
   };
 
@@ -283,16 +310,22 @@ export const useAuth = () => {
 
     sessionStorage.removeItem('userId');
 
+    sessionStorage.removeItem('isAdmin');
+
+    sessionStorage.removeItem('token');
+
     sessionStorage.removeItem('sessionStart');
 
     setUsername(null);
 
     setUserId(null);
 
+    setIsAdmin(false);
+
   };
 
 
 
-  return { username, userId, login, logout, isChecking, remainingTime };
+  return { username, userId, isAdmin, login, logout, isChecking, remainingTime };
 
 };

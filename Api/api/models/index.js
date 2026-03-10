@@ -8,6 +8,7 @@ module.exports = (sequelize) => {
   const Felhasznalo_KedvencAjandek = require("./Kedvenc")(sequelize);
   const Meghivo = require("./Meghivo")(sequelize);
   const ChatMessage = require("./ChatMessage")(sequelize);
+  const Notification = require("./Notification")(sequelize);
   // Asszociációk
 
   // Ajandek <-> Stilus (many to many)
@@ -72,6 +73,26 @@ module.exports = (sequelize) => {
   Felhasznalo.hasMany(Meghivo, {
     foreignKey: "kuldo_id",
     as: "kuldottMeghivok",
+  });
+
+  // Meghivo -> Felhasznalo (meghívott)
+  Meghivo.belongsTo(Felhasznalo, {
+    foreignKey: "meghivott_id",
+    as: "meghivott",
+  });
+  Felhasznalo.hasMany(Meghivo, {
+    foreignKey: "meghivott_id",
+    as: "kapottMeghivok",
+  });
+
+  // Notification -> Felhasznalo
+  Notification.belongsTo(Felhasznalo, {
+    foreignKey: "user_id",
+    as: "user",
+  });
+  Felhasznalo.hasMany(Notification, {
+    foreignKey: "user_id",
+    as: "notifications",
   });
  // -------------------------------------------------
     // FELHASZNÁLÓ <-> AJÁNDÉK ELŐZMÉNY (N:N + extra mező)
@@ -172,6 +193,7 @@ module.exports = (sequelize) => {
     Felhasznalo_AjandekElozmeny,
     Felhasznalo_KedvencAjandek,
     Meghivo,
-    ChatMessage
+    ChatMessage,
+    Notification
   };
 };

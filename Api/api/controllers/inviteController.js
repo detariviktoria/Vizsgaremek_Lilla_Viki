@@ -2,6 +2,7 @@ const { sendEmail } = require('../utilities/emailService');
 const db = require('../../config/db');
 const path = require('path');
 const fs = require('fs');
+const { BadRequestError, NotFoundError, AppError } = require('../errors');
 
 
 
@@ -10,15 +11,13 @@ exports.sendInvite = async (req, res, next) => {
     const { email, userId } = req.body;
 
     if (!email || !userId) {
-      return res.status(400).json({ message: 'Email és küldő ID megadása kötelező!' });
+      throw new BadRequestError('Email és küldő ID megadása kötelező!');
     }
 
     const kuldo = await db.Felhasznalo.findByPk(userId);
 
     if (!kuldo) {
-
-      return res.status(404).json({ message: 'A küldő nem található!' });
-
+      throw new NotFoundError('A küldő nem található!');
     }
 
     // Frontend URL (ezt érdemes környezeti változóba tenni)
@@ -51,6 +50,7 @@ exports.sendInvite = async (req, res, next) => {
 
     if (success) {
       // Mentjük a meghívót az adatbázisba
+      console.log('Mentés az adatbázisba:', { kuldo_id: userId, email });
       await db.Meghivo.create({
         kuldo_id: userId,
         email: email,
@@ -60,11 +60,13 @@ exports.sendInvite = async (req, res, next) => {
 
       res.status(200).json({ message: 'Meghívó sikeresen elküldve!' });
     } else {
-      // Adjunk hasznosabb hibajelzést a kliensnek (anélkül, hogy érzékeny adatokat küldenénk)
-      res.status(500).json({ message: 'Hiba történt az email küldésekor. Ellenőrizd a szerver konzolját az .env és email beállítások miatt.' });
+      console.error('Email küldése sikertelen volt.');
+      // Hasznos hibaüzenet, egységes hibakezelőn keresztül
+      throw new AppError('Hiba történt az email küldésekor. Ellenőrizd a szerver konzolját az .env és email beállítások miatt.');
     }
 
   } catch (error) {
+    console.error('sendInvite hiba:', error);
     next(error);
   }
 };
@@ -75,7 +77,7 @@ exports.getInvitedFriends = async (req, res, next) => {
     const { userId } = req.params;
 
     if (!userId) {
-      return res.status(400).json({ message: 'Felhasználó ID megadása kötelező!' });
+      throw new BadRequestError('Felhasználó ID megadása kötelező!');
     }
 
     const friendsList = [];
@@ -123,28 +125,55 @@ exports.getInvitedFriends = async (req, res, next) => {
       }
     }
 
-    // 3. Lekérjük azokat, akik engem hívtak meg (én vagyok az ajanlo_id)
-    const engemMeghivok = await db.Felhasznalo.findAll({
-      where: {
-        ajanlo_id: parseInt(userId)
-      },
-      attributes: ['user_id', 'name', 'email']
+    // 3. Lekérjük azt, aki engem hívott meg (akitől az ajánlói linket kaptam)
+    const currentUser = await db.Felhasznalo.findByPk(parseInt(userId), {
+      attributes: ['user_id', 'name', 'email', 'ajanlo_id']
     });
 
-    for (const barat of engemMeghivok) {
-      friendsList.push({
-        email: barat.email,
-        name: barat.name,
-        status: 'Engem hívott meg',
-        accepted: true,
-        direction: 'engem_hivott_meg'
+    if (currentUser && currentUser.ajanlo_id) {
+      const meghivoFelhasznalo = await db.Felhasznalo.findByPk(currentUser.ajanlo_id, {
+        attributes: ['user_id', 'name', 'email']
       });
+
+      if (meghivoFelhasznalo) {
+        friendsList.push({
+          email: meghivoFelhasznalo.email,
+          name: meghivoFelhasznalo.name,
+          status: 'Engem hívott meg',
+          accepted: true,
+          direction: 'engem_hivott_meg'
+        });
+      }
     }
 
     res.status(200).json(friendsList);
 
   } catch (error) {
     console.error('Hiba a meghívott barátok lekérésekor:', error);
+    next(error);
+  }
+};
+
+// Kuponok lekérése
+exports.getCoupons = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const uid = parseInt(userId);
+
+    const coupons = await db.Meghivo.findAll({
+      where: {
+        [db.Sequelize.Op.or]: [
+          { kuldo_id: uid },
+          { meghivott_id: uid }
+        ],
+        kupon_kod: { [db.Sequelize.Op.ne]: null }
+      },
+      order: [['lejarat_datum', 'ASC']]
+    });
+
+    res.json(coupons);
+  } catch (error) {
+    console.error('Hiba a kuponok lekérésekor:', error);
     next(error);
   }
 };

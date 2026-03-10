@@ -57,15 +57,12 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
 
       if (data && data.username) {
 
-        login(data.username, data.userId);
+        login(data.username, data.userId, data.isAdmin, (data as { token?: string }).token);
 
         setMessage('Sikeres bejelentkezés!');
-
         setMessageColor('green');
-        setTimeout(() => {
-          onClose();
-          window.location.reload();
-        }, 800);
+        onClose();
+        setTimeout(() => navigate('/welcome'), 0);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Hibás felhasználónév vagy jelszó!';
