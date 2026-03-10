@@ -1,29 +1,28 @@
-require('dotenv').config();
+require("dotenv").config({
+  quiet: true,
+  path: ".env",
+});
 
 module.exports = {
-  jwtSecret: process.env.JWT_SECRET || 'your-jwt-secret-key-change-this-in-production',
-  development: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'vizsgaremek',
-    host: process.env.DB_HOST || '127.0.0.1',
-    dialect: process.env.DB_DIALECT || 'mysql',
-    logging: false,
-  },
-  test: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME_TEST || 'vizsgaremek_test',
-    host: process.env.DB_HOST || '127.0.0.1',
-    dialect: process.env.DB_DIALECT || 'mysql',
-    logging: false,
-  },
   production: {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
-    logging: false,
-  }
+    dialect: process.env.DB_DIALECT || "mysql",
+  },
+  development: {
+    username: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "vizsgaremek",
+    host: process.env.DB_HOST || "localhost",
+    dialect: process.env.DB_DIALECT || "mysql",
+  },
+  test: {
+    username: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME_TEST || "vizsgaremek_test",
+    host: process.env.DB_HOST || "localhost",
+    dialect: process.env.DB_DIALECT || "mysql",
+  },
 };
