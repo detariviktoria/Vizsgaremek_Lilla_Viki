@@ -35,7 +35,7 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   const location = useLocation();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeModalTab, setActiveModalTab] = useState<'chat' | 'notifications'>('chat');
 
@@ -206,19 +206,32 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
 
 
-      <nav id="main-nav" className="header-right">
+      <nav id="main-nav" className={`header-right ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
 
         {username ? (
 
           <div className="nav-icons">
 
+<<<<<<< Updated upstream
             <Link to="/kedvencek" title="Kedvencek" className="icon-link">❤️</Link>
             <button className="chat-icon-btn" onClick={() => setIsChatOpen(true)} title="Chat">
               💬
               {hasUnread && <span className="chat-unread-dot" />}
+=======
+            <Link to="/kedvencek" title="Kedvencek" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
+              ❤️ <span className="nav-text">Kedvencek</span>
+            </Link>
+            <button className="chat-icon-btn" onClick={() => { setIsChatOpen(true); setIsMobileMenuOpen(false); }} title="Chat">
+              💬 <span className="nav-text">Chat</span>
+              {(hasUnread || hasUnreadNotif) && <span className="chat-unread-dot" />}
+>>>>>>> Stashed changes
             </button>
-            <Link to="/baratok" title="Barátok" className="icon-link">👥</Link>
-            <Link to="/elozmenyek" title="Előzmények" className="icon-link">🕒</Link>
+            <Link to="/baratok" title="Barátok" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
+              👥 <span className="nav-text">Barátok</span>
+            </Link>
+            <Link to="/elozmenyek" title="Előzmények" className="icon-link" onClick={() => setIsMobileMenuOpen(false)}>
+              🕒 <span className="nav-text">Előzmények</span>
+            </Link>
 
             
 
@@ -226,19 +239,24 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
               <button onClick={toggleMenu} className="settings-btn" title="Beállítások">
 
-                ⚙️
+                ⚙️ <span className="nav-text">Beállítások</span>
 
               </button>
 
               {isMenuOpen && (
 
                 <div className="dropdown-menu">
+<<<<<<< Updated upstream
 
                   <Link to="/profil" className="menu-item" onClick={() => setIsMenuOpen(false)}>
 
+=======
+                  <Link to="/profil" className="menu-item" onClick={() => { setIsMenuOpen(false); setIsMobileMenuOpen(false); }}>
+>>>>>>> Stashed changes
                     Profilom
 
                   </Link>
+<<<<<<< Updated upstream
 
                   <button className="menu-item" onClick={() => { setIsCouponsOpen(true); setIsMenuOpen(false); }}>
                     Kuponjaim
@@ -246,6 +264,12 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
                   <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="menu-item">
 
+=======
+                  <a href="#" onClick={(e) => { e.preventDefault(); setIsCouponsOpen(true); setIsMenuOpen(false); setIsMobileMenuOpen(false); }} className="menu-item">
+                    Kuponjaim
+                  </a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); setIsMobileMenuOpen(false); }} className="menu-item">
+>>>>>>> Stashed changes
                     Kijelentkezés
 
                   </a>
@@ -262,12 +286,16 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
         ) : (
 
           <div className="nav-links">
-            <button className="auth-btn" onClick={() => { setIsAuthModalOpen(true); }}>Bejelentkezés</button>
+            <button className="auth-btn" onClick={() => { setIsAuthModalOpen(true); setIsMobileMenuOpen(false); }}>Bejelentkezés</button>
           </div>
 
         )}
 
       </nav>
+
+      <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        {isMobileMenuOpen ? '✖' : '☰'}
+      </button>
 
       <AuthModal 
         isOpen={isAuthModalOpen} 

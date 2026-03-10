@@ -14,11 +14,13 @@ interface AuthModalProps {
 
 export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: AuthModalProps) {
   const [activeTab, setActiveTab] = useState<'login' | 'register' | 'forgot'> (initialTab);
+  const [isShaking, setIsShaking] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setActiveTab(initialTab);
       setMessage('');
+      setIsShaking(false);
     }
   }, [isOpen, initialTab]);
 
@@ -61,13 +63,27 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
 
         setMessage('Sikeres bejelentkezés!');
         setMessageColor('green');
+<<<<<<< Updated upstream
         onClose();
         setTimeout(() => navigate('/welcome'), 0);
+=======
+        setIsShaking(false);
+        setTimeout(() => {
+          onClose();
+          window.location.reload();
+        }, 800);
+>>>>>>> Stashed changes
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Hibás felhasználónév vagy jelszó!';
       setMessage(errorMessage);
       setMessageColor('red');
+      
+      // Trigger shake animation
+      setIsShaking(false);
+      setTimeout(() => setIsShaking(true), 10);
+      // Optional: remove class after animation ends
+      setTimeout(() => setIsShaking(false), 600);
     }
   };
 
@@ -127,7 +143,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
 
   return (
     <div className="modal show animate-fade-in" onClick={(e) => e.target === e.currentTarget && handleCloseModal()}>
-      <div className="modal-content animate-scale-in" onClick={(e) => e.stopPropagation()}>
+      <div className={`modal-content animate-scale-in ${isShaking ? 'shake' : ''}`} onClick={(e) => e.stopPropagation()}>
         <span className="close-modal" onClick={handleCloseModal}>&times;</span>
         <div id="modal-tabs">
           <button
