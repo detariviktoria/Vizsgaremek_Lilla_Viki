@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
-  let token = req.cookies?.token;
+  // Elsőbbséget élvez az Authorization fejléc (fül-specifikus), utána jön a süti
+  let token = null;
 
-  // Alternatíva: Authorization: Bearer <token>
-  if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
     token = req.headers.authorization.substring(7);
+  } else if (req.cookies.token) {
+    token = req.cookies.token;
   }
 
   if (!token) {
@@ -14,17 +16,19 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-jwt-secret-key-change-this-in-production');
-    req.user = decoded; // { id: user_id, username: name, role: 'admin'|'user', ... }
+    req.user = decoded; // { id: user_id, username: name, isAdmin: boolean }
     next();
   } catch (err) {
-    res.clearCookie('token');
+    // Csak akkor töröljük a sütit, ha volt süti, de érvénytelen
+    if (req.cookies.token) {
+      res.clearCookie('token');
+    }
     return res.status(401).json({ message: 'Érvénytelen token' });
   }
 };
 
 const adminMiddleware = (req, res, next) => {
-  const role = req.user?.role;
-  if (!req.user || role !== 'admin') {
+  if (!req.user || !req.user.isAdmin) {
     return res.status(403).json({ message: 'Hozzáférés megtagadva: Admin jogosultság szükséges' });
   }
   next();

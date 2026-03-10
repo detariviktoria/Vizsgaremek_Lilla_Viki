@@ -2,72 +2,29 @@
 
 const express = require("express");
 const router = express.Router();
-const { body, param } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 const userController = require("../controllers/userController");
 const { authMiddleware, adminMiddleware } = require("../middlewares/auth");
-const validate = require("../middlewares/validate");
 
-const validateRegister = [
-  body('name').isString().trim().notEmpty().withMessage('A felhasználónév megadása kötelező'),
+const validateUser = [
   body('email').isEmail().withMessage('Érvénytelen email cím'),
   body('password').isLength({ min: 6 }).withMessage('A jelszónak legalább 6 karakternek kell lennie'),
-  body('ajanlo_id').optional({ nullable: true }).isString(),
-  validate,
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  }
 ];
-
-const validateLogin = [
-  body('username').isString().trim().notEmpty().withMessage('A felhasználónév megadása kötelező'),
-  body('password').isString().notEmpty().withMessage('A jelszó megadása kötelező'),
-  validate,
-];
-
-const validateIdParam = [
-  param('id').isInt({ min: 1 }).withMessage('Érvénytelen ID'),
-  validate,
-];
-
-const validateForgotPassword = [
-  body('email').isEmail().withMessage('Érvénytelen email cím'),
-  validate,
-];
-
-const validateResetPassword = [
-  body('token').isString().trim().notEmpty().withMessage('Hiányzó token'),
-  body('password').isLength({ min: 6 }).withMessage('A jelszónak legalább 6 karakternek kell lennie'),
-  validate,
-];
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - email
- *         - jelszo
- *       properties:
- *         id:
- *           type: integer
- *           description: Automatikusan generált azonosító
- *         email:
- *           type: string
- *           description: Felhasználó email címe
- *         felhasznalonev:
- *           type: string
- *           description: Felhasználónév
- *         admin:
- *           type: boolean
- *           description: Adminisztrátor-e a felhasználó
- */
 
 /**
  * @swagger
  * /users:
  *   get:
  *     summary: Összes felhasználó lekérése
- *     tags: [Users]
+ *     tags: [Felhasználók]
  *     responses:
  *       200:
  *         description: Felhasználók listája
@@ -85,7 +42,7 @@ router.get("/", userController.getAllUsers);
  * /users/login:
  *   post:
  *     summary: Bejelentkezés
- *     tags: [Users]
+ *     tags: [Felhasználók]
  *     requestBody:
  *       required: true
  *       content:
@@ -93,33 +50,185 @@ router.get("/", userController.getAllUsers);
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               username:
  *                 type: string
- *               jelszo:
+ *               password:
  *                 type: string
  *     responses:
  *       200:
  *         description: Sikeres bejelentkezés
- *       401:
- *         description: Hibás adatok
  */
-router.post("/login", validateLogin, userController.loginUser);
+router.post("/login", userController.loginUser);
 
-// Route-ok
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Felhasználó lekérése ID alapján
+ *     tags: [Felhasználók]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Felhasználó adatai
+ */
+router.get("/:id", authMiddleware, userController.getUserById);
 
-router.get("/:id", authMiddleware, validateIdParam, userController.getUserById);
-router.put("/:id/admin", authMiddleware, adminMiddleware, validateIdParam, userController.updateUserAdmin);
-router.put("/:id", authMiddleware, validateIdParam, userController.updateUser);
-router.post("/", validateRegister, userController.createUser);
+/**
+ * @swagger
+ * /users/{id}/admin:
+ *   put:
+ *     summary: Felhasználó admin státuszának módosítása
+ *     tags: [Felhasználók]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               is_admin:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Sikeres frissítés
+ */
+router.put("/:id/admin", authMiddleware, adminMiddleware, userController.updateUserAdmin);
 
-// Kijelentkezés
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Felhasználó saját adatainak frissítése
+ *     tags: [Felhasználók]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               oldPassword:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Sikeres frissítés
+ */
+router.put("/:id", authMiddleware, userController.updateUser);
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Új felhasználó regisztrációja
+ *     tags: [Felhasználók]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               ajanlo_id:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Felhasználó létrehozva
+ */
+router.post("/", validateUser, userController.createUser);
+
+/**
+ * @swagger
+ * /users/logout:
+ *   post:
+ *     summary: Kijelentkezés
+ *     tags: [Felhasználók]
+ *     responses:
+ *       200:
+ *         description: Sikeres kijelentkezés
+ */
 router.post("/logout", userController.logoutUser);
 
-// Elfelejtett jelszó
-router.post("/forgot-password", validateForgotPassword, userController.forgotPassword);
-router.post("/reset-password", validateResetPassword, userController.resetPassword);
+/**
+ * @swagger
+ * /users/forgot-password:
+ *   post:
+ *     summary: Jelszó-visszaállítási link kérése
+ *     tags: [Felhasználók]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Email elküldve
+ */
+router.post("/forgot-password", userController.forgotPassword);
 
-// Session ellenőrzés
+/**
+ * @swagger
+ * /users/reset-password:
+ *   post:
+ *     summary: Új jelszó beállítása token alapján
+ *     tags: [Felhasználók]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Jelszó sikeresen megváltoztatva
+ */
+router.post("/reset-password", userController.resetPassword);
+
+/**
+ * @swagger
+ * /users/check/session:
+ *   get:
+ *     summary: Bejelentkezési állapot ellenőrzése
+ *     tags: [Felhasználók]
+ *     responses:
+ *       200:
+ *         description: Felhasználó adatai
+ *       401:
+ *         description: Nincs aktív session
+ */
 router.get("/check/session", userController.checkSession);
 
 module.exports = router;

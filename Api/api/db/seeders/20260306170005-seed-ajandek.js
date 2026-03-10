@@ -2,8 +2,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const [rows] = await queryInterface.sequelize.query('SELECT COUNT(*) as c FROM Ajandek');
-    if (rows[0].c > 0) return;
     await queryInterface.bulkInsert('Ajandek', [
       { id: 1, nev: 'Vidám bögre', leiras: 'Vidám bögre leírása', ar: 1500, kategoria: 'tárgy', image_url: 'vidambogre.jpg', link_url: 'https://bogrevaros.hu/Vidam-napot-bogre' },
       { id: 2, nev: 'Wellness hétvége', leiras: 'Wellness hétvége leírása', ar: 40000, kategoria: 'élmény', image_url: 'wellness.jpg', link_url: 'https://www.pihipakk.hu/csomag/wellness-es-romantika' },

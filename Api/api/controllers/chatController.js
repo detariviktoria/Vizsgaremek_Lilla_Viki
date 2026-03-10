@@ -38,7 +38,7 @@ exports.getHistory = async (req, res) => {
           { from_user_id: user2Id, to_user_id: user1Id },
         ],
       },
-      order: [["created_at", "ASC"]],
+      order: [["createdAt", "ASC"]],
     });
 
     res.json(messages);
@@ -99,7 +99,6 @@ exports.getUnreadSenders = async (req, res) => {
       raw: true
     });
     const ids = senders.map(s => Number(s.from_user_id));
-    console.log(`Olvasatlan üzenetek feladói (${userId} számára):`, ids);
     res.json(ids);
   } catch (error) {
     console.error("Hiba az olvasatlan feladók lekérésekor:", error);

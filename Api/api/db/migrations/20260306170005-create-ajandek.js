@@ -34,9 +34,9 @@ module.exports = {
       }
     });
 
-    // Indexek hozzáadása a teljesítmény érdekében (20260306120535-add-indexes-to-ajandek már hozzáadhatta, ezért try-catch)
-    try { await queryInterface.addIndex('Ajandek', ['ar']); } catch (e) {}
-    try { await queryInterface.addIndex('Ajandek', ['kategoria']); } catch (e) {}
+    // Indexek hozzáadása a teljesítmény érdekében
+    await queryInterface.addIndex('Ajandek', ['ar']);
+    await queryInterface.addIndex('Ajandek', ['kategoria']);
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Ajandek');

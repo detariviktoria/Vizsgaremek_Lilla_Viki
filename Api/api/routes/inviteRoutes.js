@@ -1,22 +1,46 @@
 const express = require('express');
 const router = express.Router();
 const inviteController = require('../controllers/inviteController');
-const { body, param } = require('express-validator');
-const validate = require('../middlewares/validate');
 
-const validateSendInvite = [
-  body('email').isEmail().withMessage('Érvénytelen email cím'),
-  body('userId').isInt({ min: 1 }).withMessage('Érvénytelen küldő ID'),
-  validate,
-];
+/**
+ * @swagger
+ * /invite:
+ *   post:
+ *     summary: Meghívó küldése emailben
+ *     tags: [Meghívók]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               userId:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Meghívó elküldve
+ */
+router.post('/', inviteController.sendInvite);
 
-const validateUserIdParam = [
-  param('userId').isInt({ min: 1 }).withMessage('Érvénytelen felhasználó ID'),
-  validate,
-];
-
-router.post('/', validateSendInvite, inviteController.sendInvite);
-router.get('/friends/:userId', validateUserIdParam, inviteController.getInvitedFriends);
-router.get('/coupons/:userId', validateUserIdParam, inviteController.getCoupons);
+/**
+ * @swagger
+ * /invite/friends/{userId}:
+ *   get:
+ *     summary: Meghívott barátok listája és állapotuk
+ *     tags: [Meghívók]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Barátok listája
+ */
+router.get('/friends/:userId', inviteController.getInvitedFriends);
 
 module.exports = router;

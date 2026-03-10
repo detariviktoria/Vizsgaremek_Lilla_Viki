@@ -2,8 +2,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const [rows] = await queryInterface.sequelize.query('SELECT COUNT(*) as c FROM Stilusok');
-    if (rows[0].c > 0) return;
     await queryInterface.bulkInsert('Stilusok', [
       { id: 1, nev: 'Vicces' }, { id: 2, nev: 'Hasznos' }, { id: 3, nev: 'Luxus' }, { id: 4, nev: 'Kézműves' },
       { id: 5, nev: 'Romantikus' }, { id: 6, nev: 'Technológias' }, { id: 7, nev: 'Egyedi' }, { id: 8, nev: 'Kreatív' },
