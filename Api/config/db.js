@@ -2,35 +2,14 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const { DbError } = require("../api/errors");
 const path = require("path");
-
-const dbName = process.env.DB_NAME || 'vizsgaremek';
-const dbUser = process.env.DB_USER || 'root';
-const dbPassword = process.env.DB_PASSWORD || '';
-const dbHost = process.env.DB_HOST || 'localhost';
-const dbDialect = process.env.DB_DIALECT || 'mysql';
-
-if (!dbDialect) {
-  console.error('❌ Hiba: A DB_DIALECT nincs beállítva a .env fájlban!');
-  console.error('Kérlek, hozd létre az Api/.env fájlt a következő tartalommal:');
-  console.error('DB_HOST=localhost');
-  console.error('DB_USER=root');
-  console.error('DB_PASSWORD=');
-  console.error('DB_NAME=vizsgaremek');
-  console.error('DB_DIALECT=mysql');
-  process.exit(1);
-}
- 
-
+const env = process.env.NODE_ENV || 'development';
+const config = require('./config.js')[env];
 
 const sequelize = new Sequelize(
-  dbName,
-  dbUser,
-  dbPassword,
-  {
-    host: dbHost,
-    dialect: dbDialect,
-    logging: false,
-  }
+  config.database,
+  config.username,
+  config.password,
+  config
 );
 
 const models = require("../api/models")(sequelize);

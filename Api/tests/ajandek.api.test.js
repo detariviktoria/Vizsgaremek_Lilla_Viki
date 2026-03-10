@@ -2,16 +2,17 @@ jest.mock("../api/db");
 // A biztonság kedvéért a config/db-t is mockoljuk, mivel az app azt használja
 jest.mock("../config/db", () => require("../api/db"));
 
-// Mock auth and admin middlewares
-jest.mock("../api/middlewares/auth", () => (req, res, next) => {
-    req.user = { id: 1, username: "admin", role: "admin" };
-    next();
-});
-jest.mock("../api/middlewares/admin", () => (req, res, next) => next());
-
 const request = require("supertest");
 const app = require("../app");
 const db = require("../api/db");
+const jwt = require("jsonwebtoken");
+
+const TEST_JWT_SECRET = process.env.JWT_SECRET || "your-jwt-secret-key-change-this-in-production";
+
+function adminAuthHeader() {
+    const token = jwt.sign({ id: 1, username: "Admin", role: "admin" }, TEST_JWT_SECRET, { expiresIn: "2h" });
+    return { Authorization: `Bearer ${token}` };
+}
 
 describe("API Tests", () => {
     beforeAll(async () => {
@@ -63,7 +64,10 @@ describe("API Tests", () => {
                 //#endregion
 
                 //#region Act
-                const res = await request(app).post("/ajandekok").send(newAjandek);
+                const res = await request(app)
+                    .post("/ajandekok")
+                    .set(adminAuthHeader())
+                    .send(newAjandek);
                 //#endregion
 
                 //#region Assert
@@ -83,7 +87,9 @@ describe("API Tests", () => {
                 const all = await db.Ajandek.findAll();
                 const target = all[1]; // Ajándék B
                 
-                const res = await request(app).delete(`/ajandekok/${target.id}`);
+                const res = await request(app)
+                    .delete(`/ajandekok/${target.id}`)
+                    .set(adminAuthHeader());
                 
                 expect(res.status).toBe(200);
                 expect(res.type).toMatch(/json/);

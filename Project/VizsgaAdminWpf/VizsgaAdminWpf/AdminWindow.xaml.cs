@@ -18,6 +18,7 @@ namespace VizsgaAdminWpf
     public partial class AdminWindow : Window
     {
         ApiService apiService = new ApiService();
+        private readonly AdminViewModel _vm = new AdminViewModel();
         string currentImageFilename = "";
         UserItem? _selectedUser = null;
 
@@ -49,6 +50,7 @@ namespace VizsgaAdminWpf
         public AdminWindow()
         {
             InitializeComponent();
+            DataContext = _vm;
             listBoxGifts.SelectionChanged += listBoxGifts_SelectionChanged;
             listBoxUsers.SelectionChanged += listBoxUsers_SelectionChanged;
         }
@@ -71,30 +73,13 @@ namespace VizsgaAdminWpf
 
         private async Task LoadGifts()
         {
-            listBoxGifts.Items.Clear();
-
             try
             {
-                List<AjandekDTO> gifts = await apiService.GetAjandekok();
-                if (gifts == null || gifts.Count == 0)
+                await _vm.LoadGiftsAsync();
+                if (_vm.Gifts.Count == 0)
                 {
                     MessageBox.Show("Az API üres választ adott vagy nem elérhető.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
-                }
-
-                foreach (var g in gifts)
-                {
-                    var item = new AjandekItem
-                    {
-                        Id = g.id ?? 0,
-                        Nev = g.nev ?? "",
-                        Ar = g.ar ?? 0,
-                        Leiras = g.leiras ?? "",
-                        Kategoria = g.kategoria ?? "",
-                        ImageUrl = g.image_url ?? "",
-                        LinkUrl = g.link_url ?? ""
-                    };
-                    listBoxGifts.Items.Add(item);
                 }
             }
             catch (Exception ex)
@@ -105,20 +90,20 @@ namespace VizsgaAdminWpf
 
         private void listBoxGifts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listBoxGifts.SelectedItem == null) return;
+            if (_vm.SelectedGift == null) return;
 
-            var selected = (AjandekItem)listBoxGifts.SelectedItem;
-            txtNev.Text = selected.Nev ?? "";
-            txtAr.Text = (selected.Ar ?? 0).ToString();
-            txtLeiras.Text = selected.Leiras ?? "";
-            txtKategoria.Text = selected.Kategoria ?? "";
-            currentImageFilename = selected.ImageUrl ?? "";
+            var selected = _vm.SelectedGift;
+            txtNev.Text = selected.nev ?? "";
+            txtAr.Text = (selected.ar ?? 0).ToString();
+            txtLeiras.Text = selected.leiras ?? "";
+            txtKategoria.Text = selected.kategoria ?? "";
+            currentImageFilename = selected.image_url ?? "";
 
-            if (!string.IsNullOrEmpty(selected.ImageUrl))
+            if (!string.IsNullOrEmpty(selected.image_url))
             {
                 try
                 {
-                    var uri = new Uri("http://localhost:3000/images/" + (selected.ImageUrl ?? ""), UriKind.Absolute);
+                    var uri = new Uri("http://localhost:3000/images/" + (selected.image_url ?? ""), UriKind.Absolute);
                     imageGift.Source = new BitmapImage(uri);
                 }
                 catch
@@ -225,7 +210,7 @@ namespace VizsgaAdminWpf
 
             var ajandek = new AjandekDTO
             {
-                id = selected.Id,
+                id = selected.Id.Value,
                 nev = txtNev.Text,
                 ar = ar,
                 leiras = txtLeiras.Text,
@@ -295,35 +280,21 @@ namespace VizsgaAdminWpf
         // ========== FELHASZNÁLÓK ==========
         private async Task LoadUsers(int? userIdToKeep)
         {
-            listBoxUsers.Items.Clear();
-            //_selectedUser = null;
-
             try
             {
-                var users = await apiService.GetUsers();
-                if (users == null) return;
+                await _vm.LoadUsersAsync();
 
-                UserItem? toSelect = null;
-                foreach (var u in users)
+                if (userIdToKeep.HasValue)
                 {
-                    var userItem = new UserItem
+                    var toSelect = _vm.Users.FirstOrDefault(x => (x.user_id ?? 0) == userIdToKeep.Value);
+                    if (toSelect != null)
                     {
-                        UserId = u.user_id ?? 0,
-                        Name = u.name ?? "",
-                        Email = u.email ?? ""
-                    };
-                    listBoxUsers.Items.Add(userItem);
-                    if (userIdToKeep.HasValue && userItem.UserId == userIdToKeep.Value)
-                        toSelect = userItem;
-                }
-
-                if (toSelect != null)
-                {
-                    listBoxUsers.SelectedItem = toSelect;
-                    _selectedUser = toSelect;
-                    txtUserNev.Text = toSelect.Name;
-                    txtUserEmail.Text = toSelect.Email;
-                    txtUserPassword.Password = "";
+                        _vm.SelectedUser = toSelect;
+                        listBoxUsers.SelectedItem = toSelect;
+                        txtUserNev.Text = toSelect.name ?? "";
+                        txtUserEmail.Text = toSelect.email ?? "";
+                        txtUserPassword.Password = "";
+                    }
                 }
             }
             catch (Exception ex)
@@ -355,20 +326,16 @@ namespace VizsgaAdminWpf
                 item.Focus();
                 e.Handled = true;
 
-                if (item.DataContext is UserItem u)
-                {
-                    _selectedUser = u;
-                }
+                // Selection is bound (SelectedUser), no extra handling needed here.
             }
         }
 
         private void listBoxUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listBoxUsers.SelectedItem is UserItem u)
+            if (_vm.SelectedUser is UserListDto u)
             {
-                _selectedUser = u;
-                txtUserNev.Text = u.Name;
-                txtUserEmail.Text = u.Email;
+                txtUserNev.Text = u.name ?? "";
+                txtUserEmail.Text = u.email ?? "";
                 txtUserPassword.Password = "";
 
                 // Ensure the ListBox keeps keyboard focus so the selected item remains highlighted (blue)
@@ -388,13 +355,12 @@ namespace VizsgaAdminWpf
 
         private async void btnUserModosit_Click(object sender, RoutedEventArgs e)
         {
-            var u = _selectedUser ?? listBoxUsers.SelectedItem as UserItem;
+            var u = _vm.SelectedUser ?? listBoxUsers.SelectedItem as UserListDto;
             if (u == null)
             {
                 MessageBox.Show("Előbb válassz felhasználót.");
                 return;
             }
-            _selectedUser = u;
             var name = txtUserNev.Text?.Trim() ?? "";
             var email = txtUserEmail.Text?.Trim() ?? "";
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email))
@@ -406,9 +372,9 @@ namespace VizsgaAdminWpf
             try
             {
                 var pwd = string.IsNullOrWhiteSpace(txtUserPassword.Password) ? null : txtUserPassword.Password;
-                await apiService.UpdateUserAdmin(u.UserId, name, email, pwd);
+                await apiService.UpdateUserAdmin(u.user_id ?? 0, name, email, pwd);
                 MessageBox.Show("Felhasználó adatai frissítve.");
-                var userIdToKeep = u.UserId;
+                var userIdToKeep = u.user_id ?? 0;
                 await LoadUsers(userIdToKeep);
             }
             catch (Exception ex)

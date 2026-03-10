@@ -22,6 +22,7 @@ export default function Profile() {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
     oldPassword: '',
   });
 
@@ -86,6 +87,10 @@ export default function Profile() {
           setError('A jelszó módosításához meg kell adnia a régi jelszót!');
           return;
         }
+        if (formData.password !== formData.confirmPassword) {
+          setError('Az új jelszavak nem egyeznek!');
+          return;
+        }
         updateData.password = formData.password;
         updateData.oldPassword = formData.oldPassword;
       }
@@ -129,7 +134,7 @@ export default function Profile() {
           <div className="error-card">
             <h3>Nincs bejelentkezve</h3>
             <p>Kérjük, jelentkezzen be a profilja megtekintéséhez!</p>
-            <button className="login-redirect-btn" onClick={() => window.location.href = '/bejelentkezes'}>
+            <button className="login-redirect-btn" onClick={() => window.location.href = '/'}>
               Bejelentkezés
             </button>
           </div>
@@ -222,6 +227,22 @@ export default function Profile() {
                       value={formData.password} 
                       onChange={handleChange}
                     />
+                    <input 
+                      type="password" 
+                      name="confirmPassword" 
+                      placeholder="Új jelszó megerősítése"
+                      value={formData.confirmPassword} 
+                      onChange={handleChange}
+                    />
+                    <div className="forgot-password-link-container">
+                      <a href="#" className="forgot-password-link" onClick={(e) => {
+                        e.preventDefault();
+                        // Itt hívhatjuk a forgot password logikát
+                        if (user?.email) {
+                          api.forgotPassword(user.email).then(() => alert('Email elküldve!'));
+                        }
+                      }}>Elfelejtettem a jelszavam</a>
+                    </div>
                     <div className="edit-actions">
                       <button className="save-btn" onClick={() => handleSave('password')}>Mentés</button>
                       <button className="cancel-btn" onClick={() => setIsEditing({...isEditing, password: false})}>Mégse</button>

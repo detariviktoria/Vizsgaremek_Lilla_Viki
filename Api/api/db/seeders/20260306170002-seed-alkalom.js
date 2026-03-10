@@ -2,6 +2,8 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    const [rows] = await queryInterface.sequelize.query('SELECT COUNT(*) as c FROM Alkalom');
+    if (rows[0].c > 0) return;
     await queryInterface.bulkInsert('Alkalom', [
       { id: 1, nev: 'Születésnap' }, { id: 2, nev: 'Karácsony' }, { id: 3, nev: 'Valentin-nap' }, { id: 4, nev: 'Anyák napja' },
       { id: 5, nev: 'Apák napja' }, { id: 6, nev: 'Anyák napja' }, { id: 7, nev: 'Gyermeknap' }, { id: 8, nev: 'Húsvét' },

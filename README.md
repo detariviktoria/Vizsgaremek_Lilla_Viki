@@ -1,65 +1,80 @@
-# AjándékAjánló - Vizsgaremek
+# Vizsgaremek – AjándékAjánló
 
-Ez a projekt egy komplex ajándékajánló rendszer, amely segít a felhasználóknak megtalálni a tökéletes ajándékot különböző alkalmakra, stílusok és célcsoportok alapján.
+Valós problémára készült web + backend + admin kliens alkalmazás: ajándék ötletek böngészése/szűrése, kedvencek, előzmények, meghívásos rendszer (kupon), chat és értesítések.
 
-## Projekt felépítése
+## Tech stack
+- **Backend**: Node.js + Express + Sequelize + MySQL, Swagger (`/api-docs`), Socket.IO
+- **Web kliens**: React + TypeScript + Vite
+- **Asztali admin**: WPF (.NET 8)
+- **Tesztek**: Jest + Supertest (backend), MSTest/NUnit jellegű teszt projekt (WPF)
 
-- **Api/**: Node.js/Express alapú REST API, Sequelize ORM-mel és MySQL adatbázissal.
-- **my-react-app/**: Modern React (Vite + TypeScript) frontend alkalmazás.
-- **Project/VizsgaAdminWpf/**: C# .NET WPF alapú asztali adminisztrációs felület.
-- **Képek/**: A projekthez használt médiaforrások.
+## Gyors indítás (fejlesztői)
 
-## Főbb funkciók
+### 1) Backend (.env)
+1. Másold le az env mintát:
+   - `Api/.env.example` → `Api/.env`
+2. Töltsd ki az értékeket (MySQL + email).
 
-- Felhasználói regisztráció és bejelentkezés (JWT + Cookie auth).
-- Ajándékok böngészése és szűrése (ár, alkalom, stílus, célcsoport).
-- Kedvencek és böngészési előzmények mentése.
-- Meghívó rendszer: hívj meg barátokat és szerezz kuponokat!
-- Valós idejű Chat (Socket.io) a felhasználók között.
-- Admin felület (WPF) az ajándékok és felhasználók kezeléséhez.
+Fontos: **valós jelszót nem commitolunk**. A repóban csak `.env.example` van.
 
-## Telepítés és beállítás
+### 2) Adatbázis
+MySQL-ben hozz létre egy adatbázist (pl. `vizsgaremek`), majd:
 
-### Előfeltételek
-- Node.js (v18+)
-- MySQL szerver
+```bash
+cd Api
+npm install
+npm run db:migrate
+npm run db:seed
+```
 
-### Backend beállítása (Api)
-1. Lépj be az `Api` mappába: `cd Api`
-2. Telepítsd a függőségeket: `npm install`
-3. Hozz létre egy `.env` fájlt az alábbi tartalommal:
-   ```env
-   PORT=3000
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASS=your_password
-   DB_NAME=ajandekajanlo
-   JWT_SECRET=titkos_kulcs
-   EMAIL_USER=your_email@gmail.com
-   EMAIL_PASS=your_app_password
-   FRONTEND_URL=http://localhost:5173
-   ```
-4. Indítsd el a szervert: `npm run dev` (vagy `npm start`)
+Ha mindent újra akarsz húzni:
 
-### Frontend beállítása (React)
-1. Lépj be a `my-react-app` mappába: `cd my-react-app`
-2. Telepítsd a függőségeket: `npm install`
-3. Indítsd el a fejlesztői szervert: `npm run dev`
-4. Nyisd meg a böngészőben: `http://localhost:5173`
+```bash
+cd Api
+npm run db:reset
+```
 
-### Asztali alkalmazás (WPF)
-1. Nyisd meg a `Project/VizsgaAdminWpf/VizsgaAdminWpf.sln` fájlt Visual Studio-ban.
-2. Győződj meg róla, hogy a Backend fut.
-3. Indítsd el a projektet (F5).
+### 3) Backend indítás
 
-## Tesztelés
-- Backend tesztek: `cd Api && npm test`
-- WPF tesztek: Futtasd a teszteket a Visual Studio Test Explorer-ben.
+```bash
+cd Api
+npm run start
+```
 
-## Felhasznált technológiák
-- **Backend**: Node.js, Express, Sequelize, MySQL, JWT, Nodemailer, Socket.io, Jest.
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS, React Router.
-- **Desktop**: C# .NET, WPF, HttpClient.
+- API: `http://localhost:3000`
+- Swagger: `http://localhost:3000/api-docs`
 
----
-🤖 Készült a vizsgaremek követelményei alapján.
+### 4) Web kliens indítás
+
+```bash
+cd my-react-app
+npm install
+npm run dev
+```
+
+Web: `http://localhost:5173`
+
+### 5) WPF Admin indítás
+Nyisd meg a megoldást:
+- `Project/VizsgaAdminWpf/VizsgaAdminWpf.sln`
+
+Indítsd a `VizsgaAdminWpf` projektet Visual Studio-ból (Target: `net8.0-windows`).
+
+## Fő funkciók (How-To)
+- **Regisztráció / bejelentkezés**: a web kliensből (a backend JWT tokent ad és httpOnly cookie-t is beállít a védett végpontokhoz).
+- **Jelszó visszaállítás**: “Elfelejtett jelszó” → email link → új jelszó.
+- **Meghívás**: barát meghívása emailben → regisztráció `?ref=<id>` paraméterrel → kupon/értesítés létrejön.
+- **Kedvencek / előzmények**: bejelentkezés után elérhető.
+- **Chat / értesítések**: Socket.IO + REST.
+
+## Tesztek futtatása
+Backend:
+
+```bash
+cd Api
+npm test
+```
+
+WPF tesztek:
+- `Project/VizsgaAdminWpf/VizsgaAdminWpf.Test` projektből futtatható Visual Studio Test Explorerrel.
+

@@ -19,7 +19,7 @@ namespace VizsgaAdminWpf.Test
                 nev = "Bögre",
                 ar = 2500,
                 leiras = "Vicces felirat",
-                kategoria = "Ajándék",
+                kategoria = "tárgy",
                 image_url = "kep.jpg",
                 link_url = "http://pelda.hu"
             };
@@ -30,7 +30,7 @@ namespace VizsgaAdminWpf.Test
                 Assert.That(ajandek.nev, Is.EqualTo("Bögre"));
                 Assert.That(ajandek.ar, Is.EqualTo(2500));
                 Assert.That(ajandek.leiras, Is.EqualTo("Vicces felirat"));
-                Assert.That(ajandek.kategoria, Is.EqualTo("Ajándék"));
+                Assert.That(ajandek.kategoria, Is.EqualTo("tárgy"));
                 Assert.That(ajandek.image_url, Is.EqualTo("kep.jpg"));
                 Assert.That(ajandek.link_url, Is.EqualTo("http://pelda.hu"));
             });
@@ -43,7 +43,7 @@ namespace VizsgaAdminWpf.Test
             {
                 nev = "",
                 leiras = "",
-                kategoria = "",
+                kategoria = "élmény",
                 image_url = "",
                 link_url = ""
             };
@@ -52,6 +52,7 @@ namespace VizsgaAdminWpf.Test
             {
                 Assert.That(ajandek.nev, Is.EqualTo(""));
                 Assert.That(ajandek.leiras, Is.EqualTo(""));
+                Assert.That(ajandek.kategoria, Is.EqualTo("élmény"));
             });
         }
     }

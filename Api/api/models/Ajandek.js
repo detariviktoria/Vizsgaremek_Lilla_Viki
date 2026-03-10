@@ -22,16 +22,11 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       kategoria: {
-
         type: DataTypes.ENUM("tárgy", "élmény"),
-
         allowNull: false,
-
       },
       image_url: {
-
         type: DataTypes.STRING(255),
-
       },
       link_url: {
         type: DataTypes.STRING(255),

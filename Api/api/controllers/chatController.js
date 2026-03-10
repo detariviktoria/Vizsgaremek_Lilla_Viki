@@ -38,7 +38,7 @@ exports.getHistory = async (req, res) => {
           { from_user_id: user2Id, to_user_id: user1Id },
         ],
       },
-      order: [["createdAt", "ASC"]],
+      order: [["created_at", "ASC"]],
     });
 
     res.json(messages);

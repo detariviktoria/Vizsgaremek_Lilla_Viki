@@ -1,147 +1,151 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace VizsgaAdminWpf
 {
     public class ApiService
     {
-        private static readonly HttpClient client;
-        private const string BaseUrl = "http://localhost:3000/";
-
-        static ApiService()
+        private readonly HttpClient httpClient = new HttpClient
         {
-            var handler = new SocketsHttpHandler
-            {
-                UseProxy = false
-            };
-
-            client = new HttpClient(handler)
-            {
-                BaseAddress = new Uri(BaseUrl)
-            };
-        }
-
+            BaseAddress = new Uri("http://localhost:3000")
+        };
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
 
-        public async Task<List<UserListDto>> GetUsers()
-        {
-            try
-            {
-                var response = await client.GetAsync("users");
-                response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<UserListDto>>(json, JsonOptions) ?? new List<UserListDto>();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Hiba a felhasználók lekérésekor: {ex.Message}", ex);
-            }
-        }
-
-        public async Task UpdateUserAdmin(int id, string name, string email, string? password)
-        {
-            try
-            {
-                var payload = new Dictionary<string, object?> { ["name"] = name, ["email"] = email };
-                if (!string.IsNullOrWhiteSpace(password)) 
-                    payload["password"] = password;
-                var json = JsonSerializer.Serialize(payload, JsonOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PutAsync($"users/{id}/admin", content);
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"API hiba: {response.StatusCode} - {errorContent}");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Hiba a felhasználó módosításakor: {ex.Message}", ex);
-            }
-        }
-
+        // Ajándékok
         public async Task<List<AjandekDTO>> GetAjandekok()
         {
             try
             {
-                var response = await client.GetAsync("ajandekok");
-                response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<AjandekDTO>>(json, JsonOptions) ?? new List<AjandekDTO>();
+                var lista = await httpClient.GetFromJsonAsync<List<AjandekDTO>>("/ajandekok");
+                return lista ?? new();
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception($"Hiba az ajándékok lekérésekor: {ex.Message}", ex);
+                return new();
             }
         }
 
-        public async Task CreateAjandek(AjandekDTO ajandek)
+        public async Task<bool> CreateAjandek(AjandekDTO ajandek)
         {
             try
             {
-                var json = JsonSerializer.Serialize(ajandek, JsonOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("ajandekok", content);
-                
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"API hiba: {response.StatusCode} - {errorContent}");
-                }
+                var response = await httpClient.PostAsJsonAsync("/ajandekok", ajandek);
+                return response.IsSuccessStatusCode;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception($"Hiba az ajándék létrehozásakor: {ex.Message}", ex);
+                return false;
             }
         }
 
-        public async Task UpdateAjandek(int id, AjandekDTO ajandek)
+        public async Task<bool> UpdateAjandek(int id, AjandekDTO ajandek)
         {
             try
             {
-                var json = JsonSerializer.Serialize(ajandek, JsonOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PutAsync($"ajandekok/{id}", content);
-                
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"API hiba: {response.StatusCode} - {errorContent}");
-                }
+                var response = await httpClient.PutAsJsonAsync($"/ajandekok/{id}", ajandek);
+                return response.IsSuccessStatusCode;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception($"Hiba az ajándék módosításakor: {ex.Message}", ex);
+                return false;
             }
         }
 
-        public async Task DeleteAjandek(int id)
+        public async Task<bool> DeleteAjandek(int id)
         {
             try
             {
-                var response = await client.DeleteAsync($"ajandekok/{id}");
-                
-                if (!response.IsSuccessStatusCode)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"API hiba: {response.StatusCode} - {errorContent}");
-                }
+                var response = await httpClient.DeleteAsync($"/ajandekok/{id}");
+                return response.IsSuccessStatusCode;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception($"Hiba az ajándék törlésekor: {ex.Message}", ex);
+                return false;
             }
         }
 
+        // Régi metódusok nevei a tesztekhez/kompatibilitáshoz
+        public async Task<List<Ajandek>> LekerdezAjandekokAsync()
+        {
+            var dtos = await GetAjandekok();
+            var list = new List<Ajandek>();
+            foreach(var d in dtos) {
+                list.Add(new Ajandek { 
+                    id = d.id ?? 0, 
+                    nev = d.nev, 
+                    ar = d.ar ?? 0, 
+                    leiras = d.leiras, 
+                    kategoria = d.kategoria, 
+                    image_url = d.image_url, 
+                    link_url = d.link_url 
+                });
+            }
+            return list;
+        }
+
+        public async Task<bool> HozzaadAjandekAsync(Ajandek ajandek)
+        {
+            return await CreateAjandek(new AjandekDTO { 
+                nev = ajandek.nev, 
+                ar = ajandek.ar, 
+                leiras = ajandek.leiras, 
+                kategoria = ajandek.kategoria, 
+                image_url = ajandek.image_url, 
+                link_url = ajandek.link_url 
+            });
+        }
+
+        public async Task<bool> TorolAjandekAsync(int id) => await DeleteAjandek(id);
+        public async Task<bool> ModositAjandekAsync(int id, Ajandek ajandek) 
+        {
+            return await UpdateAjandek(id, new AjandekDTO { 
+                id = ajandek.id,
+                nev = ajandek.nev, 
+                ar = ajandek.ar, 
+                leiras = ajandek.leiras, 
+                kategoria = ajandek.kategoria, 
+                image_url = ajandek.image_url, 
+                link_url = ajandek.link_url 
+            });
+        }
+
+        // Felhasználók
+        public async Task<List<UserListDto>> GetUsers()
+        {
+            try
+            {
+                var lista = await httpClient.GetFromJsonAsync<List<UserListDto>>("/users");
+                return lista ?? new();
+            }
+            catch
+            {
+                return new();
+            }
+        }
+
+        public async Task<bool> UpdateUserAdmin(int userId, string name, string email, string? pwd)
+        {
+            try
+            {
+                var payload = new { name, email, password = pwd };
+                var response = await httpClient.PutAsJsonAsync($"/users/{userId}/admin", payload);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Kép feltöltés
         public async Task<string?> UploadImage(string filePath)
         {
             try
@@ -152,150 +156,52 @@ namespace VizsgaAdminWpf
                 fileContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
                 content.Add(fileContent, "image", System.IO.Path.GetFileName(filePath));
 
-                var response = await client.PostAsync("upload", content);
-                
+                var response = await httpClient.PostAsync("/upload", content);
                 if (!response.IsSuccessStatusCode)
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"API hiba: {response.StatusCode} - {errorContent}");
-                }
-
+                    return null;
                 var json = await response.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<UploadResponse>(json, JsonOptions);
                 return result?.filename;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception($"Hiba a kép feltöltésekor: {ex.Message}", ex);
+                return null;
             }
         }
 
-        public async Task<List<string>> GetAlkalmak()
-        {
-            var response = await client.GetAsync("alkalmak");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
-        }
+        // Továbbiak az ApiServiceTests.cs alapján
+        public async Task<List<string>> GetAlkalmak() => await httpClient.GetFromJsonAsync<List<string>>("/alkalmak") ?? new();
+        public async Task<List<string>> GetStilusok() => await httpClient.GetFromJsonAsync<List<string>>("/stilusok") ?? new();
+        public async Task<List<string>> GetCelcsoportok() => await httpClient.GetFromJsonAsync<List<string>>("/celcsoportok") ?? new();
 
-        public async Task<List<string>> GetStilusok()
-        {
-            var response = await client.GetAsync("stilusok");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
-        }
-
-
-        public async Task<List<string>> GetCelcsoportok()
-        {
-            var response = await client.GetAsync("celcsoportok");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
-        }
-
-
-        public async Task<List<AjandekDTO>> GetAjandekokByAlkalom(string alkalom)
-        {
-            var response = await client.GetAsync($"ajandekok/alkalom/{WebUtility.UrlEncode(alkalom)}");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<AjandekDTO>>(json, JsonOptions) ?? new List<AjandekDTO>();
-        }
-        public async Task<List<AjandekDTO>> GetAjandekokByStilus(string stilus)
-        {
-            var response = await client.GetAsync($"ajandekok/stilus/{WebUtility.UrlEncode(stilus)}");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<AjandekDTO>>(json, JsonOptions) ?? new List<AjandekDTO>();
-        }
-        public async Task<List<AjandekDTO>> GetAjandekokByCelcsoport(string celcsoport)
-        {
-            var response = await client.GetAsync($"ajandekok/celcsoport/{WebUtility.UrlEncode(celcsoport)}");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<AjandekDTO>>(json, JsonOptions) ?? new List<AjandekDTO>();
-        }
-
+        public async Task<List<AjandekDTO>> GetAjandekokByAlkalom(string alkalom) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/ajandekok/alkalom/{Uri.EscapeDataString(alkalom)}") ?? new();
+        public async Task<List<AjandekDTO>> GetAjandekokByStilus(string stilus) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/ajandekok/stilus/{Uri.EscapeDataString(stilus)}") ?? new();
+        public async Task<List<AjandekDTO>> GetAjandekokByCelcsoport(string celcsoport) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/ajandekok/celcsoport/{Uri.EscapeDataString(celcsoport)}") ?? new();
 
         public async Task<LoginResponse?> Login(string username, string password)
         {
-            var json = JsonSerializer.Serialize(new { username, password });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("users/login", content);
-            if (!response.IsSuccessStatusCode) return null;
-            var respJson = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<LoginResponse>(respJson);
-        }
-        public async Task Logout()
-        {
-            var response = await client.PostAsync("users/logout", new StringContent("{}", Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-        }
-        public async Task<LoginResponse?> CheckSession()
-        {
-            var response = await client.GetAsync("users/check/session");
-            if (response.StatusCode == HttpStatusCode.Unauthorized) return null;
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<LoginResponse>(json);
-        }
-        public async Task<User?> Register(string name, string email, string password, string? ajanlo_id = null)
-        {
-            var json = JsonSerializer.Serialize(new { name, email, password, ajanlo_id });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("users", content);
-            if (!response.IsSuccessStatusCode) return null;
-            var respJson = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<User>(respJson);
+            var response = await httpClient.PostAsJsonAsync("/users/login", new { username, password });
+            if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<LoginResponse>();
+            return null;
         }
 
-        public async Task<List<AjandekDTO>> GetKedvencek(int userId)
+        public async Task Logout() => await httpClient.PostAsync("/users/logout", null);
+        public async Task<LoginResponse?> CheckSession() => await httpClient.GetFromJsonAsync<LoginResponse>("/users/check/session");
+
+        public async Task<User?> Register(string name, string email, string password)
         {
-            var response = await client.GetAsync($"kedvencek/{userId}");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<AjandekDTO>>(json, JsonOptions) ?? new List<AjandekDTO>();
-        }
-        public async Task AddKedvenc(int userId, int ajandekId)
-        {
-            var json = JsonSerializer.Serialize(new { ajandek_id = ajandekId });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync($"kedvencek/{userId}", content);
-            response.EnsureSuccessStatusCode();
-        }
-        public async Task RemoveKedvenc(int userId, int ajandekId)
-        {
-            var response = await client.DeleteAsync($"kedvencek/{userId}/{ajandekId}");
-            response.EnsureSuccessStatusCode();
+            var response = await httpClient.PostAsJsonAsync("/users", new { name, email, password });
+            if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<User>();
+            return null;
         }
 
+        public async Task<List<AjandekDTO>> GetKedvencek(int userId) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/kedvencek/{userId}") ?? new();
+        public async Task AddKedvenc(int userId, int ajandekId) => await httpClient.PostAsJsonAsync($"/kedvencek/{userId}", new { ajandek_id = ajandekId });
+        public async Task RemoveKedvenc(int userId, int ajandekId) => await httpClient.DeleteAsync($"/kedvencek/{userId}/{ajandekId}");
 
-        public async Task<List<AjandekDTO>> GetElozmenyek(int userId)
-        {
-            var response = await client.GetAsync($"elozmenyek/{userId}");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<AjandekDTO>>(json, JsonOptions) ?? new List<AjandekDTO>();
-        }
-        public async Task AddElozmeny(int userId, int ajandekId)
-        {
-            var json = JsonSerializer.Serialize(new { ajandek_id = ajandekId });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync($"elozmenyek/{userId}", content);
-            response.EnsureSuccessStatusCode();
-        }
+        public async Task<List<AjandekDTO>> GetElozmenyek(int userId) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/elozmenyek/{userId}") ?? new();
+        public async Task AddElozmeny(int userId, int ajandekId) => await httpClient.PostAsJsonAsync($"/elozmenyek/{userId}", new { ajandek_id = ajandekId });
 
-
-        public async Task SendInvite(string email, int userId)
-        {
-            var json = JsonSerializer.Serialize(new { email, userId });
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("invite", content);
-            response.EnsureSuccessStatusCode();
-        }
+        public async Task SendInvite(string email, int userId) => await httpClient.PostAsJsonAsync("/invite", new { email, userId });
     }
-
-
 }

@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
 
   Meghivo.init(
     {
-      id: {
+      meghivo_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -17,7 +17,6 @@ module.exports = (sequelize) => {
           model: "Felhasznalo",
           key: "user_id",
         },
-        field: 'kuldo_id'
       },
       meghivott_id: {
         type: DataTypes.INTEGER,
@@ -26,11 +25,10 @@ module.exports = (sequelize) => {
           model: "Felhasznalo",
           key: "user_id",
         },
-        field: 'meghivott_id'
       },
       email: {
         type: DataTypes.STRING(100),
-        allowNull: true,
+        allowNull: false,
         validate: {
           isEmail: {
             args: true,
@@ -41,10 +39,11 @@ module.exports = (sequelize) => {
       kupon_kod: {
         type: DataTypes.STRING(20),
         allowNull: true,
+        unique: true
       },
       lejarat_datum: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: true
       },
       kuldve_datum: {
         type: DataTypes.DATE,
@@ -71,3 +70,4 @@ module.exports = (sequelize) => {
 
   return Meghivo;
 };
+

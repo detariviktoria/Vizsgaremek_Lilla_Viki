@@ -13,18 +13,10 @@ module.exports = (sequelize) => {
       from_user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: "Felhasznalo",
-          key: "user_id",
-        },
       },
       to_user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: "Felhasznalo",
-          key: "user_id",
-        },
       },
       message: {
         type: DataTypes.TEXT,
@@ -35,26 +27,20 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
-        field: 'createdAt'
       },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-        field: 'updatedAt'
-      }
     },
     {
       sequelize,
       modelName: "ChatMessage",
       tableName: "uzenet",
-      timestamps: true,
+      timestamps: false,
     }
   );
 
   return ChatMessage;
 };
+

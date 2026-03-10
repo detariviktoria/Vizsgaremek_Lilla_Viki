@@ -15,7 +15,7 @@ describe("Meghívó Service Tests", () => {
   });
 
   test("should create an invitation via service", async () => {
-    const data = { from_user_id: user.user_id, email: "friend@example.com" };
+    const data = { kuldo_id: user.user_id, email: "friend@example.com" };
     const result = await meghivoService.create(data);
     expect(result.email).toBe(data.email);
   });

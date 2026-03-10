@@ -13,22 +13,22 @@ module.exports = (sequelize) => {
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: { model: 'Felhasznalo', key: 'user_id' }
       },
       message: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       is_read: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
-      }
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       sequelize,
       modelName: "Notification",
       tableName: "Ertesitesek",
-      timestamps: true
+      timestamps: true,
     }
   );
 

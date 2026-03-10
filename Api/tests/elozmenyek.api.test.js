@@ -1,12 +1,6 @@
 jest.mock("../api/db");
 jest.mock("../config/db", () => require("../api/db"));
 
-// Mock auth middleware
-jest.mock("../api/middlewares/auth", () => (req, res, next) => {
-    req.user = { id: 1, username: "user", role: "user" };
-    next();
-});
-
 const request = require("supertest");
 const app = require("../app");
 const db = require("../api/db");

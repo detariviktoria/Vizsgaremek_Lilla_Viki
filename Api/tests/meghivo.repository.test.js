@@ -17,11 +17,11 @@ describe("Meghívó Repository Tests", () => {
 
   test("should create and find a Meghívó", async () => {
     const data = {
-      from_user_id: user.user_id,
+      kuldo_id: user.user_id,
       email: "invited@example.com"
     };
     const created = await db.Meghivo.create(data);
-    const found = await db.Meghivo.findByPk(created.id);
+    const found = await db.Meghivo.findByPk(created.meghivo_id);
     expect(found.email).toBe(data.email);
   });
 });
