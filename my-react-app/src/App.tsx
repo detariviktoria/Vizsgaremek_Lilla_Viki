@@ -39,6 +39,8 @@ function App() {
     <BrowserRouter future={future}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/bejelentkezes" element={<Bejelentkezes />} />
+        <Route path="/regisztracio" element={<Regisztracio />} />
         <Route path="/ajandekok" element={<KategoriaValasztas />} />
         <Route path="/alkalom/:nev" element={<KategoriaValasztas />} />
         <Route path="/stilus/:nev" element={<KategoriaValasztas />} />

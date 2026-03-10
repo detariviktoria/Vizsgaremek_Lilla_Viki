@@ -1,7 +1,12 @@
 const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
-  const token = req.cookies.token;
+  let token = req.cookies?.token;
+
+  // Alternatíva: Authorization: Bearer <token>
+  if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.substring(7);
+  }
 
   if (!token) {
     return res.status(401).json({ message: 'Nincs bejelentkezve' });
@@ -9,7 +14,7 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-jwt-secret-key-change-this-in-production');
-    req.user = decoded; // { id: user_id, username: name, isAdmin: boolean }
+    req.user = decoded; // { id: user_id, username: name, role: 'admin'|'user', ... }
     next();
   } catch (err) {
     res.clearCookie('token');
@@ -18,7 +23,8 @@ const authMiddleware = (req, res, next) => {
 };
 
 const adminMiddleware = (req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
+  const role = req.user?.role;
+  if (!req.user || role !== 'admin') {
     return res.status(403).json({ message: 'Hozzáférés megtagadva: Admin jogosultság szükséges' });
   }
   next();

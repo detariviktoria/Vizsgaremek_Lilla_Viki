@@ -10,7 +10,7 @@ export default function Welcome() {
 
   useEffect(() => {
     if (!username) {
-      navigate('/bejelentkezes');
+      navigate('/');
     }
   }, [username, navigate]);
 

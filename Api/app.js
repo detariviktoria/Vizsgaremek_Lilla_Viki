@@ -85,6 +85,8 @@ const inviteRoutes = require("./api/routes/inviteRoutes");
 
 const chatRoutes = require('./api/routes/chat');
 
+const notificationRoutes = require("./api/routes/notificationRoutes");
+
 
 
 // Route-ok regisztrálása
@@ -122,6 +124,8 @@ app.use("/upload", uploadRoutes);
 
 app.use("/chat", chatRoutes);
 
+app.use("/notifications", notificationRoutes);
+
 // Minden egyéb kérést irányítsunk egy egyszerű üzenetre (mivel a frontend külön fut)
 
 app.get("/", (req, res) => {
@@ -130,7 +134,13 @@ app.get("/", (req, res) => {
 
 // SPA támogatás törölve, ha nem API hívás, akkor 404
 app.use((req, res, next) => {
-  if (req.path.startsWith('/api') || req.path.startsWith('/users') || req.path.startsWith('/ajandekok') || req.path.startsWith('/chat')) {
+  const allowedPaths = [
+    '/api', '/users', '/ajandekok', '/chat', '/invite', '/alkalmak', 
+    '/stilusok', '/celcsoportok', '/kategoriak', '/elozmenyek', 
+    '/kedvencek', '/upload', '/images', '/Képek', '/notifications'
+  ];
+  
+  if (allowedPaths.some(path => req.path.startsWith(path))) {
     return next();
   }
   res.status(404).json({ error: "Not Found", message: "Az API végpont nem található." });

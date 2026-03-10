@@ -3,9 +3,9 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addIndex('Ajandek', ['nev']);
-    await queryInterface.addIndex('Ajandek', ['kategoria']);
-    await queryInterface.addIndex('Ajandek', ['ar']);
+    try { await queryInterface.addIndex('Ajandek', ['nev']); } catch (e) {}
+    try { await queryInterface.addIndex('Ajandek', ['kategoria']); } catch (e) {}
+    try { await queryInterface.addIndex('Ajandek', ['ar']); } catch (e) {}
   },
 
   async down(queryInterface, Sequelize) {

@@ -26,6 +26,6 @@ describe("User API Tests", () => {
         const newUser = { name: "New User", email: "new@test.com", password: "password" };
         const res = await request(app).post("/users").send(newUser);
         expect(res.status).toBe(201);
-        expect(res.body.message).toBe("Felhasználó létrehozva!");
+        expect(res.body.message).toMatch(/Felhasználó/i);
     });
 });

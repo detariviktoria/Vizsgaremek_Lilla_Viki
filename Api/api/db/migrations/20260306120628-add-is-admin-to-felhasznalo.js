@@ -3,10 +3,13 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('Felhasznalo', 'is_admin', {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false,
-    });
+    const tableInfo = await queryInterface.describeTable('Felhasznalo');
+    if (!tableInfo.is_admin) {
+      await queryInterface.addColumn('Felhasznalo', 'is_admin', {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      });
+    }
   },
 
   async down(queryInterface, Sequelize) {

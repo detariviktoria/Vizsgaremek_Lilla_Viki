@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 
-const SESSION_TIMEOUT = 10 * 60 * 1000; // 10 perc inaktivitás után
+const SESSION_TIMEOUT = 2 * 60 * 60 * 1000; // 2 óra inaktivitás után
 
 
 
@@ -43,6 +43,8 @@ export const useAuth = () => {
 
           await api.logout();
 
+          sessionStorage.removeItem('token');
+
           setUsername(null);
 
           setUserId(null);
@@ -74,6 +76,8 @@ export const useAuth = () => {
           sessionStorage.removeItem('userId');
 
           sessionStorage.removeItem('isAdmin');
+
+          sessionStorage.removeItem('token');
 
           sessionStorage.removeItem('sessionStart');
 
@@ -128,6 +132,8 @@ export const useAuth = () => {
 
             sessionStorage.removeItem('isAdmin');
 
+            sessionStorage.removeItem('token');
+
             sessionStorage.removeItem('sessionStart');
 
             setUsername(null);
@@ -148,6 +154,8 @@ export const useAuth = () => {
 
           sessionStorage.removeItem('isAdmin');
 
+          sessionStorage.removeItem('token');
+
           sessionStorage.removeItem('sessionStart');
 
           setUsername(null);
@@ -161,20 +169,8 @@ export const useAuth = () => {
       } catch (error) {
 
         console.error('🚨 Hiba a session ellenőrzéskor:', error);
-
-        sessionStorage.removeItem('username');
-
-        sessionStorage.removeItem('userId');
-
-        sessionStorage.removeItem('isAdmin');
-
-        sessionStorage.removeItem('sessionStart');
-
-        setUsername(null);
-
-        setUserId(null);
-
-        setIsAdmin(false);
+        // Hálózati hiba esetén ne jelentkeztessük ki azonnal, hátha csak átmeneti
+        setIsChecking(false);
 
       } finally {
 
@@ -272,7 +268,7 @@ export const useAuth = () => {
 
 
 
-  const login = (user: string, id: number, admin: boolean) => {
+  const login = (user: string, id: number, admin: boolean, token?: string) => {
 
     console.log('📝 Login:', user, id, admin);
 
@@ -281,6 +277,8 @@ export const useAuth = () => {
     if (id !== undefined && id !== null) sessionStorage.setItem('userId', id.toString());
 
     if (admin !== undefined && admin !== null) sessionStorage.setItem('isAdmin', admin.toString());
+
+    if (token) sessionStorage.setItem('token', token);
 
     sessionStorage.setItem('sessionStart', Date.now().toString());
 
@@ -313,6 +311,8 @@ export const useAuth = () => {
     sessionStorage.removeItem('userId');
 
     sessionStorage.removeItem('isAdmin');
+
+    sessionStorage.removeItem('token');
 
     sessionStorage.removeItem('sessionStart');
 

@@ -12,7 +12,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: (origin, callback) => {
+      if (!origin || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -33,6 +39,11 @@ io.on("connection", (socket) => {
     console.log(`Private message from ${from} to ${to}: ${message}`);
     io.to("user_" + to).emit("private message", { from, to, message });
     io.to("user_" + from).emit("private message", { from, to, message }); // saját ablakban is jelenjen meg
+  });
+
+  // Értesítés küldése
+  socket.on("notification", ({ to, message }) => {
+    io.to("user_" + to).emit("notification", { message });
   });
 
   socket.on("disconnect", () => {

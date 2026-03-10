@@ -114,7 +114,13 @@ export const api = {
         credentials: 'include',
         body: JSON.stringify({ username, password }),
       });
-      if (!response.ok) throw new Error('Hibás felhasználónév vagy jelszó!');
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        const serverMsg = body?.error || body?.message;
+        const msg = (response.status === 500 && serverMsg) ? serverMsg : 'Hibás felhasználónév vagy jelszó!';
+        console.error('Login API hiba:', response.status, body);
+        throw new Error(msg);
+      }
       return await response.json();
     } catch (error) {
       console.error('Hiba a bejelentkezéskor:', error);
@@ -138,9 +144,12 @@ export const api = {
 
   checkSession: async (): Promise<LoginResponse | null> => {
     try {
+      const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
       const response = await fetch(`${API_BASE_URL}/users/check/session`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         credentials: 'include',
       });
       if (response.status === 401) return null;
@@ -327,7 +336,13 @@ export const api = {
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || errorData.error || 'Regisztráció sikertelen!');
+        const validatorErrors = Array.isArray(errorData?.errors)
+          ? errorData.errors
+              .map((e: any) => e?.msg)
+              .filter((msg: unknown) => typeof msg === 'string' && msg.trim().length > 0)
+          : [];
+        const validatorMsg = validatorErrors.length > 0 ? validatorErrors.join('\n') : '';
+        throw new Error(validatorMsg || errorData.message || errorData.error || 'Regisztráció sikertelen!');
       }
       return await response.json();
     } catch (error) {
@@ -392,5 +407,36 @@ export const api = {
       console.error("Nem JSON válasz érkezett:", text.substring(0, 100));
       return [];
     }
+  },
+
+  // Értesítések
+  getNotifications: async (userId: number): Promise<any[]> => {
+    const response = await fetch(`${API_BASE_URL}/notifications/${userId}`, { credentials: 'include' });
+    if (!response.ok) throw new Error('Hiba az értesítések lekérésekor');
+    return await response.json();
+  },
+  markNotificationAsRead: async (id: number): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
+    });
+    if (!response.ok) throw new Error('Hiba az értesítés frissítésekor');
+  },
+  markAllNotificationsAsRead: async (userId: number): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/notifications/user/${userId}/read-all`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
+    });
+    if (!response.ok) throw new Error('Hiba az értesítések frissítésekor');
+  },
+
+  // Kuponok (Meghívókból)
+  getCoupons: async (userId: number): Promise<any[]> => {
+    // Lekérjük azokat a meghívókat, amiket mi küldtünk és elfogadták, VAGY amiket mi kaptunk
+    const response = await fetch(`${API_BASE_URL}/invite/coupons/${userId}`, { credentials: 'include' });
+    if (!response.ok) throw new Error('Hiba a kuponok lekérésekor');
+    return await response.json();
   },
 };

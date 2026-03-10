@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 module.exports = {
+  jwtSecret: process.env.JWT_SECRET || 'your-jwt-secret-key-change-this-in-production',
   development: {
     username: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
