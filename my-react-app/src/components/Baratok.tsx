@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { api } from '../api';
 import Header from './Header';
-import NincsAdat from './NincsAdat';
 import './Baratok.css';
 
 interface Friend {
@@ -51,7 +51,11 @@ const Baratok = () => {
     return (
       <>
         <Header />
-        <div className="nincs-adat">Kérlek jelentkezz be a barátok megtekintéséhez!</div>
+        <div className="nincs-adat-container animate-fade-in">
+          <div className="nincs-adat-ikon">🔒</div>
+          <div className="nincs-adat">Kérlek jelentkezz be a barátok megtekintéséhez!</div>
+          <Link to="/" className="vissza-gomb">Vissza a főoldalra</Link>
+        </div>
       </>
     );
   }
@@ -62,12 +66,11 @@ const Baratok = () => {
       <div className="baratok-container animate-fade-in">
         <h1 className="baratok-cim animate-slide-up">Baráti meghívások</h1>
         {baratok.length === 0 ? (
-          <NincsAdat 
-            ikon="👥" 
-            uzenet="Még nem hívtál meg senkit, és téged sem hívott meg senki." 
-            gombSzoveg="Vissza a főoldalra" 
-            gombLink="/" 
-          />
+          <div className="nincs-adat-container animate-fade-in">
+            <div className="nincs-adat-ikon">👥</div>
+            <div className="nincs-adat">Még nincs barátod / meghívásod.</div>
+            <Link to="/ajandekok" className="vissza-gomb">Böngéssz az ajándékok között</Link>
+          </div>
         ) : (
           <div className="baratok-lista">
             {baratok.map((barat, index) => (

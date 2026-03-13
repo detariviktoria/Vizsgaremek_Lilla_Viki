@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VizsgaAdminWpf.Models
+namespace VizsgaAdminWpf
 {
     public class User
     {

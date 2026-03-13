@@ -1,33 +1,40 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Ertesitesek', {
+    await queryInterface.createTable('uzenet', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      user_id: {
+      from_user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'Felhasznalo', key: 'user_id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+      },
+      to_user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       message: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       is_read: {
         type: Sequelize.BOOLEAN,
-        defaultValue: false
+        allowNull: false,
+        defaultValue: false,
       },
-      createdAt: { type: Sequelize.DATE, allowNull: false },
-      updatedAt: { type: Sequelize.DATE, allowNull: false }
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
     });
   },
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Ertesitesek');
+    await queryInterface.dropTable('uzenet');
   }
 };

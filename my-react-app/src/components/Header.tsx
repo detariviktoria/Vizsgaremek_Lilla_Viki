@@ -37,6 +37,7 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   const location = useLocation();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -170,7 +171,9 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
   };
 
-
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
 
@@ -206,47 +209,92 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
       <nav id="main-nav" className="header-right">
 
         {username ? (
+          <>
+            {/* Desktop Navigation */}
+            <div className="nav-icons desktop-nav">
 
-          <div className="nav-icons">
-
-            <Link to="/kedvencek" title="Kedvencek" className="icon-link">❤️</Link>
-            <button className="chat-icon-btn" onClick={() => setIsChatOpen(true)} title="Chat">
-              💬
-              {(hasUnread || hasUnreadNotif) && <span className="chat-unread-dot" />}
-            </button>
-            <Link to="/baratok" title="Barátok" className="icon-link">👥</Link>
-            <Link to="/elozmenyek" title="Előzmények" className="icon-link">🕒</Link>
-
-            
-
-            <div className="menu-container">
-
-              <button onClick={toggleMenu} className="settings-btn" title="Beállítások">
-
-                ⚙️
-
+              <Link to="/kedvencek" title="Kedvencek" className="icon-link">❤️</Link>
+              <button className="chat-icon-btn" onClick={() => setIsChatOpen(true)} title="Chat">
+                💬
+                {(hasUnread || hasUnreadNotif) && <span className="chat-unread-dot" />}
               </button>
+              <Link to="/baratok" title="Barátok" className="icon-link">👥</Link>
+              <Link to="/elozmenyek" title="Előzmények" className="icon-link">🕒</Link>
 
-              {isMenuOpen && (
+              
 
-                <div className="dropdown-menu">
-                  <Link to="/profil" className="menu-item" onClick={() => setIsMenuOpen(false)}>
-                    Profilom
-                  </Link>
-                  <a href="#" onClick={(e) => { e.preventDefault(); setIsCouponsOpen(true); setIsMenuOpen(false); }} className="menu-item">
-                    Kuponjaim
-                  </a>
-                  <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="menu-item">
-                    Kijelentkezés
-                  </a>
-                </div>
+              <div className="menu-container">
 
-              )}
+                <button onClick={toggleMenu} className="settings-btn" title="Beállítások">
 
+                  ⚙️
+
+                </button>
+
+                {isMenuOpen && (
+
+                  <div className="dropdown-menu">
+                    <Link to="/profil" className="menu-item" onClick={() => setIsMenuOpen(false)}>
+                      Profilom
+                    </Link>
+                    <a href="#" onClick={(e) => { e.preventDefault(); setIsCouponsOpen(true); setIsMenuOpen(false); }} className="menu-item">
+                      Kuponjaim
+                    </a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className="menu-item">
+                      Kijelentkezés
+                    </a>
+                  </div>
+
+                )}
+
+
+              </div>
 
             </div>
 
-          </div>
+            {/* Mobile Menu Button */}
+            <button className="mobile-menu-btn" onClick={toggleMobileMenu} aria-label="Menu">
+              ☰
+            </button>
+
+            {/* Mobile Menu Drawer */}
+            {isMobileMenuOpen && (
+              <>
+                <div className="mobile-menu-overlay" onClick={toggleMobileMenu}></div>
+                <div className="mobile-menu">
+                  <div className="mobile-menu-header">
+                    <button className="close-menu-btn" onClick={toggleMobileMenu}>✖</button>
+                  </div>
+                  <div className="mobile-menu-items">
+                    <Link to="/kedvencek" className="mobile-menu-item" onClick={toggleMobileMenu}>
+                      <span className="mobile-menu-icon">❤️</span> Kedvencek
+                    </Link>
+                    <button className="mobile-menu-item" onClick={() => { setIsChatOpen(true); toggleMobileMenu(); }}>
+                      <span className="mobile-menu-icon">💬</span> 
+                      Üzenetek
+                      {(hasUnread || hasUnreadNotif) && <span className="mobile-unread-dot" />}
+                    </button>
+                    <Link to="/baratok" className="mobile-menu-item" onClick={toggleMobileMenu}>
+                      <span className="mobile-menu-icon">👥</span> Barátok
+                    </Link>
+                    <Link to="/elozmenyek" className="mobile-menu-item" onClick={toggleMobileMenu}>
+                      <span className="mobile-menu-icon">🕒</span> Előzmények
+                    </Link>
+                    <div className="mobile-menu-divider"></div>
+                    <Link to="/profil" className="mobile-menu-item" onClick={toggleMobileMenu}>
+                       <span className="mobile-menu-icon">👤</span> Profilom
+                    </Link>
+                    <button className="mobile-menu-item" onClick={() => { setIsCouponsOpen(true); toggleMobileMenu(); }}>
+                      <span className="mobile-menu-icon">🎫</span> Kuponjaim
+                    </button>
+                    <button className="mobile-menu-item logout-item" onClick={() => { handleLogout(); toggleMobileMenu(); }}>
+                      <span className="mobile-menu-icon">🚪</span> Kijelentkezés
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </>
 
         ) : (
 

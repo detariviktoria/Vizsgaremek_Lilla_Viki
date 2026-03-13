@@ -14,21 +14,6 @@ header {
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
-=======
-/* Főoldal header – más megjelenés */
-header.header--home {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-header.header--home .logo,
-header.header--home nav a,
-header.header--home .auth-btn {
-  color: black;
-}
-
->>>>>>> 6b175cf2 (wpf_teszteles0313)
 .header-left, .header-center, .header-right {
   display: flex;
   align-items: center;
@@ -83,6 +68,129 @@ nav a:hover {
   display: flex;
   align-items: center;
   gap: 15px;
+}
+
+/* Mobile Menu Styles */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
+  padding: 0;
+  margin-left: 10px;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 45vw; /* Kicsit kevesebb, mint a fele */
+  height: 100%;
+  background: white;
+  z-index: 2001;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu-header {
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid #eee;
+}
+
+.close-menu-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.mobile-menu-items {
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* egységes távolság az ikon és a szöveg között */
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.mobile-menu-item:hover {
+  background-color: #fff4fa;
+  color: palevioletred;
+}
+
+.mobile-menu-icon {
+  margin-right: 0; /* a gap kezeli a térközt */
+  font-size: 1.3rem;
+  width: 28px;
+  min-width: 28px;
+  flex: 0 0 28px; /* fix ikon oszlop */
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* emoji-k ne csússzanak el */
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 10px 20px;
+}
+
+.logout-item {
+  color: #d9534f;
+}
+
+.mobile-unread-dot {
+  width: 8px;
+  height: 8px;
+  background-color: palevioletred;
+  border-radius: 50%;
+  margin-left: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
 .nav-icons > * {
@@ -199,6 +307,14 @@ nav a:hover {
   .welcome-text {
     font-size: 0.9rem;
   }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
 }
 
 @media (max-width: 480px) {
@@ -216,6 +332,10 @@ nav a:hover {
 
   .settings-btn {
     font-size: 1.2rem;
+  }
+
+  .mobile-menu {
+    width: 65vw; /* Kisebb képernyőn egy kicsit szélesebb, hogy elférjen a szöveg */
   }
 }
 

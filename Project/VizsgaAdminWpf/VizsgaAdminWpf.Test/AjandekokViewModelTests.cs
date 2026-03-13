@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
-using VizsgaAdminWpf.Models;
-using VizsgaAdminWpf.Services;
-using VizsgaAdminWpf.ViewModels;
+using VizsgaAdminWpf;
 using NUnit.Framework;
 
 namespace VizsgaAdminWpf.Test
@@ -18,9 +16,9 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public async Task AjandekokBetoltese_FillsCollection()
+        public async Task BetoltesAsync_FillsCollection()
         {
-            await viewModel.AjandekokBetoltese();
+            await viewModel.BetoltesAsync();
             Assert.That(viewModel.Ajandekok, Is.Not.Null);
         }
     }

@@ -53,16 +53,21 @@
 }
 
 .card {
-  background-color: #f5f5f5;
-  border-radius: 8px;
+  background-color: white;
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
   position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .card img {
@@ -76,8 +81,11 @@
   padding: 15px;
   text-align: center;
   font-weight: bold;
-  font-size: 20px;
-  background-color: #f0f0f0;
+  font-size: 1.2rem;
+  background-color: #f8f8f8;
+  color: #333;
+  border-top: 1px solid #eee;
+  margin-top: auto;
 }
 
 .invite-banner {
@@ -123,7 +131,8 @@
 
 
 
-  .filter-panel {
+  /* Csak a Home oldalon rendezze át a szűrőt */
+  .home-container .filter-panel {
 
     order: 1; /* Mobilon a szűrő alulra kerüljön, hogy a tartalom legyen az első */
 
@@ -160,83 +169,101 @@
   .content-grid {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 20px;
   }
   .main-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 cards per row on mobile */
+    gap: 12px;
     order: 0;
   }
-  .filter-panel {
+  /* Csak a Home oldalon rendezze át a szűrőt */
+  .home-container .filter-panel {
     order: 1;
-    margin-top: 0;
+    margin-top: 10px;
     margin-bottom: 12px;
     width: 100% !important;
     max-width: none !important;
-    padding: 4px 2px;
-    font-size: 11px;
+    /* A kinézetet a közös (globális) filter stílusok adják */
   }
-  .filter-header {
-    margin-bottom: 2px;
+  /* A filter-header / title / icon stílusok globálisak */
+  .home-container .filter-section h3 {
+    font-size: 1rem;
+    padding: 10px 15px;
+    margin-bottom: 0;
+    border-top: 1px solid #fce4ec;
   }
-  .filter-title {
-    font-size: 0.95rem;
+  .home-container .checkbox-list {
+    padding: 10px 20px;
+    gap: 8px;
+    font-size: 14px;
   }
-  .filter-section h3 {
-    font-size: 0.95rem;
-    margin-bottom: 2px;
+  .home-container .checkbox-label {
+    font-size: 14px;
+    gap: 8px;
   }
-  .checkbox-list {
-    gap: 2px;
-    font-size: 11px;
+  .home-container .price-inputs {
+    padding: 0 15px 10px 15px;
   }
-  .checkbox-label {
-    font-size: 11px;
-    gap: 2px;
-  }
-  .price-inputs input {
-    width: 38px;
-    font-size: 11px;
-    padding: 1px 2px;
-  }
-  .range-slider {
-    height: 1px;
-  }
-  .filter-button {
+  .home-container .price-inputs input {
+    width: 60px;
+    font-size: 14px;
     padding: 5px;
-    font-size: 11px;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    margin-top: 6px;
+  }
+  .home-container .price-slider-container {
+    padding: 0 15px 15px 15px;
+  }
+  .home-container .range-slider {
+    height: 4px;
+  }
+  .home-container .filter-button {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin: 15px;
+    background-color: palevioletred;
+    color: white;
+    font-weight: bold;
+    border: none;
+    width: calc(100% - 30px);
   }
   .card {
-    min-height: 80px;
-    max-height: 120px;
-    border-radius: 8px;
-    margin-bottom: 6px;
+    min-height: 150px;
+    max-height: none;
+    border-radius: 12px;
+    margin-bottom: 0;
   }
   .card img {
-    height: 60px;
-    object-fit: contain;
-    border-radius: 8px 8px 0 0;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
   }
   .card-title {
-    font-size: 1rem;
-    padding: 8px;
+    font-size: 0.95rem; /* Slightly smaller font for better fit */
+    padding: 10px 5px;
   }
   .invite-banner {
-    padding: 16px 8px;
-    margin-top: 10px;
+    padding: 25px 20px;
+    margin-top: 15px;
     flex-direction: column;
-    align-items: flex-start;
-    border-radius: 8px;
+    align-items: center;
+    border-radius: 12px;
+    text-align: center;
+    background-color: #fff9f0;
+    border: 1px solid #ffe0b2;
   }
   .invite-content h2 {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
   }
   .invite-btn {
-    font-size: 13px;
-    padding: 8px 12px;
+    font-size: 1rem;
+    padding: 10px 25px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   }
 }
