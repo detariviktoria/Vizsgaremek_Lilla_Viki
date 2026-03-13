@@ -16,7 +16,7 @@ import './Header.css';
 
 import './ChatModal.css';
 
-import { api, type User } from "../api";
+import { api, type User, API_BASE_URL } from "../api";
 import socket from "../socket";
 
 
@@ -45,6 +45,7 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [currentUserData, setCurrentUserData] = useState<User | null>(null);
 
   const [activeTab, setActiveTab] = useState<'messages' | 'notifications'>('messages');
 
@@ -68,6 +69,14 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
     window.addEventListener('open-forgot-password', handleOpenForgot);
     return () => window.removeEventListener('open-forgot-password', handleOpenForgot);
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      api.getUser(userId).then(setCurrentUserData).catch(console.error);
+    } else {
+      setCurrentUserData(null);
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (!currentUserId) return;
@@ -316,19 +325,45 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
 
             {activeTab === 'messages' ? (
               <div style={{display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden'}}>
-                <div style={{padding: '0 20px', marginBottom: '10px'}}>
-                  <UserSelect onSelect={setSelectedUser} selectedUserId={selectedUser?.user_id} highlightUserIds={highlightUserIds} />
-                </div>
-                <div className="modal-body-content">
-                  {selectedUser && (
-                    <Chat 
-                      key={selectedUser.user_id} 
-                      currentUser={{user_id: Number(userId), name: username || '', email: '', password: ''}} 
-                      selectedUser={selectedUser}
-                      onMessagesRead={checkUnread}
-                    />
-                  )}
-                </div>
+                {!selectedUser ? (
+                  <div style={{padding: '0 20px', flex: 1, overflowY: 'auto'}}>
+                    <h3 style={{margin: '10px 0', fontSize: '16px', color: '#666'}}>Kivel szeretnél chatelni?</h3>
+                    <UserSelect onSelect={setSelectedUser} selectedUserId={selectedUser?.user_id} highlightUserIds={highlightUserIds} />
+                  </div>
+                ) : (
+                  <>
+                    <div style={{padding: '10px 20px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: '15px'}}>
+                      <button 
+                        onClick={() => setSelectedUser(null)} 
+                        style={{background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: 'palevioletred', padding: '0 5px'}}
+                        title="Vissza a listához"
+                      >
+                        ⬅
+                      </button>
+                      <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                        <div className="user-grid-avatar" style={{width: '35px', height: '35px', fontSize: '16px'}}>
+                          <img 
+                            src={`/Képek/${selectedUser.kep_url || selectedUser.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") + ".jpg"}`} 
+                            alt={selectedUser.name} 
+                            style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%'}}
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/Képek/logo.webp';
+                            }}
+                          />
+                        </div>
+                        <span style={{fontWeight: 'bold', fontSize: '16px'}}>{selectedUser.name}</span>
+                      </div>
+                    </div>
+                    <div className="modal-body-content">
+                      <Chat 
+                        key={selectedUser.user_id} 
+                        currentUser={currentUserData || {user_id: Number(userId), name: username || '', email: '', password: ''}} 
+                        selectedUser={selectedUser}
+                        onMessagesRead={checkUnread}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               <div className="modal-body-content">

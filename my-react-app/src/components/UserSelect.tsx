@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { api, type User } from "../api";
+import { api, type User, API_BASE_URL } from "../api";
 import "./UserSelect.css";
 
 type UserSelectProps = {
@@ -12,8 +12,6 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -44,69 +42,36 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
     return a.name.localeCompare(b.name);
   });
 
-  if (loading) return <div>Felhasználók betöltése...</div>;
-  if (error) return <div style={{color:'red'}}>{error}</div>;
-
-  // Saját custom dropdown
-  const selected = orderedUsers.find(u => u.user_id === selectedUserId);
+  if (loading) return <div className="user-select-loading">Felhasználók betöltése...</div>;
+  if (error) return <div className="user-select-error">{error}</div>;
 
   const isHighlighted = (userId?: number) => {
     if (!userId) return false;
     return highlightUserIds.some(id => Number(id) === Number(userId));
   };
 
-  const filteredBySearch = orderedUsers.filter(user => 
-    user.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-  );
-
   return (
-    <div className="user-select">
-      <label>Válassz felhasználót a chathez:</label>
-      <div className="custom-dropdown" onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-          setOpen(false);
-          setSearchTerm("");
-        }
-      }}>
-        <input
-          type="text"
-          className={
-            "custom-dropdown-selected" + 
-            (selected && isHighlighted(selected.user_id) ? " highlighted-user-option" : "")
-          }
-          value={open ? searchTerm : (selected ? (isHighlighted(selected.user_id) ? `${selected.name} (ÚJ)` : selected.name) : "")}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setOpen(true)}
-          onClick={() => setOpen(true)}
-          placeholder={open ? "Keresés..." : "-- Válassz --"}
-          autoComplete="off"
-        />
-        {open && (
-          <ul className="custom-dropdown-list">
-            {filteredBySearch.length > 0 ? (
-              filteredBySearch.map(user => (
-                <li
-                  key={user.user_id}
-                  className={
-                    "custom-dropdown-option" +
-                    (isHighlighted(user.user_id) ? " highlighted-user-option" : "") +
-                    (selectedUserId === user.user_id ? " selected" : "")
-                  }
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => { 
-                    onSelect(user); 
-                    setOpen(false); 
-                    setSearchTerm("");
-                  }}
-                >
-                  {isHighlighted(user.user_id) ? `${user.name} (ÚJ)` : user.name}
-                </li>
-              ))
-            ) : (
-              <li className="custom-dropdown-option">Nincs találat</li>
-            )}
-          </ul>
-        )}
+    <div className="user-grid-container">
+      <div className="user-grid">
+        {orderedUsers.map(user => (
+          <div 
+            key={user.user_id} 
+            className={`user-grid-item ${selectedUserId === user.user_id ? 'selected' : ''} ${isHighlighted(user.user_id) ? 'highlighted' : ''}`}
+            onClick={() => onSelect(user)}
+          >
+            <div className="user-grid-avatar">
+              <img 
+                src={`/Képek/${user.kep_url || user.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") + ".jpg"}`} 
+                alt={user.name} 
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/Képek/logo.webp';
+                }}
+              />
+              {isHighlighted(user.user_id) && <span className="unread-badge" />}
+            </div>
+            <span className="user-grid-name">{user.name}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

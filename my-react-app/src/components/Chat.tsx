@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import socket from "../socket";
-import { api, type User } from "../api";
+import { api, type User, API_BASE_URL } from "../api";
 import "./Chat.css";
 
 interface ChatProps {
@@ -117,6 +117,25 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
     }
   };
 
+  const renderAvatar = (user: User | null) => {
+    if (!user) return <div className="chat-avatar-placeholder">?</div>;
+    
+    // Ékezetmentesítés a név alapján, ha nincs kep_url
+    const safeName = user.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const imageUrl = `/Képek/${user.kep_url || safeName + ".jpg"}`;
+    
+    return (
+      <img 
+        src={imageUrl} 
+        alt={user.name} 
+        className="chat-avatar-img"
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = '/Képek/logo.webp'; // Végső fallback
+        }}
+      />
+    );
+  };
+
   return (
     <div className="chat-container">
       <div className="chat-messages">
@@ -125,10 +144,22 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
           return (
             <div
               key={i}
-              className={isMe ? "chat-message-me" : "chat-message-other"}
+              className={isMe ? "chat-message-row-me" : "chat-message-row-other"}
             >
-              {!isMe && <div style={{fontSize: '10px', marginBottom: '2px', opacity: 0.7}}>{selectedUser?.name}</div>}
-              {msg.message}
+              {!isMe && (
+                <div className="chat-avatar">
+                  {renderAvatar(selectedUser)}
+                </div>
+              )}
+              <div className={isMe ? "chat-message-me" : "chat-message-other"}>
+                {!isMe && <div style={{fontSize: '10px', marginBottom: '2px', opacity: 0.7}}>{selectedUser?.name}</div>}
+                {msg.message}
+              </div>
+              {isMe && (
+                <div className="chat-avatar">
+                  {renderAvatar(currentUser)}
+                </div>
+              )}
             </div>
           );
         })}

@@ -33,9 +33,46 @@
   text-align: center;
 }
 
-.profile-avatar {
+.profile-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.profile-avatar-container {
+  position: relative;
   width: 80px;
   height: 80px;
+  margin: 0 auto 15px;
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  color: #e91e63;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: transform 0.2s, background-color 0.2s;
+  z-index: 5;
+  border: 1px solid #eee;
+}
+
+.avatar-edit-badge:hover {
+  transform: scale(1.1);
+  background-color: #f8f9fa;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
@@ -43,13 +80,8 @@
   align-items: center;
   font-size: 36px;
   font-weight: bold;
-  margin: 0 auto 15px;
   border: 3px solid white;
-}
-
-.profile-header h2 {
-  margin: 0;
-  font-size: 24px;
+  overflow: hidden; /* Biztosítja, hogy a kép ne lógjon ki */
 }
 
 .profile-content {

@@ -16,6 +16,7 @@ export type User = {
   name: string;
   email: string;
   password?: string;
+  kep_url?: string;
 };
 
 
@@ -483,6 +484,27 @@ export const api = {
       credentials: 'include' 
     });
     if (!response.ok) throw new Error('Hiba a kuponok lekérésekor');
+    return await response.json();
+  },
+
+  // Fájlfeltöltés
+  uploadImage: async (file: File): Promise<{ filename: string }> => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch(`${API_BASE_URL}/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Hiba a fájl feltöltésekor');
+    }
+
     return await response.json();
   },
 };

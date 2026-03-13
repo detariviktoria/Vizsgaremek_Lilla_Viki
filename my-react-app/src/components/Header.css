@@ -12,10 +12,9 @@ header {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   z-index: 1000;
   box-sizing: border-box;
+  gap: 20px;
 }
 
-<<<<<<< HEAD
-=======
 /* Főoldal header – más megjelenés */
 header.header--home {
   background: white;
@@ -28,23 +27,24 @@ header.header--home .auth-btn {
   color: black;
 }
 
->>>>>>> 6b175cf2 (wpf_teszteles0313)
 .header-left, .header-center, .header-right {
   display: flex;
   align-items: center;
 }
 
 .header-left {
-  flex: 1;
+  flex: 1 0 0;
+  justify-content: flex-start;
 }
 
 .header-center {
-  flex: 2;
+  flex: 0 0 auto;
   justify-content: center;
+  min-width: 0;
 }
 
 .header-right {
-  flex: 1;
+  flex: 1 0 0;
   justify-content: flex-end;
 }
 
@@ -125,16 +125,37 @@ nav a:hover {
   color: #666;
 }
 
-.icon-link {
+.icon-link, .chat-icon-btn {
   font-size: 1.5rem;
   text-decoration: none;
   display: flex;
   align-items: center;
   transition: transform 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
 }
 
-.icon-link:hover {
+.icon-link:hover, .chat-icon-btn:hover {
   transform: scale(1.1);
+}
+
+.chat-icon-btn {
+  position: relative;
+}
+
+.chat-unread-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  background-color: #ff4d4f;
+  border-radius: 50%;
+  border: 2px solid white;
 }
 
 /* Dropdown menü stílusok */

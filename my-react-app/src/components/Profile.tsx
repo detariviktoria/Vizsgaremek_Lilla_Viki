@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { api, type User } from '../api';
+import { api, type User, API_BASE_URL } from '../api';
 import { useAuth } from '../hooks/useAuth';
 import Header from './Header';
 import './Profile.css';
@@ -26,6 +26,8 @@ export default function Profile() {
     oldPassword: '',
   });
 
+  const [uploading, setUploading] = useState(false);
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (userId) {
@@ -41,6 +43,7 @@ export default function Profile() {
               name: userData.name || '',
               email: userData.email || '',
               password: '',
+              confirmPassword: '',
               oldPassword: '',
             });
             setError(null);
@@ -105,10 +108,47 @@ export default function Profile() {
       setSuccess('Adatok sikeresen frissítve!');
       setTimeout(() => setSuccess(null), 3000);
       
-      if (field === 'password') setFormData({ ...formData, password: '', oldPassword: '' });
+      if (field === 'password') setFormData({ ...formData, password: '', confirmPassword: '', oldPassword: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Hiba történt a mentés során.');
       setTimeout(() => setError(null), 5000);
+    }
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !userId) return;
+
+    // Fájlméret ellenőrzés (pl. 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('A fájl mérete nem haladhatja meg az 5MB-ot!');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      console.log('DEBUG: Starting avatar upload for file:', file.name);
+      // 1. Fájl feltöltése
+      const { filename } = await api.uploadImage(file);
+      console.log('DEBUG: Uploaded filename:', filename);
+      
+      // 2. Felhasználó kep_url frissítése
+      console.log('DEBUG: Updating user kep_url for ID:', userId);
+      await api.updateUser(userId, { kep_url: filename });
+      
+      // 3. Helyi állapot frissítése
+      if (user) {
+        console.log('DEBUG: Updating local user state with kep_url:', filename);
+        setUser({ ...user, kep_url: filename });
+      }
+      
+      setSuccess('Profilkép sikeresen frissítve!');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Hiba történt a kép feltöltése során.');
+      setTimeout(() => setError(null), 5000);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -166,8 +206,28 @@ export default function Profile() {
       <div className="profile-container">
         <div className="profile-card animate-scale-in">
           <div className="profile-header">
-            <div className="profile-avatar">
-              {user?.name ? user.name.charAt(0).toUpperCase() : '?'}
+            <div className="profile-avatar-container">
+              <div className="profile-avatar">
+                <img 
+                  src={`/Képek/${user?.kep_url || user?.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") + ".jpg"}`} 
+                  alt="Profilkép" 
+                  className="avatar-img"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/Képek/logo.webp';
+                  }}
+                />
+              </div>
+              <label htmlFor="avatar-upload" className="avatar-edit-badge" title="Profilkép módosítása">
+                {uploading ? '...' : '📷'}
+                <input 
+                  id="avatar-upload" 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleAvatarChange} 
+                  disabled={uploading}
+                  style={{ display: 'none' }}
+                />
+              </label>
             </div>
             <h2>Személyes adatok</h2>
           </div>

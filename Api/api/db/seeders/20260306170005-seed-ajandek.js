@@ -27,7 +27,7 @@ module.exports = {
       { id: 22, nev: 'Tánctanfolyam', leiras: 'Tánctanfolyam leírása', ar: 8000, kategoria: 'élmény', image_url: 'tanc.jpg', link_url: 'https://tancvalaszto.hu/kezdo-tanfolyamok.html' },
       { id: 23, nev: 'Kertészeti szett', leiras: 'Kertészeti szett leírása', ar: 20000, kategoria: 'tárgy', image_url: 'kertesz.jpg', link_url: 'https://www.csepeligravir.hu/termek/kerteszeti-szett-gravirozas-nelkuli-termek/' },
       { id: 24, nev: 'Hobbi készlet', leiras: 'Hobbi készlet leírása', ar: 12968, kategoria: 'tárgy', image_url: 'hobbi.jpg', link_url: 'https://www.kreativhobby.hu/ajandekotletek-2117' },
-      { id: 25, nev: 'Plüssfigura', leiras: 'Plüssfigura leírása', ar: 4000, kategoria: 'tárgy', image_url: 'plussfigura.png', link_url: 'https://www.plussfigurabolt.hu/termek' },
+      { id: 25, nev: 'Plüssfigura', leiras: 'Plüssfigura leírása', ar: 4000, kategoria: 'tárgy', image_url: 'pluss.jpg', link_url: 'https://www.plussfigurabolt.hu/termek' },
       { id: 26, nev: 'Kerékpár kiegészítő', leiras: 'Kerékpár kiegészítő leírása', ar: 8415, kategoria: 'tárgy', image_url: 'bico.jpg', link_url: 'https://www.bicajbolt.hu/kiegeszitok' },
       { id: 27, nev: 'Laptop táska', leiras: 'Laptop táska leírása', ar: 10995, kategoria: 'tárgy', image_url: 'ltaska.jpg', link_url: 'https://www.laptoptaska.hu/termek' },
       { id: 28, nev: 'Napernyő', leiras: 'Napernyő leírása', ar: 4214, kategoria: 'tárgy', image_url: 'napernyo.jpg', link_url: 'https://www.napernyobolt.hu/termek' },

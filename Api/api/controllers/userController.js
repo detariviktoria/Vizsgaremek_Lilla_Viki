@@ -69,6 +69,7 @@ exports.getUserById = async (req, res) => {
       attributes: { exclude: ['password'] },
     });
     if (!user) return res.status(404).json({ message: "Felhasználó nem található" });
+    console.log(`DEBUG: getUserById(${id}) returning kep_url:`, user.kep_url);
     res.json(user);
   } catch (error) {
     console.error('Hiba a felhasználó lekérésekor:', error);
@@ -110,7 +111,7 @@ exports.updateUserAdmin = async (req, res) => {
 
     await user.save();
 
-    res.json({ message: "Felhasználó adatai frissítve!", user: { id: user.user_id, name: user.name, email: user.email } });
+    res.json({ message: "Felhasználó adatai frissítve!", user: { id: user.user_id, name: user.name, email: user.email, kep_url: user.kep_url } });
   } catch (error) {
     console.error('Hiba a felhasználó (admin) frissítésekor:', error);
     res.status(500).json({ error: error.message });
@@ -120,7 +121,15 @@ exports.updateUserAdmin = async (req, res) => {
 // Felhasználó frissítése
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { name, email, password, oldPassword } = req.body;
+  const { name, email, password, oldPassword, kep_url } = req.body;
+
+  console.log(`DEBUG: updateUser request for ID ${id}, body:`, { name, email, kep_url, hasPassword: !!password });
+
+  // Csak a saját adatait módosíthatja, kivéve ha admin
+  if (req.user.id != id && !req.user.isAdmin) {
+    return res.status(403).json({ message: "Nincs jogosultsága más felhasználó adatait módosítani!" });
+  }
+
   try {
     const user = await db.Felhasznalo.findByPk(id);
     if (!user) return res.status(404).json({ message: "Felhasználó nem található" });
@@ -149,9 +158,31 @@ exports.updateUser = async (req, res) => {
       user.password = password;
     }
 
-    await user.save();
+    if (kep_url !== undefined) {
+      console.log(`DEBUG: Updating database for user ${id}, setting kep_url to: ${kep_url}`);
+      // Közvetlen update parancs, hogy biztosan bekerüljön az adatbázisba
+      await db.sequelize.query(`UPDATE Felhasznalo SET kep_url = ? WHERE user_id = ?`, {
+        replacements: [kep_url, id],
+        type: db.Sequelize.QueryTypes.UPDATE
+      });
+    }
 
-    res.json({ message: "Felhasználó adatai frissítve!", user: { id: user.user_id, name: user.name, email: user.email } });
+    // Ha egyéb adatokat is mentünk (név, jelszó)
+    await user.save();
+    
+    // Frissítsük le újra az adatbázisból, hogy lássuk mi ment el ténylegesen
+    const updatedUser = await db.Felhasznalo.findByPk(id);
+    console.log(`DEBUG: User ${id} after save in DB kep_url:`, updatedUser.kep_url);
+
+    res.json({ 
+      message: "Felhasználó adatai frissítve!", 
+      user: { 
+        id: updatedUser.user_id, 
+        name: updatedUser.name, 
+        email: updatedUser.email, 
+        kep_url: updatedUser.kep_url 
+      } 
+    });
   } catch (error) {
     console.error('Hiba a felhasználó frissítésekor:', error);
     res.status(500).json({ error: error.message });

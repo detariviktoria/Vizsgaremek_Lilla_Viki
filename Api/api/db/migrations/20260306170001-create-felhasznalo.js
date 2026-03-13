@@ -37,6 +37,11 @@ module.exports = {
       is_admin: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      kep_url: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+        defaultValue: null
       }
     });
   },
