@@ -8,6 +8,8 @@ import Header from './Header';
 
 import AjandekKartya from './AjandekKartya';
 
+import NincsAdat from './NincsAdat';
+
 import { useAuth } from '../hooks/useAuth';
 
 import { api, type Ajandek } from '../api';
@@ -489,7 +491,14 @@ export default function KategoriaValasztas() {
                   />
                 ))
               ) : (
-                <p className="no-results">Nincs a keresési feltételeknek megfelelő ajándék.</p>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <NincsAdat 
+                    ikon="🔍" 
+                    uzenet="Nincs a keresési feltételeknek megfelelő ajándék." 
+                    gombSzoveg="Összes ajándék megtekintése" 
+                    gombLink="/ajandekok" 
+                  />
+                </div>
               )}
             </div>
         </div>

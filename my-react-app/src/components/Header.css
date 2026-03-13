@@ -14,6 +14,21 @@ header {
   box-sizing: border-box;
 }
 
+<<<<<<< HEAD
+=======
+/* Főoldal header – más megjelenés */
+header.header--home {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+header.header--home .logo,
+header.header--home nav a,
+header.header--home .auth-btn {
+  color: black;
+}
+
+>>>>>>> 6b175cf2 (wpf_teszteles0313)
 .header-left, .header-center, .header-right {
   display: flex;
   align-items: center;

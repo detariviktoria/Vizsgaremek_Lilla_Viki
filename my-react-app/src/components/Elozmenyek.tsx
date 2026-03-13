@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import { api, type Ajandek } from '../api';
 import AjandekKartya, { SkeletonKartya } from './AjandekKartya';
 import Header from './Header';
+import NincsAdat from './NincsAdat';
 import './Elozmenyek.css';
 
 const Elozmenyek = () => {
@@ -57,11 +58,12 @@ const Elozmenyek = () => {
     return (
       <>
         <Header />
-        <div className="nincs-adat-container animate-fade-in">
-          <div className="nincs-adat-ikon">🔒</div>
-          <div className="nincs-adat">Kérlek jelentkezz be az előzmények megtekintéséhez!</div>
-          <Link to="/" className="vissza-gomb">Vissza a főoldalra</Link>
-        </div>
+        <NincsAdat 
+          ikon="🔒" 
+          uzenet="Kérlek jelentkezz be az előzmények megtekintéséhez!" 
+          gombSzoveg="Vissza a főoldalra" 
+          gombLink="/" 
+        />
       </>
     );
   }
@@ -72,11 +74,12 @@ const Elozmenyek = () => {
       <div className="elozmenyek-container animate-fade-in">
         <h1 className="elozmenyek-cim animate-slide-up">Megtekintett Ajándékok</h1>
         {elozmenyek.length === 0 ? (
-          <div className="nincs-adat-container animate-fade-in">
-            <div className="nincs-adat-ikon">👀</div>
-            <div className="nincs-adat">Még nincsenek megtekintett ajándékaid.</div>
-            <Link to="/ajandekok" className="vissza-gomb">Kezdj el böngészni</Link>
-          </div>
+          <NincsAdat 
+            ikon="👀" 
+            uzenet="Még nincsenek megtekintett ajándékaid." 
+            gombSzoveg="Kezdj el böngészni" 
+            gombLink="/ajandekok" 
+          />
         ) : (
           <div className="elozmenyek-grid">
             {elozmenyek.map((ajandek, index) => (

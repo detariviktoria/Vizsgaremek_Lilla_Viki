@@ -1,9 +1,10 @@
-﻿using System;
+﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using VizsgaAdminWpf;
+using VizsgaAdminWpf.Models;
+using VizsgaAdminWpf.Services;
 
 namespace VizsgaAdminWpf.Test
 {
@@ -34,7 +35,7 @@ namespace VizsgaAdminWpf.Test
         public async Task GetUserById_Test()
         {
             var apiService = new ApiService();
-            var users = await apiService.GetUsers();
+            var users = await apiService.GetUsersAsync();
             var user = users?.FirstOrDefault(u => u.user_id == 1);
 
             if (user != null)

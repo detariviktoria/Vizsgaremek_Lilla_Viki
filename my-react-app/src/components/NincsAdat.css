@@ -1,0 +1,59 @@
+.nincs-adat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin: 40px auto;
+  max-width: 450px;
+  width: 90%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.nincs-adat-ikon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+}
+
+.nincs-adat-szoveg {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.vissza-gomb {
+  display: inline-block;
+  padding: 14px 35px;
+  background-color: #e91e63;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+  border: none;
+  cursor: pointer;
+}
+
+.vissza-gomb:hover {
+  background-color: #c2185b;
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(233, 30, 99, 0.5);
+}
+
+.vissza-gomb:active {
+  transform: scale(0.95);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

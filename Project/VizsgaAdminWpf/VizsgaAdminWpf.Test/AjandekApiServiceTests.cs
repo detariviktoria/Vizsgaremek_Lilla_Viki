@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VizsgaAdminWpf;
+using VizsgaAdminWpf.Models;
+using VizsgaAdminWpf.Services;
 using NUnit.Framework;
 
 namespace VizsgaAdminWpf.Test
@@ -17,33 +18,33 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public async Task LekerdezAjandekokAsync_ReturnsList()
+        public async Task GetAjandekokAsync_ReturnsList()
         {
-            var result = await apiService.LekerdezAjandekokAsync();
+            var result = await apiService.GetAjandekokAsync();
             Assert.That(result, Is.Not.Null);
-            Assert.That(result, Is.InstanceOf<List<Ajandek>>());
+            Assert.That(result, Is.InstanceOf<List<AjandekDTO>>());
         }
 
         [Test]
-        public async Task HozzaadAjandekAsync_ReturnsBool()
+        public async Task CreateAjandekAsync_ReturnsBool()
         {
-            var ajandek = new Ajandek { nev = "Teszt", ar = 1000, kategoria = "tárgy" };
-            var siker = await apiService.HozzaadAjandekAsync(ajandek);
+            var ajandek = new AjandekDTO { nev = "Teszt", ar = 1000, kategoria = "tárgy" };
+            var siker = await apiService.CreateAjandekAsync(ajandek);
             Assert.That(siker, Is.TypeOf<bool>());
         }
 
         [Test]
-        public async Task TorolAjandekAsync_ReturnsBool()
+        public async Task DeleteAjandekAsync_ReturnsBool()
         {
-            var siker = await apiService.TorolAjandekAsync(1);
+            var siker = await apiService.DeleteAjandekAsync(1);
             Assert.That(siker, Is.TypeOf<bool>());
         }
 
         [Test]
-        public async Task ModositAjandekAsync_ReturnsBool()
+        public async Task UpdateAjandekAsync_ReturnsBool()
         {
-            var ajandek = new Ajandek { nev = "Módosított", ar = 2000, kategoria = "tárgy" };
-            var siker = await apiService.ModositAjandekAsync(1, ajandek);
+            var ajandek = new AjandekDTO { nev = "Módosított", ar = 2000, kategoria = "tárgy" };
+            var siker = await apiService.UpdateAjandekAsync(1, ajandek);
             Assert.That(siker, Is.TypeOf<bool>());
         }
     }

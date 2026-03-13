@@ -608,49 +608,43 @@ main {
   background-color: rgb(141, 70, 93);
 }
 
-/* Új globális stílusok a "kidolgozottsághoz" */
-.nincs-adat-container {
+/* Modal alapstílus */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background: rgba(0,0,0,0.25);
+}
+
+.modal.show {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 60px 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  margin: 40px auto;
-  max-width: 500px;
 }
 
-.nincs-adat-ikon {
-  font-size: 4rem;
-  margin-bottom: 20px;
+.modal-content {
+  background: #fff4fa;
+  padding: 38px 35px 20px 35px;
+  border-radius: 14px;
+  min-width: 320px;
+  max-width: 350px;
+  box-shadow: 0 2px 12px rgba(200, 50, 70, 0.17);
+  margin: 0;
+  position: relative;
 }
 
-.nincs-adat {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 30px;
-}
-
-.vissza-gomb {
-  display: inline-block;
-  padding: 12px 24px;
-  background-color: #e91e63;
-  color: white;
-  text-decoration: none;
-  border-radius: 30px;
-  font-weight: bold;
-  transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
-}
-
-.vissza-gomb:hover {
-  background-color: #c2185b;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+.close-modal {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 28px;
+  color: #8d465d;
+  cursor: pointer;
 }
 
 .loading-container {

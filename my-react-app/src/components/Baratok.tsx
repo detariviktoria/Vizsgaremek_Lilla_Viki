@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { api } from '../api';
 import Header from './Header';
+import NincsAdat from './NincsAdat';
 import './Baratok.css';
 
 interface Friend {
@@ -61,7 +62,12 @@ const Baratok = () => {
       <div className="baratok-container animate-fade-in">
         <h1 className="baratok-cim animate-slide-up">Baráti meghívások</h1>
         {baratok.length === 0 ? (
-          <div className="nincs-adat animate-fade-in">Még nem hívtál meg senkit, és téged sem hívott meg senki.</div>
+          <NincsAdat 
+            ikon="👥" 
+            uzenet="Még nem hívtál meg senkit, és téged sem hívott meg senki." 
+            gombSzoveg="Vissza a főoldalra" 
+            gombLink="/" 
+          />
         ) : (
           <div className="baratok-lista">
             {baratok.map((barat, index) => (

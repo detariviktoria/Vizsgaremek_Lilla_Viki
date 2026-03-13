@@ -34,7 +34,7 @@ module.exports = {
       { id: 29, nev: 'Sportcipő', leiras: 'Sportcipő leírása', ar: 9880, kategoria: 'tárgy', image_url: 'sportcipo.jpg', link_url: 'https://www.sportcipobolt.hu/termek' },
       { id: 30, nev: 'Hátizsák', leiras: 'Hátizsák leírása', ar: 12350, kategoria: 'tárgy', image_url: 'hatizsak.jpg', link_url: 'https://www.hatizsakbolt.hu/termek' },
       { id: 31, nev: 'Laptop hűtőpad', leiras: 'Laptop hűtőpad leírása', ar: 9612, kategoria: 'tárgy', image_url: 'lhuto.jpg', link_url: 'https://www.laptophutopad.hu/termek' },
-      { id: 32, nev: 'LED lámpa', leiras: 'LED lámpa leírása', ar: 3426, kategoria: 'élmény', image_url: 'ledlampa.jpg', link_url: 'https://www.ledlampabolt.hu/termek' },
+      { id: 32, nev: 'LED lámpa', leiras: 'LED lámpa leírása', ar: 3426, kategoria: 'tárgy', image_url: 'ledlampa.jpg', link_url: 'https://www.ledlampabolt.hu/termek' },
       { id: 33, nev: 'Szépségcsomag', leiras: 'Szépségcsomag leírása', ar: 8991, kategoria: 'tárgy', image_url: 'szep.jpg', link_url: 'https://www.szepsegcsomag.hu/termek' },
       { id: 34, nev: 'Fitness bérlet', leiras: 'Fitness bérlet leírása', ar: 11475, kategoria: 'élmény', image_url: 'fitness.jpg', link_url: 'https://www.fitnessberlet.hu/termek' },
       { id: 35, nev: 'VR szemüveg', leiras: 'VR szemüveg leírása', ar: 15204, kategoria: 'tárgy', image_url: 'vr.jpg', link_url: 'https://www.vrszemuveg.hu/termek' },
