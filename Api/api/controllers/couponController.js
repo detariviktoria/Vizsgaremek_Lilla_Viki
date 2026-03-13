@@ -24,7 +24,7 @@ exports.getUserCoupons = async (req, res) => {
 
     // Átalakítjuk a formátumot a frontendnek
     const formatted = coupons.map(c => ({
-      id: c.id,
+      id: c.meghivo_id,
       kod: c.kupon_kod,
       lejarat_datum: c.lejarat_datum
     }));

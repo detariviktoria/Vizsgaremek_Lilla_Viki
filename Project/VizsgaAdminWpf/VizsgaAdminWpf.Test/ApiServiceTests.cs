@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using VizsgaAdminWpf.Models;
-using VizsgaAdminWpf.Services;
+using VizsgaAdminWpf;
 
 namespace VizsgaAdminWpf.Test
 {
@@ -20,11 +19,11 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public async Task GetUsersAsync_ReturnsUserList()
+        public async Task GetUsers_ReturnsUserList()
         {
             try
             {
-                var users = await service.GetUsersAsync();
+                var users = await service.GetUsers();
                 Assert.Multiple(() =>
                 {
                     Assert.That(users, Is.Not.Null, "A felhasználók listája nem lehet null.");
@@ -39,11 +38,11 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public async Task UpdateUserAdminAsync_ValidData_Succeeds()
+        public async Task UpdateUserAdmin_ValidData_Succeeds()
         {
             try
             {
-                var result = await service.UpdateUserAdminAsync(1, "Teszt Elek", "teszt@example.com", null);
+                var result = await service.UpdateUserAdmin(1, "Teszt Elek", "teszt@example.com", null);
                 Assert.That(result, Is.TypeOf<bool>());
             }
             catch (Exception ex)
@@ -53,11 +52,11 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public async Task GetAjandekokAsync_ReturnsAjandekList()
+        public async Task GetAjandekok_ReturnsAjandekList()
         {
             try
             {
-                var ajandekok = await service.GetAjandekokAsync();
+                var ajandekok = await service.GetAjandekok();
                 Assert.Multiple(() =>
                 {
                     Assert.That(ajandekok, Is.Not.Null, "Az ajándékok listája nem lehet null.");
@@ -72,7 +71,7 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public async Task CreateAjandekAsync_ValidData_Succeeds()
+        public async Task CreateAjandek_ValidData_Succeeds()
         {
             try
             {
@@ -83,7 +82,7 @@ namespace VizsgaAdminWpf.Test
                     ar = 1000,
                     kategoria = "tárgy"
                 };
-                var result = await service.CreateAjandekAsync(ujAjandek);
+                var result = await service.CreateAjandek(ujAjandek);
                 Assert.That(result, Is.TypeOf<bool>());
             }
             catch (Exception ex)
@@ -93,11 +92,11 @@ namespace VizsgaAdminWpf.Test
         }
 
         [Test]
-        public async Task GetAlkalmakAsync_ReturnsList()
+        public async Task GetAlkalmak_ReturnsList()
         {
             try
             {
-                var list = await service.GetAlkalmakAsync();
+                var list = await service.GetAlkalmak();
                 Assert.That(list, Is.Not.Null);
             }
             catch (Exception ex)

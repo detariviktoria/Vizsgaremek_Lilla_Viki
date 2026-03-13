@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
 
   Meghivo.init(
     {
-      id: {
+      meghivo_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -24,15 +24,6 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
-      kupon_kod: {
-        type: DataTypes.STRING(20),
-        allowNull: true,
-        unique: true
-      },
-      lejarat_datum: {
-        type: DataTypes.DATE,
-        allowNull: true
-      },
       kuldve_datum: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -44,6 +35,14 @@ module.exports = (sequelize) => {
         defaultValue: false,
       },
       elfogadva_datum: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      kupon_kod: {
+        type: DataTypes.STRING(20),
+        allowNull: true,
+      },
+      lejarat_datum: {
         type: DataTypes.DATE,
         allowNull: true,
       },

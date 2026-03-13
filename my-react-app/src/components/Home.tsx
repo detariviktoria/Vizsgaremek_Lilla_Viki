@@ -8,6 +8,8 @@ import Header from './Header';
 
 import InviteModal from './InviteModal';
 
+import AuthModal from './AuthModal';
+
 import { api } from '../api';
 
 import './Home.css';

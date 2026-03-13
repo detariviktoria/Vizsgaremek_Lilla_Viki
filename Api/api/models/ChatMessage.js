@@ -35,12 +35,8 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
+      // Az adatbázisban a mező neve created_at
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,

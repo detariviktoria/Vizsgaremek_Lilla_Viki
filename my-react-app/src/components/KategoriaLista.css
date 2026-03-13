@@ -20,6 +20,10 @@
   border-radius: 14px;
   width: 100%;
   box-sizing: border-box;
+<<<<<<< HEAD
+=======
+  align-items: stretch;
+>>>>>>> 748a7e6de3930400406bc2334a63185276cb7ffa
 }
 
 @media (max-width: 768px) {

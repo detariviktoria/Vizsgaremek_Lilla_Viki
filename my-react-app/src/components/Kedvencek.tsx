@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/useAuth';
 import { api, type Ajandek } from '../api';
 import AjandekKartya, { SkeletonKartya } from './AjandekKartya';
 import Header from './Header';
-import NincsAdat from './NincsAdat';
 import './Kedvencek.css';
 
 const Kedvencek = () => {
@@ -50,12 +49,11 @@ const Kedvencek = () => {
     return (
       <>
         <Header />
-        <NincsAdat 
-          ikon="🔒" 
-          uzenet="Kérlek jelentkezz be a kedvencek megtekintéséhez!" 
-          gombSzoveg="Vissza a főoldalra" 
-          gombLink="/" 
-        />
+        <div className="nincs-adat-container animate-fade-in">
+          <div className="nincs-adat-ikon">🔒</div>
+          <div className="nincs-adat">Kérlek jelentkezz be a kedvencek megtekintéséhez!</div>
+          <Link to="/" className="vissza-gomb">Vissza a főoldalra</Link>
+        </div>
       </>
     );
   }
@@ -66,12 +64,11 @@ const Kedvencek = () => {
       <div className="kedvencek-container animate-fade-in">
         <h1 className="kedvencek-cim animate-slide-up">Kedvenc Ajándékaim</h1>
         {kedvencek.length === 0 ? (
-          <NincsAdat 
-            ikon="💝" 
-            uzenet="Még nincsenek kedvenc ajándékaid." 
-            gombSzoveg="Böngéssz az ajándékok között" 
-            gombLink="/ajandekok" 
-          />
+          <div className="nincs-adat-container animate-fade-in">
+            <div className="nincs-adat-ikon">💝</div>
+            <div className="nincs-adat">Még nincsenek kedvenc ajándékaid.</div>
+            <Link to="/ajandekok" className="vissza-gomb">Böngéssz az ajándékok között</Link>
+          </div>
         ) : (
           <div className="kedvencek-grid">
             {kedvencek.map((ajandek, index) => (
