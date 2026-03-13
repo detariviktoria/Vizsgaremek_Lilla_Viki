@@ -23,12 +23,27 @@ export type LoginResponse = {
   username: string;
   userId: number;
   isAdmin: boolean;
+  token?: string;
+};
+
+const getAuthHeaders = () => {
+  const token = sessionStorage.getItem('token');
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
 };
 
 export const api = {
   getAlkalmak: async (): Promise<string[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/alkalmak`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/alkalmak`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error('Hiba az alkalmak lekérésekor');
       const data = await response.json();
       return data.map((item: any) => typeof item === 'string' ? item : item.nev);
@@ -40,7 +55,10 @@ export const api = {
 
   getStilusok: async (): Promise<string[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/stilusok`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/stilusok`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error('Hiba a stílusok lekérésekor');
       const data = await response.json();
       return data.map((item: any) => typeof item === 'string' ? item : item.nev);
@@ -52,7 +70,10 @@ export const api = {
 
   getCelcsoportok: async (): Promise<string[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/celcsoportok`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/celcsoportok`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error('Hiba a célcsoportok lekérésekor');
       const data = await response.json();
       return data.map((item: any) => typeof item === 'string' ? item : item.nev);
@@ -64,7 +85,10 @@ export const api = {
 
   getAjandekok: async (): Promise<Ajandek[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ajandekok`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/ajandekok`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error('Hiba az ajándékok lekérésekor');
       return await response.json();
     } catch (error) {
@@ -75,7 +99,10 @@ export const api = {
 
   getAjandekokByAlkalom: async (alkalom: string): Promise<Ajandek[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ajandekok/alkalom/${encodeURIComponent(alkalom)}`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/ajandekok/alkalom/${encodeURIComponent(alkalom)}`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error(`Hiba az ajándékok lekérésekor: ${alkalom} alkalomra`);
       return await response.json();
     } catch (error) {
@@ -86,7 +113,10 @@ export const api = {
 
   getAjandekokByStilus: async (stilus: string): Promise<Ajandek[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ajandekok/stilus/${encodeURIComponent(stilus)}`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/ajandekok/stilus/${encodeURIComponent(stilus)}`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error(`Hiba az ajándékok lekérésekor: ${stilus} stílus alapján`);
       return await response.json();
     } catch (error) {
@@ -97,7 +127,10 @@ export const api = {
 
   getAjandekokByCelcsoport: async (celcsoport: string): Promise<Ajandek[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/ajandekok/celcsoport/${encodeURIComponent(celcsoport)}`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/ajandekok/celcsoport/${encodeURIComponent(celcsoport)}`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error(`Hiba az ajándékok lekérésekor: ${celcsoport} célcsoportra`);
       return await response.json();
     } catch (error) {
@@ -114,14 +147,12 @@ export const api = {
         credentials: 'include',
         body: JSON.stringify({ username, password }),
       });
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        const serverMsg = body?.error || body?.message;
-        const msg = (response.status === 500 && serverMsg) ? serverMsg : 'Hibás felhasználónév vagy jelszó!';
-        console.error('Login API hiba:', response.status, body);
-        throw new Error(msg);
+      if (!response.ok) throw new Error('Hibás felhasználónév vagy jelszó!');
+      const data = await response.json();
+      if (data.token) {
+        sessionStorage.setItem('token', data.token);
       }
-      return await response.json();
+      return data;
     } catch (error) {
       console.error('Hiba a bejelentkezéskor:', error);
       throw error;
@@ -132,24 +163,23 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/users/logout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         credentials: 'include',
       });
+      sessionStorage.removeItem('token');
       if (!response.ok) throw new Error('Kijelentkezés sikertelen!');
     } catch (error) {
       console.error('Hiba a kijelentkezéskor:', error);
+      sessionStorage.removeItem('token');
       throw error;
     }
   },
 
   checkSession: async (): Promise<LoginResponse | null> => {
     try {
-      const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null;
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (token) headers['Authorization'] = `Bearer ${token}`;
       const response = await fetch(`${API_BASE_URL}/users/check/session`, {
         method: 'GET',
-        headers,
+        headers: getAuthHeaders(),
         credentials: 'include',
       });
       if (response.status === 401) return null;
@@ -163,7 +193,10 @@ export const api = {
 
   getKedvencek: async (userId: number): Promise<Ajandek[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/kedvencek/${userId}`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/kedvencek/${userId}`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error('Hiba a kedvencek lekérésekor');
       return await response.json();
     } catch (error) {
@@ -176,7 +209,7 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/kedvencek/${userId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         credentials: 'include',
         body: JSON.stringify({ ajandek_id: ajandekId }),
       });
@@ -191,6 +224,7 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/kedvencek/${userId}/${ajandekId}`, {
         method: 'DELETE',
+        headers: getAuthHeaders(),
         credentials: 'include',
       });
       if (!response.ok) throw new Error('Hiba a kedvenc törlésekor');
@@ -204,7 +238,7 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         credentials: 'include',
       });
       if (!response.ok) throw new Error('Hiba a felhasználó lekérésekor');
@@ -217,7 +251,10 @@ export const api = {
 
   getUsers: async (): Promise<User[]> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/users`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error('Hiba a felhasználók lekérésekor');
       return await response.json();
     } catch (error) {
@@ -230,7 +267,7 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         credentials: 'include',
         body: JSON.stringify(userData),
       });
@@ -284,7 +321,10 @@ export const api = {
   getElozmenyek: async (userId: number): Promise<Ajandek[]> => {
 
     try {
-      const response = await fetch(`${API_BASE_URL}/elozmenyek/${userId}`, { credentials: 'include' });
+      const response = await fetch(`${API_BASE_URL}/elozmenyek/${userId}`, { 
+        headers: getAuthHeaders(),
+        credentials: 'include' 
+      });
       if (!response.ok) throw new Error('Hiba az előzmények lekérésekor');
       return await response.json();
     } catch (error) {
@@ -297,7 +337,7 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/elozmenyek/${userId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         credentials: 'include',
         body: JSON.stringify({ ajandek_id: ajandekId }),
       });
@@ -312,7 +352,7 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/invite`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         credentials: 'include',
         body: JSON.stringify({ email, userId }),
       });
@@ -336,13 +376,7 @@ export const api = {
       });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const validatorErrors = Array.isArray(errorData?.errors)
-          ? errorData.errors
-              .map((e: any) => e?.msg)
-              .filter((msg: unknown) => typeof msg === 'string' && msg.trim().length > 0)
-          : [];
-        const validatorMsg = validatorErrors.length > 0 ? validatorErrors.join('\n') : '';
-        throw new Error(validatorMsg || errorData.message || errorData.error || 'Regisztráció sikertelen!');
+        throw new Error(errorData.message || errorData.error || 'Regisztráció sikertelen!');
       }
       return await response.json();
     } catch (error) {
@@ -355,7 +389,7 @@ export const api = {
     try {
       const response = await fetch(`${API_BASE_URL}/invite/friends/${userId}`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         credentials: 'include',
       });
       if (!response.ok) throw new Error('Hiba a barátok lekérésekor');
@@ -368,14 +402,17 @@ export const api = {
 
   // Chat privát üzenetek és előzmények
   getChatHistory: async (user1: number, user2: number) => {
-    const response = await fetch(`${API_BASE_URL}/chat/history/${user1}/${user2}`, { credentials: 'include' });
+    const response = await fetch(`${API_BASE_URL}/chat/history/${user1}/${user2}`, { 
+      headers: getAuthHeaders(),
+      credentials: 'include' 
+    });
     if (!response.ok) throw new Error('Hiba az üzenet előzmények lekérésekor');
     return await response.json();
   },
   sendChatMessage: async (from: number, to: number, message: string) => {
     const response = await fetch(`${API_BASE_URL}/chat/send`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       credentials: 'include',
       body: JSON.stringify({ from_user_id: from, to_user_id: to, message })
     });
@@ -383,21 +420,27 @@ export const api = {
     return await response.json();
   },
   getUnreadChatCount: async (userId: number): Promise<{ unreadCount: number }> => {
-    const response = await fetch(`${API_BASE_URL}/chat/unread/${userId}`, { credentials: 'include' });
+    const response = await fetch(`${API_BASE_URL}/chat/unread/${userId}`, { 
+      headers: getAuthHeaders(),
+      credentials: 'include' 
+    });
     if (!response.ok) throw new Error('Hiba az olvasatlan üzenetek lekérésekor');
     return await response.json();
   },
   markChatAsRead: async (fromUserId: number, toUserId: number): Promise<void> => {
     const response = await fetch(`${API_BASE_URL}/chat/read`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       credentials: 'include',
       body: JSON.stringify({ fromUserId, toUserId })
     });
     if (!response.ok) throw new Error('Hiba az üzenetek olvasottnak jelölésekor');
   },
   getUnreadSenders: async (userId: number): Promise<number[]> => {
-    const response = await fetch(`${API_BASE_URL}/chat/unread-senders/${userId}`, { credentials: 'include' });
+    const response = await fetch(`${API_BASE_URL}/chat/unread-senders/${userId}`, { 
+      headers: getAuthHeaders(),
+      credentials: 'include' 
+    });
     if (!response.ok) throw new Error('Hiba az olvasatlan feladók lekérésekor');
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -411,31 +454,34 @@ export const api = {
 
   // Értesítések
   getNotifications: async (userId: number): Promise<any[]> => {
-    const response = await fetch(`${API_BASE_URL}/notifications/${userId}`, { credentials: 'include' });
+    const response = await fetch(`${API_BASE_URL}/notifications/${userId}`, { 
+      headers: getAuthHeaders(),
+      credentials: 'include' 
+    });
     if (!response.ok) throw new Error('Hiba az értesítések lekérésekor');
     return await response.json();
   },
   markNotificationAsRead: async (id: number): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
       credentials: 'include'
     });
-    if (!response.ok) throw new Error('Hiba az értesítés frissítésekor');
   },
   markAllNotificationsAsRead: async (userId: number): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/notifications/user/${userId}/read-all`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch(`${API_BASE_URL}/notifications/all-read/${userId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
       credentials: 'include'
     });
-    if (!response.ok) throw new Error('Hiba az értesítések frissítésekor');
   },
 
-  // Kuponok (Meghívókból)
+  // Kuponok
   getCoupons: async (userId: number): Promise<any[]> => {
-    // Lekérjük azokat a meghívókat, amiket mi küldtünk és elfogadták, VAGY amiket mi kaptunk
-    const response = await fetch(`${API_BASE_URL}/invite/coupons/${userId}`, { credentials: 'include' });
+    const response = await fetch(`${API_BASE_URL}/coupons/user/${userId}`, { 
+      headers: getAuthHeaders(),
+      credentials: 'include' 
+    });
     if (!response.ok) throw new Error('Hiba a kuponok lekérésekor');
     return await response.json();
   },

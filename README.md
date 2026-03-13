@@ -2,53 +2,79 @@
 
 Valós problémára készült web + backend + admin kliens alkalmazás: ajándék ötletek böngészése/szűrése, kedvencek, előzmények, meghívásos rendszer (kupon), chat és értesítések.
 
-## Technológiai stack
-- **Backend**: Node.js + Express + Sequelize (ORM) + MySQL
-- **API Dokumentáció**: Swagger / OpenAPI 3.0 (`/api-docs`)
-- **Valós idejű kommunikáció**: Socket.IO (Chat és értesítések)
-- **Web kliens**: React 18 + TypeScript + Vite + Tailwind CSS
-- **Asztali admin**: WPF (.NET 8) + MVVM minta
-- **Tesztek**: Jest + Supertest (Backend), MSTest (WPF)
+## Tech stack
+- **Backend**: Node.js + Express + Sequelize + MySQL, Swagger (`/api-docs`), Socket.IO
+- **Web kliens**: React + TypeScript + Vite
+- **Asztali admin**: WPF (.NET 8)
+- **Tesztek**: Jest + Supertest (backend), MSTest/NUnit jellegű teszt projekt (WPF)
 
-## Előfeltételek
-- Node.js (v18+)
-- MySQL szerver
-- .NET 8 SDK (a WPF alkalmazáshoz)
+## Gyors indítás (fejlesztői)
 
-## Telepítés és indítás
+### 1) Backend (.env)
+1. Másold le az env mintát:
+   - `Api/.env.example` → `Api/.env`
+2. Töltsd ki az értékeket (MySQL + email).
 
-### 1. Backend beállítása
-1. Lépj be az `Api` mappába: `cd Api`
-2. Telepítsd a függőségeket: `npm install`
-3. Másold le az env mintát: `cp .env.example .env` (Windows-on: `copy .env.example .env`)
-4. Szerkeszd a `.env` fájlt: add meg a MySQL hozzáférést és a JWT titkot.
-5. Adatbázis inicializálása:
-   ```bash
-   npx sequelize-cli db:migrate
-   npx sequelize-cli db:seed:all
-   ```
-6. Indítás: `npm run start` (vagy `npm run dev` fejlesztéshez)
-   - API elérhető: `http://localhost:3000`
-   - Swagger dokumentáció: `http://localhost:3000/api-docs`
+Fontos: **valós jelszót nem commitolunk**. A repóban csak `.env.example` van.
 
-### 2. Webes kliens indítása
-1. Lépj be a `my-react-app` mappába: `cd my-react-app`
-2. Telepítsd a függőségeket: `npm install`
-3. Indítás: `npm run dev`
-   - Elérhető: `http://localhost:5173`
+### 2) Adatbázis
+MySQL-ben hozz létre egy adatbázist (pl. `vizsgaremek`), majd:
 
-### 3. WPF Admin kliens indítása
-1. Nyisd meg a `Project/VizsgaAdminWpf/VizsgaAdminWpf.sln` fájlt Visual Studio-ban.
-2. Állítsd be a `VizsgaAdminWpf` projektet indító projektnek.
-3. Futtatás (F5).
+```bash
+cd Api
+npm install
+npm run db:migrate
+npm run db:seed
+```
+
+Ha mindent újra akarsz húzni:
+
+```bash
+cd Api
+npm run db:reset
+```
+
+### 3) Backend indítás
+
+```bash
+cd Api
+npm run start
+```
+
+- API: `http://localhost:3000`
+- Swagger: `http://localhost:3000/api-docs`
+
+### 4) Web kliens indítás
+
+```bash
+cd my-react-app
+npm install
+npm run dev
+```
+
+Web: `http://localhost:5173`
+
+### 5) WPF Admin indítás
+Nyisd meg a megoldást:
+- `Project/VizsgaAdminWpf/VizsgaAdminWpf.sln`
+
+Indítsd a `VizsgaAdminWpf` projektet Visual Studio-ból (Target: `net8.0-windows`).
 
 ## Fő funkciók (How-To)
-- **Regisztráció**: Új fiók létrehozása. Ha meghívó linkkel érkezel (`?ref=ID`), automatikusan kupont kapsz.
-- **Ajándékkereső**: Szűrés alkalom (pl. Karácsony), stílus (pl. Modern) vagy célcsoport (pl. Férfiak) szerint.
-- **Admin felület**: Az asztali alkalmazásban az adminok kezelhetik az ajándékokat (CRUD) és a felhasználókat.
-- **Chat**: Bejelentkezett felhasználók valós időben beszélgethetnek.
+- **Regisztráció / bejelentkezés**: a web kliensből (a backend JWT tokent ad és httpOnly cookie-t is beállít a védett végpontokhoz).
+- **Jelszó visszaállítás**: “Elfelejtett jelszó” → email link → új jelszó.
+- **Meghívás**: barát meghívása emailben → regisztráció `?ref=<id>` paraméterrel → kupon/értesítés létrejön.
+- **Kedvencek / előzmények**: bejelentkezés után elérhető.
+- **Chat / értesítések**: Socket.IO + REST.
 
-## Tesztelés
-- **Backend**: `cd Api && npm test`
-- **WPF**: Visual Studio -> Test Explorer -> Run All Tests
+## Tesztek futtatása
+Backend:
+
+```bash
+cd Api
+npm test
+```
+
+WPF tesztek:
+- `Project/VizsgaAdminWpf/VizsgaAdminWpf.Test` projektből futtatható Visual Studio Test Explorerrel.
 

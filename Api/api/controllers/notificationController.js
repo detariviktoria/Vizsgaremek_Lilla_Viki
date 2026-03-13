@@ -6,7 +6,7 @@ exports.getNotifications = async (req, res) => {
     const { userId } = req.params;
     const notifications = await db.Notification.findAll({
       where: { user_id: userId },
-      order: [["createdAt", "DESC"]],
+      order: [['createdAt', 'DESC']]
     });
     res.json(notifications);
   } catch (error) {
@@ -40,7 +40,7 @@ exports.markAllAsRead = async (req, res) => {
     );
     res.json({ message: "Összes értesítés olvasottnak jelölve." });
   } catch (error) {
-    console.error("Hiba az értesítések frissítésekor:", error);
+    console.error("Hiba az értesítések tömeges frissítésekor:", error);
     res.status(500).json({ error: error.message });
   }
 };

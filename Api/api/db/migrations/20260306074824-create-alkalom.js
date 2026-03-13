@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -11,9 +12,10 @@ module.exports = {
       nev: {
         type: Sequelize.STRING(100),
         allowNull: false,
-      }
+      },
     });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Alkalom');
   }

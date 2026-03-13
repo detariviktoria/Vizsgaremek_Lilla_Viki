@@ -7,11 +7,10 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "jest",
-    "db:drop": "npx sequelize-cli db:drop",
+    "seed": "node api/seed/seed.js",
     "db:create": "npx sequelize-cli db:create",
     "db:migrate": "npx sequelize-cli db:migrate",
-    "db:seed": "npx sequelize-cli db:seed:all",
-    "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "db:seed": "node api/seed/seed.js",
     "migration:generate": "npx sequelize-cli migration:generate --name"
   },
   "keywords": [],

@@ -2,8 +2,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const [rows] = await queryInterface.sequelize.query('SELECT COUNT(*) as c FROM Ajandek_Celcsoport');
-    if (rows[0].c > 0) return;
     await queryInterface.bulkInsert('Ajandek_Celcsoport', [
       { ajandek_id: 1, celcsoport_id: 2 }, { ajandek_id: 1, celcsoport_id: 5 },
       { ajandek_id: 2, celcsoport_id: 4 },

@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
         autoIncrement: true,
       },
       nev: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
       leiras: {

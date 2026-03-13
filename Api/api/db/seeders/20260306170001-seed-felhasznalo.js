@@ -3,10 +3,6 @@ const bcrypt = require('bcrypt');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // full-seed már létrehozza a felhasználókat – csak akkor szúrjunk be, ha üres a tábla
-    const [rows] = await queryInterface.sequelize.query('SELECT COUNT(*) as c FROM Felhasznalo');
-    if (rows[0].c > 0) return;
-
     await queryInterface.bulkInsert('Felhasznalo', [
       { user_id: 1, name: 'Viktória', email: 'viktoria@mail.com', password: await bcrypt.hash('pass123', 10) },
       { user_id: 2, name: 'Lilla', email: 'lilla@mail.com', password: await bcrypt.hash('pass456', 10) },

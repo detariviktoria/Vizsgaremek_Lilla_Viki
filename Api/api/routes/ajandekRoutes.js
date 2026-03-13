@@ -1,26 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
 const ajandekController = require('../controllers/ajandekController');
 const { authMiddleware, adminMiddleware } = require('../middlewares/auth');
-const validate = require('../middlewares/validate');
 
-const validateAjandek = [
-  body('nev').notEmpty().withMessage('A név kötelező'),
-  body('ar').isNumeric().withMessage('Az árnak számnak kell lennie'),
-  body('kategoria').notEmpty().withMessage('A kategória kötelező'),
-  validate
-];
-
+/**
+ * @swagger
+ * /ajandekok:
+ *   get:
+ *     summary: Összes ajándék lekérése
+ *     tags: [Ajándékok]
+ *     responses:
+ *       200:
+ *         description: Ajándékok listája
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Ajandek'
+ */
 router.get('/', ajandekController.getAjandekok);
 
-<<<<<<< Updated upstream
-router.post('/', authMiddleware, adminMiddleware, ajandekController.createAjandek);
-
-router.get('/:id', ajandekController.getAjandekById);
-
-router.put('/:id', authMiddleware, adminMiddleware, ajandekController.updateAjandek);
-=======
 /**
  * @swagger
  * /ajandekok/{id}:
@@ -61,7 +61,7 @@ router.get('/:id', ajandekController.getAjandekById);
  *       201:
  *         description: Ajándék létrehozva
  */
-router.post('/', authMiddleware, adminMiddleware, validateAjandek, ajandekController.createAjandek);
+router.post('/', authMiddleware, adminMiddleware, ajandekController.createAjandek);
 
 /**
  * @swagger
@@ -85,13 +85,78 @@ router.post('/', authMiddleware, adminMiddleware, validateAjandek, ajandekContro
  *       200:
  *         description: Sikeres frissítés
  */
-router.put('/:id', authMiddleware, adminMiddleware, validateAjandek, ajandekController.updateAjandek);
->>>>>>> Stashed changes
+router.put('/:id', authMiddleware, adminMiddleware, ajandekController.updateAjandek);
 
+/**
+ * @swagger
+ * /ajandekok/{id}:
+ *   delete:
+ *     summary: Ajándék törlése (Admin)
+ *     tags: [Ajándékok]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Sikeres törlés
+ */
 router.delete('/:id', authMiddleware, adminMiddleware, ajandekController.deleteAjandek);
 
+/**
+ * @swagger
+ * /ajandekok/alkalom/{alkalomNev}:
+ *   get:
+ *     summary: Ajándékok lekérése alkalom szerint
+ *     tags: [Ajándékok]
+ *     parameters:
+ *       - in: path
+ *         name: alkalomNev
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ajándékok listája
+ */
 router.get('/alkalom/:alkalomNev', ajandekController.getAjandekokByAlkalom);
+
+/**
+ * @swagger
+ * /ajandekok/stilus/{stilusNev}:
+ *   get:
+ *     summary: Ajándékok lekérése stílus szerint
+ *     tags: [Ajándékok]
+ *     parameters:
+ *       - in: path
+ *         name: stilusNev
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ajándékok listája
+ */
 router.get('/stilus/:stilusNev', ajandekController.getAjandekokByStilus);
+
+/**
+ * @swagger
+ * /ajandekok/celcsoport/{celcsoportNev}:
+ *   get:
+ *     summary: Ajándékok lekérése célcsoport szerint
+ *     tags: [Ajándékok]
+ *     parameters:
+ *       - in: path
+ *         name: celcsoportNev
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Ajándékok listája
+ */
 router.get('/celcsoport/:celcsoportNev', ajandekController.getAjandekokByCelcsoport);
 
 module.exports = router;

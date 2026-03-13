@@ -30,7 +30,7 @@ export default function Tovabb() {
 
   if (!username) {
 
-    return <Navigate to="/" replace />;
+    return <Navigate to="/bejelentkezes" replace />;
 
   }
 

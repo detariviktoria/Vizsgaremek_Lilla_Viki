@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {}
+    "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {}
   },
   "projects": {
-    "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {
+    "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
+        "projectUniqueName": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
         "projectName": "VizsgaAdminWpf.Test",
-        "projectPath": "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
-        "packagesPath": "C:\\Users\\detar\\.nuget\\packages\\",
-        "outputPath": "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\obj\\",
+        "projectPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\VizsgaAdminWpf.Test.csproj",
+        "packagesPath": "C:\\Users\\gebhardt.lilla\\.nuget\\packages\\",
+        "outputPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\detar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\gebhardt.lilla\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,8 +32,8 @@
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {
-              "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
-                "projectPath": "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj"
+              "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
+                "projectPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj"
               }
             }
           }
@@ -48,7 +48,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -83,24 +83,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
+    "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
+        "projectUniqueName": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
         "projectName": "VizsgaAdminWpf",
-        "projectPath": "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
-        "packagesPath": "C:\\Users\\detar\\.nuget\\packages\\",
-        "outputPath": "C:\\Suli\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\obj\\",
+        "projectPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\VizsgaAdminWpf.csproj",
+        "packagesPath": "C:\\Users\\gebhardt.lilla\\.nuget\\packages\\",
+        "outputPath": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\detar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\gebhardt.lilla\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -127,7 +127,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0-windows7.0": {
@@ -151,7 +151,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -50,3 +50,5 @@ Thumbs.db
 *.bak
 EZAZ.txt
 Új Szöveges dokumentum.txt
+node_modules/
+my-react-app/node_modules/

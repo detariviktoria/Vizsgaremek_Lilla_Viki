@@ -88,7 +88,20 @@ export default function KategoriaValasztas() {
 
   // Panel állapotok (nyitva/zárva)
 
-  const [isFilterOpen, setIsFilterOpen] = useState(true);
+  // Kezdő állapot: nagy képernyőn nyitva (bal oldalt), mobilon csukva (kompakt kezdőkép).
+  const [isFilterOpen, setIsFilterOpen] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return window.innerWidth > 1200;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Ha átmész mobilra, legyen alapból csukva; ha vissza desktopra, legyen nyitva.
+      setIsFilterOpen(window.innerWidth > 1200);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const [openSections, setOpenSections] = useState({
 
@@ -299,6 +312,11 @@ export default function KategoriaValasztas() {
 
     filterWithParams(selectedAlkalmak, selectedStilusok, selectedCelcsoportok, priceRange.min, priceRange.max);
 
+    // Mobil / kisebb nézetben csukódjon be szűrés után
+    if (typeof window !== 'undefined' && window.innerWidth <= 1200) {
+      setIsFilterOpen(false);
+    }
+
   };
 
 
@@ -369,116 +387,118 @@ export default function KategoriaValasztas() {
 
       <div className="main-content-container animate-fade-in">
         
-        {/* Szűrő Panel */}
-        <div className={`filter-panel ${isFilterOpen ? 'open' : 'closed'}`}>
+        {/* Szűrő Panel - Mobilon felül, Gépen oldalt */}
+        <aside className={`filter-panel ${isFilterOpen ? 'open' : 'closed'}`}>
           <div className="filter-header" onClick={() => setIsFilterOpen(!isFilterOpen)}>
             <h2 className="filter-title">Szűrés</h2>
             <span className="toggle-icon">{isFilterOpen ? '▲' : '▼'}</span>
           </div>
 
           {isFilterOpen && (
-            <div className="filter-content">
-              {/* Ár Szűrés */}
-              <div className="filter-section">
-                <h3 onClick={() => toggleSection('ar')}>Ár {openSections.ar ? '▲' : '▼'}</h3>
-                {openSections.ar && (
-                  <div className="price-slider-container">
-                    <div className="price-inputs">
-                        <input 
-                            type="number" 
-                            value={priceRange.min} 
-                            onChange={(e) => {
-                              const val = Number(e.target.value);
-                              if (!isNaN(val)) setPriceRange({ ...priceRange, min: val });
-                            }}
-                            min={0} max={priceRange.max}
-                        />
-                        <span>-</span>
-                        <input 
-                            type="number" 
-                            value={priceRange.max} 
-                            onChange={(e) => {
-                              const val = Number(e.target.value);
-                              if (!isNaN(val)) setPriceRange({ ...priceRange, max: val });
-                            }}
-                            min={priceRange.min} max={maxPriceLimit}
-                        />
+            <div className="filter-content-wrapper">
+              <div className="filter-sections-grid">
+                {/* Ár Szűrés */}
+                <div className="filter-section">
+                  <h3 onClick={() => toggleSection('ar')}>Ár {openSections.ar ? '▲' : '▼'}</h3>
+                  {openSections.ar && (
+                    <div className="price-slider-container">
+                      <div className="price-inputs">
+                          <input 
+                              type="number" 
+                              value={priceRange.min} 
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (!isNaN(val)) setPriceRange({ ...priceRange, min: val });
+                              }}
+                              min={0} max={priceRange.max}
+                          />
+                          <span>-</span>
+                          <input 
+                              type="number" 
+                              value={priceRange.max} 
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (!isNaN(val)) setPriceRange({ ...priceRange, max: val });
+                              }}
+                              min={priceRange.min} max={maxPriceLimit}
+                          />
+                      </div>
+                      <input 
+                          type="range" 
+                          min={0} max={maxPriceLimit} 
+                          value={priceRange.max} 
+                          onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
+                          className="range-slider"
+                      />
                     </div>
-                    <input 
-                        type="range" 
-                        min={0} max={maxPriceLimit} 
-                        value={priceRange.max} 
-                        onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                        className="range-slider"
-                    />
-                  </div>
-                )}
+                  )}
+                </div>
+
+                {/* Alkalmak */}
+                <div className="filter-section">
+                  <h3 onClick={() => toggleSection('alkalom')}>Alkalmak {openSections.alkalom ? '▲' : '▼'}</h3>
+                  {openSections.alkalom && (
+                    <div className="checkbox-list">
+                      {alkalmak.map(a => (
+                        <label key={a} className="checkbox-label">
+                          <input 
+                            type="checkbox" 
+                            checked={selectedAlkalmak.includes(a)} 
+                            onChange={() => handleCheckboxChange(a, 'alkalom')}
+                          />
+                          {a}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Stílusok */}
+                <div className="filter-section">
+                  <h3 onClick={() => toggleSection('stilus')}>Stílusok {openSections.stilus ? '▲' : '▼'}</h3>
+                  {openSections.stilus && (
+                    <div className="checkbox-list">
+                      {stilusok.map(s => (
+                        <label key={s} className="checkbox-label">
+                          <input 
+                            type="checkbox" 
+                            checked={selectedStilusok.includes(s)} 
+                            onChange={() => handleCheckboxChange(s, 'stilus')}
+                          />
+                          {s}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Célcsoportok */}
+                <div className="filter-section">
+                  <h3 onClick={() => toggleSection('celcsoport')}>Célcsoportok {openSections.celcsoport ? '▲' : '▼'}</h3>
+                  {openSections.celcsoport && (
+                    <div className="checkbox-list">
+                      {celcsoportok.map(c => (
+                        <label key={c} className="checkbox-label">
+                          <input 
+                            type="checkbox" 
+                            checked={selectedCelcsoportok.includes(c)} 
+                            onChange={() => handleCheckboxChange(c, 'celcsoport')}
+                          />
+                          {c}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Alkalmak */}
-              <div className="filter-section">
-                <h3 onClick={() => toggleSection('alkalom')}>Alkalmak {openSections.alkalom ? '▲' : '▼'}</h3>
-                {openSections.alkalom && (
-                  <div className="checkbox-list">
-                    {alkalmak.map(a => (
-                      <label key={a} className="checkbox-label">
-                        <input 
-                          type="checkbox" 
-                          checked={selectedAlkalmak.includes(a)} 
-                          onChange={() => handleCheckboxChange(a, 'alkalom')}
-                        />
-                        {a}
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Stílusok */}
-              <div className="filter-section">
-                <h3 onClick={() => toggleSection('stilus')}>Stílusok {openSections.stilus ? '▲' : '▼'}</h3>
-                {openSections.stilus && (
-                  <div className="checkbox-list">
-                    {stilusok.map(s => (
-                      <label key={s} className="checkbox-label">
-                        <input 
-                          type="checkbox" 
-                          checked={selectedStilusok.includes(s)} 
-                          onChange={() => handleCheckboxChange(s, 'stilus')}
-                        />
-                        {s}
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Célcsoportok */}
-              <div className="filter-section">
-                <h3 onClick={() => toggleSection('celcsoport')}>Célcsoportok {openSections.celcsoport ? '▲' : '▼'}</h3>
-                {openSections.celcsoport && (
-                  <div className="checkbox-list">
-                    {celcsoportok.map(c => (
-                      <label key={c} className="checkbox-label">
-                        <input 
-                          type="checkbox" 
-                          checked={selectedCelcsoportok.includes(c)} 
-                          onChange={() => handleCheckboxChange(c, 'celcsoport')}
-                        />
-                        {c}
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <button className="filter-button" onClick={handleFilter}>Szűrés</button>
+              <button className="filter-button" onClick={handleFilter}>Szűrés alkalmazása</button>
             </div>
           )}
-        </div>
+        </aside>
 
         {/* Találatok */}
-        <div className="middle-content">
+        <main className="content-area">
             <div className="ajandek-grid">
               {filteredAjandekok.length > 0 ? (
                 filteredAjandekok.map((ajandek) => (
@@ -492,7 +512,7 @@ export default function KategoriaValasztas() {
                 <p className="no-results">Nincs a keresési feltételeknek megfelelő ajándék.</p>
               )}
             </div>
-        </div>
+        </main>
       </div>
     </>
   );

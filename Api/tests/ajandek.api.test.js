@@ -5,14 +5,6 @@ jest.mock("../config/db", () => require("../api/db"));
 const request = require("supertest");
 const app = require("../app");
 const db = require("../api/db");
-const jwt = require("jsonwebtoken");
-
-const TEST_JWT_SECRET = process.env.JWT_SECRET || "your-jwt-secret-key-change-this-in-production";
-
-function adminAuthHeader() {
-    const token = jwt.sign({ id: 1, username: "Admin", role: "admin" }, TEST_JWT_SECRET, { expiresIn: "2h" });
-    return { Authorization: `Bearer ${token}` };
-}
 
 describe("API Tests", () => {
     beforeAll(async () => {
@@ -64,10 +56,7 @@ describe("API Tests", () => {
                 //#endregion
 
                 //#region Act
-                const res = await request(app)
-                    .post("/ajandekok")
-                    .set(adminAuthHeader())
-                    .send(newAjandek);
+                const res = await request(app).post("/ajandekok").send(newAjandek);
                 //#endregion
 
                 //#region Assert
@@ -87,9 +76,7 @@ describe("API Tests", () => {
                 const all = await db.Ajandek.findAll();
                 const target = all[1]; // Ajándék B
                 
-                const res = await request(app)
-                    .delete(`/ajandekok/${target.id}`)
-                    .set(adminAuthHeader());
+                const res = await request(app).delete(`/ajandekok/${target.id}`);
                 
                 expect(res.status).toBe(200);
                 expect(res.type).toMatch(/json/);

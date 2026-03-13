@@ -14,17 +14,3 @@ ez alapján csináld:socket.on('chat message', (msg) => {
     messages.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
   });
-
-
-  eloszor is sok helyen van meghvio illetve kupon viszont nekunk csak a meghivo kell mert kb ugynazt a célt szolgálják iletve mondhatni ez se szolgál  még semmit mert csak a meghivoval kuldunk valakinek meghívot de nem kap kodot hogy majd az adott helyen ezt felhasznalhassa szoval kitalaltam hogy az uzenetek fulnél legyen egy olyan opcio vagyis ketto ugye az egyik az chat a másik pedig az értesítések ez kozepen legyen elválasztva és felul lehessen a ketto kötött "menni" az uzenetek marad az ami eddig ott lehet beszélgetni csak az értesítéseknél legyen az hogy amikor pl viki meghivja a lillat és o bejelentkezik akkor mindketten kapnak kupkodot ami a meghivoba tárolodik ugye és ezt el kellene értesiteésben kuldeni nekik hogy tájékozodjanak pl "a barétod lilla elfogadta a kérelmed/bejelentkezett" ezért kapnak kuponkodot és ez a kuponkod egy bizonyos ideig érvényes ugye és kitaláltam hoogy legyen a kis fogaskeréknél egy olyan is hogy "kuponjaim" és ott vannak felsorakoztatva a kuponkodok hogy mikor járle és a kod másolhato hogy majd az adott oldalon be tudja irni mert ugye ez csakegy ajanlo oldal ahol vannak ajandekok de nem lehes vásárolni semmit csak ajanlunk ajandekokat szoval kodot lehet kapni illetve az nagyon fontos hogy figyelj arra nehogy az uj regisztrálz embernél az ajanlo embert adja be mert elobb már elofordult nálam illetve szeretném ha a jelszo változtatásnáál kétszer lehessenbeirni a jelszot az ujat hogy biztos legen s ott is legyen egy elfelejtettem a jelszavam rész illletve ha az uzenet vagy ertesítes erkezik kapjunk rola egybol uzenetet ne csak az oldal ujratoltésénél és ujratoltésnél ne jelentkeztesse ki a felhasznalotm ert az is sokszor probléma volt és az a lényeg hogy van a meghivos rész pl viki kuld meghivot lillának lilla beregisztráll és ekkor viki és lilla is kap kupont errol kap értesítést mindketto az uzenetnél nem a chatben hanem az értesítésnél illetve a kuponjaim résznél fel lesznek sorakoztatva az osszes kupon lejárati dátum szerint másolhato formában amikor elobb jol emgcsináltam ugy oldotta meg hogy csinált még egy értesítés modelt és seedet és a meghívónál tárolta el a kuponkodot és annak lejárati dátumát 
-
-
-- amit lillus csinált hogy megjelenjen szép részben ha nincs még kedvenc és elozmeny
-
-
-
-ha valakit meghívtál már és benne van a barátaid lisstában azzal hogy "fuggoben" akkor ott abban a listában ne sorakoztasd fel mégegyszer, 
-
-- sétarepules kep
-- ha viki bejelentkezett kimásolom a localhostot és belépek lillával és ujratoltom vikinéál az oldalt kijelentkeztet
-- az idó ne legyen 2 óra maradjon 10 perc amiután kijelentkeztet 
