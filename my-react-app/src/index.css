@@ -564,9 +564,7 @@ main {
   max-width: 350px;
   box-shadow: 0 2px 12px rgba(200, 50, 70, 0.17);
   margin: 0;
-<<<<<<< HEAD
   position: relative;
-=======
 }
 
 .close-modal {
@@ -659,7 +657,6 @@ main {
 .nincs-adat-ikon {
   font-size: 4rem;
   margin-bottom: 20px;
->>>>>>> 748a7e6de3930400406bc2334a63185276cb7ffa
 }
 
 .nincs-adat {

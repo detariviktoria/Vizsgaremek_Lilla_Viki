@@ -1,10 +1,4 @@
 'use strict';
-<<<<<<< HEAD
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up(queryInterface, Sequelize) {},
-  async down(queryInterface, Sequelize) {}
-=======
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -45,19 +39,15 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
-<<<<<<<< HEAD:Api/api/db/migrations/20260306170001-create-felhasznalo.js
       kep_url: {
         type: Sequelize.STRING(255),
         allowNull: true,
         defaultValue: null
       }
-========
->>>>>>>> 748a7e6de3930400406bc2334a63185276cb7ffa:Api/api/db/migrations/20260306074821-create-felhasznalo.js
     });
   },
 
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Felhasznalo');
   }
->>>>>>> 748a7e6de3930400406bc2334a63185276cb7ffa
 };
