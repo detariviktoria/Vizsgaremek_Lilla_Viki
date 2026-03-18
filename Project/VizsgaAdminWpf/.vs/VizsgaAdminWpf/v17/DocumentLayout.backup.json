@@ -77,20 +77,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 272,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 7,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "AjandekTests.cs",
-              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekTests.cs",
-              "RelativeDocumentMoniker": "VizsgaAdminWpf.Test\\AjandekTests.cs",
-              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekTests.cs",
-              "RelativeToolTip": "VizsgaAdminWpf.Test\\AjandekTests.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T10:01:50.407Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 8,
@@ -177,6 +165,31 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ApiServiceTests.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\ApiServiceTests.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf.Test\\ApiServiceTests.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\ApiServiceTests.cs",
+              "RelativeToolTip": "VizsgaAdminWpf.Test\\ApiServiceTests.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T07:17:24.504Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AjandekTests.cs",
+              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "RelativeDocumentMoniker": "VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "RelativeToolTip": "VizsgaAdminWpf.Test\\AjandekTests.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-03T10:01:50.407Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 7,
               "Title": "AssemblyInfo.cs",
               "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf\\AssemblyInfo.cs",
@@ -198,19 +211,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-05T11:21:43.654Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ApiServiceTests.cs",
-              "DocumentMoniker": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\ApiServiceTests.cs",
-              "RelativeDocumentMoniker": "VizsgaAdminWpf.Test\\ApiServiceTests.cs",
-              "ToolTip": "H:\\Vizsgaremek_Lilla_Viki\\Project\\VizsgaAdminWpf\\VizsgaAdminWpf.Test\\ApiServiceTests.cs",
-              "RelativeToolTip": "VizsgaAdminWpf.Test\\ApiServiceTests.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-04T07:17:24.504Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
