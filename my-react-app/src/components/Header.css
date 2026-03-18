@@ -15,7 +15,6 @@ header {
   gap: 20px;
 }
 
-<<<<<<< HEAD
 /* Főoldal header – más megjelenés */
 header.header--home {
   background: white;
@@ -27,10 +26,7 @@ header.header--home nav a,
 header.header--home .auth-btn {
   color: black;
 }
-
-=======
->>>>>>> 748a7e6de3930400406bc2334a63185276cb7ffa
-.header-left, .header-center, .header-right {
+.header-left, .header-right {
   display: flex;
   align-items: center;
 }
@@ -40,15 +36,10 @@ header.header--home .auth-btn {
   justify-content: flex-start;
 }
 
-.header-center {
-  flex: 0 0 auto;
-  justify-content: center;
-  min-width: 0;
-}
-
 .header-right {
   flex: 1 0 0;
   justify-content: flex-end;
+  gap: 20px;
 }
 
 .logo-link {
@@ -241,7 +232,8 @@ nav a:hover {
   color: palevioletred;
   font-weight: bold;
   font-size: 1.1rem;
-  text-align: center;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .timer {
@@ -339,8 +331,8 @@ nav a:hover {
     padding: 10px 15px;
   }
 
-  .header-center {
-    display: none; /* Mobilon elrejtjük a középső szöveget, ha nincs hely */
+  .welcome-text {
+    display: none;
   }
 
   .welcome-text {
