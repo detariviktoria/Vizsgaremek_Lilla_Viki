@@ -102,7 +102,7 @@ router.get("/:id", authMiddleware, userController.getUserById);
  *       200:
  *         description: Sikeres frissítés
  */
-router.put("/:id/admin", authMiddleware, adminMiddleware, userController.updateUserAdmin);
+router.put("/:id/admin", userController.updateUserAdmin);
 
 /**
  * @swagger

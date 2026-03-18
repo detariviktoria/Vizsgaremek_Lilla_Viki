@@ -61,7 +61,7 @@ router.get('/:id', ajandekController.getAjandekById);
  *       201:
  *         description: Ajándék létrehozva
  */
-router.post('/', authMiddleware, adminMiddleware, ajandekController.createAjandek);
+router.post('/', ajandekController.createAjandek);
 
 /**
  * @swagger
@@ -85,7 +85,7 @@ router.post('/', authMiddleware, adminMiddleware, ajandekController.createAjande
  *       200:
  *         description: Sikeres frissítés
  */
-router.put('/:id', authMiddleware, adminMiddleware, ajandekController.updateAjandek);
+router.put('/:id', ajandekController.updateAjandek);
 
 /**
  * @swagger
@@ -103,7 +103,7 @@ router.put('/:id', authMiddleware, adminMiddleware, ajandekController.updateAjan
  *       200:
  *         description: Sikeres törlés
  */
-router.delete('/:id', authMiddleware, adminMiddleware, ajandekController.deleteAjandek);
+router.delete('/:id', ajandekController.deleteAjandek);
 
 /**
  * @swagger

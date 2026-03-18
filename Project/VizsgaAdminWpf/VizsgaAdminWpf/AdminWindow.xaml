@@ -89,18 +89,6 @@
                                  Focusable="True"
                                  ItemsSource="{Binding Users}"
                                  SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Padding" Value="5"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="LightBlue"/>
-                                            <Setter Property="Foreground" Value="Black"/>
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock>
@@ -127,10 +115,10 @@
                         <PasswordBox x:Name="txtUserPassword" Width="140" Margin="0,0,0,10"/>
 
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btnUserModosit" Content="Módosít" Width="65" Height="30"
+                            <Button x:Name="btnUserUpdate" Content="Módosít" Width="65" Height="30"
                                     Focusable="False"
                                     Background="HotPink" Foreground="White"
-                                    Click="btnUserModosit_Click"/>
+                                    Click="btnUserUpdate_Click"/>
                         </StackPanel>
                     </StackPanel>
 
