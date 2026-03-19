@@ -1,0 +1,724 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .animate-scale-in {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+  cursor: default;
+  background-color: lightcoral;
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Hőskép szekció – ugyanaz az elrendezés, mint a backend index.html-ben */
+.hero {
+  height: 100vh;
+  background: url("/Képek/nyitooldal.jpg") no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding-top: 80px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.hero-overlay {
+  background-color: rgba(255,255,255,0.8);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 60px;
+    background-attachment: scroll;
+  }
+  
+  .hero-overlay {
+    padding: 20px;
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-overlay {
+    padding: 15px;
+  }
+}
+
+.hero h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.hero button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  background-color: palevioletred;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.hero button:hover {
+  background-color: rgb(141, 70, 93);
+}
+
+/* Keresősáv */
+.search-bar {
+  position: absolute;
+  top: 20%;
+  width: 90%;
+  max-width: 600px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 30px;
+  border: none;
+  font-size: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    top: 25%;
+    width: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-bar {
+    top: 22%;
+    width: 90%;
+  }
+  
+  .search-bar input {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+.subcat-list {
+  margin: 40px auto;
+  max-width: 500px;
+  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 15px;
+  display: grid;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .subcat-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+}
+
+.subcat-item {
+  background: #fff4fa;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 17px;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 1px 6px rgba(200, 50, 70, 0.07);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.subcat-item:hover {
+  background: #ffe0ef;
+  color: palevioletred;
+}
+
+nav a.back-btn {
+  background-color: palevioletred;
+  color: white !important;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 8px;
+  margin-right: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+nav a.back-btn:hover {
+  background-color: #8d465d;
+}
+
+.switch-link {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.switch-link a {
+  color: palevioletred;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* -------------------------------------------------
+   KÖZÖS "SZŰRÉS" PANEL STÍLUS (minden oldalon)
+   ------------------------------------------------- */
+.filter-panel {
+  background: #fff4fa;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border: none;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: #fff4fa;
+  box-sizing: border-box;
+}
+
+/* Open állapot: középen cím + két oldalt halvány vonal */
+.filter-panel.open .filter-header {
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 16px;
+  min-height: 56px;
+}
+
+.filter-panel.open .filter-header::before,
+.filter-panel.open .filter-header::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(219, 112, 147, 0.35);
+  max-width: 220px;
+}
+
+/* Closed állapot: kompakt, a szöveg vízszint+függőleg középen */
+.filter-panel.closed .filter-header {
+  justify-content: center;
+  gap: 10px;
+  padding: 0 14px;
+  height: 44px;
+}
+
+.filter-title {
+  color: palevioletred;
+  font-weight: bold;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.filter-panel.open .filter-title {
+  font-size: 1.1rem;
+}
+
+.filter-panel.closed .filter-title {
+  font-size: 1rem;
+  text-align: center;
+}
+
+.toggle-icon {
+  font-size: 0.9rem;
+  color: palevioletred;
+  display: flex;
+  align-items: center;
+}
+
+
+.filter-content,
+.filter-content-wrapper {
+  padding: 18px 18px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: #fff4fa;
+}
+
+
+.filter-button {
+  align-self: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: palevioletred;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-button:hover {
+  background: #d65a8a;
+}
+
+@media (max-width: 1024px) {
+  .filter-panel {
+    width: 100%;
+  }
+  
+  .category-select {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .category-select button {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+}
+
+
+
+.category-select {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.category-select button {
+  padding: 13px 0;
+  font-size: 17px;
+  border: none;
+  border-radius: 24px;
+  background: palevioletred;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  transition: background 0.3s;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 170px;
+}
+
+.category-select button:hover {
+  background: #8d465d;
+}
+
+.subcategories {
+  margin: 40px auto 0 auto;
+  padding-top: 0;
+  max-width: 500px;
+  flex: 1;
+  margin-top: 0;
+  padding-top: 0;
+  min-width: 400px;
+}
+
+.main-content-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 60px;
+  margin-top: 200px;
+  margin-right: 0;
+  padding: 0 40px;
+}
+
+@media (max-width: 1024px) {
+  .main-content-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-top: 120px;
+    padding: 0 20px;
+  }
+}
+
+#welcome-message {
+  margin-top: 150px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#tovabb_gomb {
+  display: block;
+  margin: 30px auto 0 auto;
+  padding: 14px 32px;
+  font-size: 18px;
+  border: none;
+  border-radius: 24px;
+  background: palevioletred;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  transition: background 0.3s;
+}
+
+#tovabb_gomb:hover {
+  background: #8d465d;
+}
+
+.message-box {
+  margin-top: 7px;
+  color: red;
+  font-weight: bold;
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+
+main {
+  margin-top: 120px;
+  text-align: center;
+}
+
+#elmenyBtn, #targyBtn {
+  padding: 14px 32px;
+  font-size: 18px;
+  border: none;
+  border-radius: 24px;
+  background: palevioletred;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  transition: background 0.3s;
+  margin: 10px;
+}
+
+#elmenyBtn:hover, #targyBtn:hover {
+  background: #8d465d;
+}
+
+#ajandekLista {
+  margin-top: 30px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 1100px;
+  min-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  #ajandekLista {
+    min-width: auto;
+    width: 100%;
+    padding: 20px;
+  }
+}
+
+.ajandek-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  justify-items: center;
+}
+
+@media (max-width: 1200px) {
+  .ajandek-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .ajandek-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .ajandek-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ajandek-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+.ajandek-item img {
+  max-width: 160px;
+  max-height: 160px;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  margin-bottom: 8px;
+}
+
+.ajandek-item span {
+  font-size: 16px;
+}
+
+.ajandek-placeholder {
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff4fa;
+  border-radius: 10px;
+  color: #8d465d;
+  font-size: 15px;
+  box-shadow: 0 1px 5px rgba(200, 50, 70, 0.07);
+  margin-bottom: 8px;
+}
+
+/* Modal alapstílus */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background: rgba(0,0,0,0.25);
+}
+
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff4fa;
+  padding: 38px 35px 20px 35px;
+  border-radius: 14px;
+  min-width: 320px;
+  max-width: 350px;
+  box-shadow: 0 2px 12px rgba(200, 50, 70, 0.17);
+  margin: 0;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 28px;
+  color: #8d465d;
+  cursor: pointer;
+}
+
+#modal-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+  gap: 10px;
+}
+
+#modal-tabs button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #8d465d;
+  padding: 6px 16px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#modal-tabs button.active {
+  background: #fff4fa;
+  font-weight: bold;
+  border-bottom: 2px solid palevioletred;
+}
+
+.login-form {
+  background: #fff4fa;
+  padding: 38px 35px;
+  border-radius: 14px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 12px rgba(200, 50, 70, 0.17);
+}
+
+.login-form h2 {
+  margin-bottom: 22px;
+  text-align: center;
+  color: palevioletred;
+}
+
+.login-form input {
+  margin-bottom: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  font-size: 16px;
+}
+
+.login-form button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  background-color: palevioletred;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-form button:hover {
+  background-color: rgb(141, 70, 93);
+}
+
+/* Új globális stílusok a "kidolgozottsághoz" */
+.nincs-adat-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin: 40px auto;
+  max-width: 500px;
+}
+
+.nincs-adat-ikon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.nincs-adat {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.vissza-gomb {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #e91e63;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+}
+
+.vissza-gomb:hover {
+  background-color: #c2185b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #e91e63;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+.input-error {
+  border-color: #ff4d4d !important;
+  background-color: #fff5f5 !important;
+}

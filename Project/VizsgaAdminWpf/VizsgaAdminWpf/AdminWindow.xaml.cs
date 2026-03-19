@@ -12,40 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using System.Diagnostics;
+using VizsgaAdminWpf.Models;
+using VizsgaAdminWpf.ApiServices;
+using VizsgaAdminWpf.ViewModels;
 
 namespace VizsgaAdminWpf
 {
     public partial class AdminWindow : Window
     {
-        ApiService apiService = new ApiService();
         private readonly AdminViewModel _vm = new AdminViewModel();
         string currentImageFilename = "";
-        UserItem? _selectedUser = null;
-
-        class AjandekItem
-        {
-            public int? Id { get; set; } = 0;
-            public string? Nev { get; set; } = "";
-            public int? Ar { get; set; } = 0;
-            public string? Leiras { get; set; } = "";
-            public string? Kategoria { get; set; } = "";
-            public string? ImageUrl { get; set; } = "";
-            public string? LinkUrl { get; set; } = "";
-
-            public override string ToString()
-            {
-                return (Nev ?? "") + " - " + (Ar ?? 0) + " Ft";
-            }
-        }
-
-        class UserItem
-        {
-            public int UserId { get; set; }
-            public string Name { get; set; } = "";
-            public string Email { get; set; } = "";
-
-            public override string ToString() => (Name ?? "") + " – " + (Email ?? "");
-        }
 
         public AdminWindow()
         {
@@ -65,7 +41,7 @@ namespace VizsgaAdminWpf
             if (!ReferenceEquals(sender, tabMain))
                 return;
 
-            if (tabMain.SelectedIndex == 1)
+            if (tabMain.SelectedIndex == 1 && _vm.Users.Count == 0)
             {
                 _ = LoadUsers(null);
             }
@@ -131,7 +107,7 @@ namespace VizsgaAdminWpf
             {
                 try
                 {
-                    var filename = await apiService.UploadImage(openFile.FileName);
+                    var filename = await _vm.Api.UploadImage(openFile.FileName);
                     currentImageFilename = filename ?? "";
 
                     if (!string.IsNullOrEmpty(currentImageFilename))
@@ -176,27 +152,34 @@ namespace VizsgaAdminWpf
                 nev = txtNev.Text,
                 ar = ar,
                 leiras = txtLeiras.Text,
-                kategoria = txtKategoria.Text,
+                kategoria = txtKategoria.Text.Trim().ToLower(),
                 image_url = currentImageFilename
             };
 
             try
             {
-                await apiService.CreateAjandek(ajandek);
-                MessageBox.Show("Ajándék hozzáadva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
-                ClearFields();
-                await LoadGifts();
+                var result = await _vm.Api.CreateAjandek(ajandek);
+                if (result.Success)
+                {
+                    MessageBox.Show("Ajándék hozzáadva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ClearFields();
+                    await LoadGifts();
+                }
+                else
+                {
+                    MessageBox.Show($"Nem sikerült az ajándék hozzáadása.\n\nAPI válasz: {result.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Nem sikerült az ajándék hozzáadása.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Hiba történt: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         // Kiválasztott ajándék módosítása
         private async void btnEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxGifts.SelectedItem is not AjandekItem selected || selected.Id == null)
+            if (_vm.SelectedGift == null || _vm.SelectedGift.id == null)
             {
                 MessageBox.Show("Előbb válassz ki egy ajándékot.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -210,23 +193,30 @@ namespace VizsgaAdminWpf
 
             var ajandek = new AjandekDTO
             {
-                id = selected.Id.Value,
+                id = _vm.SelectedGift.id.Value,
                 nev = txtNev.Text,
                 ar = ar,
                 leiras = txtLeiras.Text,
-                kategoria = txtKategoria.Text,
+                kategoria = txtKategoria.Text.Trim().ToLower(),
                 image_url = currentImageFilename
             };
 
             try
             {
-                await apiService.UpdateAjandek(selected.Id.Value, ajandek);
-                MessageBox.Show("Ajándék módosítva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
-                await LoadGifts();
+                var result = await _vm.Api.UpdateAjandek(_vm.SelectedGift.id.Value, ajandek);
+                if (result.Success)
+                {
+                    MessageBox.Show("Ajándék módosítva.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await LoadGifts();
+                }
+                else
+                {
+                    MessageBox.Show($"Nem sikerült a módosítás.\n\nAPI válasz: {result.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Nem sikerült az ajándék módosítása.\n\nHiba: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Hiba történt: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -235,7 +225,7 @@ namespace VizsgaAdminWpf
         {
             try
             {
-                await apiService.DeleteAjandek(id);
+                await _vm.Api.DeleteAjandek(id);
             }
             catch (Exception ex)
             {
@@ -246,7 +236,7 @@ namespace VizsgaAdminWpf
         // Törlés gomb eseménykezelő
         private async void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxGifts.SelectedItem is not AjandekItem selected || selected.Id == null)
+            if (_vm.SelectedGift == null || _vm.SelectedGift.id == null)
             {
                 MessageBox.Show("Előbb válassz ki egy ajándékot.", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -257,7 +247,7 @@ namespace VizsgaAdminWpf
 
             if (result == MessageBoxResult.Yes)
             {
-                await DeleteGift(selected.Id.Value);
+                await DeleteGift(_vm.SelectedGift.id.Value);
                 await LoadGifts();
             }
         }
@@ -303,33 +293,6 @@ namespace VizsgaAdminWpf
             }
         }
 
-        private void listBoxUsers_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // Find the ListBoxItem that was clicked (works when clicking elements inside the item template)
-            var lb = sender as ListBox;
-            if (lb == null) return;
-
-            var dep = (DependencyObject)e.OriginalSource;
-            var item = ItemsControl.ContainerFromElement(lb, dep) as ListBoxItem;
-            if (item == null)
-            {
-                // try walking up the visual tree
-                while (dep != null && dep is not ListBoxItem)
-                    dep = VisualTreeHelper.GetParent(dep);
-                item = dep as ListBoxItem;
-            }
-
-            if (item != null)
-            {
-                // Select the item's data and focus the item so selection highlight remains
-                lb.SelectedItem = item.DataContext;
-                item.Focus();
-                e.Handled = true;
-
-                // Selection is bound (SelectedUser), no extra handling needed here.
-            }
-        }
-
         private void listBoxUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_vm.SelectedUser is UserListDto u)
@@ -337,15 +300,7 @@ namespace VizsgaAdminWpf
                 txtUserNev.Text = u.name ?? "";
                 txtUserEmail.Text = u.email ?? "";
                 txtUserPassword.Password = "";
-
-                // Ensure the ListBox keeps keyboard focus so the selected item remains highlighted (blue)
-                try
-                {
-                    listBoxUsers.Focus();
-                }
-                catch { }
             }
-            // Ha null (pl. fókuszvesztés): _selectedUser marad – így Módosít továbbra is működik
         }
 
         private async void btnUserRefresh_Click(object sender, RoutedEventArgs e)
@@ -353,9 +308,9 @@ namespace VizsgaAdminWpf
             await LoadUsers(null);
         }
 
-        private async void btnUserModosit_Click(object sender, RoutedEventArgs e)
+        private async void btnUserUpdate_Click(object sender, RoutedEventArgs e)
         {
-            var u = _vm.SelectedUser ?? listBoxUsers.SelectedItem as UserListDto;
+            var u = _vm.SelectedUser;
             if (u == null)
             {
                 MessageBox.Show("Előbb válassz felhasználót.");
@@ -372,14 +327,21 @@ namespace VizsgaAdminWpf
             try
             {
                 var pwd = string.IsNullOrWhiteSpace(txtUserPassword.Password) ? null : txtUserPassword.Password;
-                await apiService.UpdateUserAdmin(u.user_id ?? 0, name, email, pwd);
-                MessageBox.Show("Felhasználó adatai frissítve.");
-                var userIdToKeep = u.user_id ?? 0;
-                await LoadUsers(userIdToKeep);
+                var result = await _vm.Api.UpdateUserAdmin(u.user_id ?? 0, name, email, pwd);
+                if (result.Success)
+                {
+                    MessageBox.Show("Felhasználó adatai frissítve.");
+                    var userIdToKeep = u.user_id ?? 0;
+                    await LoadUsers(userIdToKeep);
+                }
+                else
+                {
+                    MessageBox.Show($"Nem sikerült a módosítás.\n\nAPI válasz: {result.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Nem sikerült módosítani.\n\nHiba: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Hiba történt: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
