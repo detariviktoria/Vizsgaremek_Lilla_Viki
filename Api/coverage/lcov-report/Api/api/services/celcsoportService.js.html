@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -106,15 +106,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -122,21 +122,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,38 +144,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const db = require('../../config/db');
 &nbsp;
 class CelcsoportService {
-<span class="fstat-no" title="function not covered" >  as</span>ync getAll() {
-<span class="cstat-no" title="statement not covered" >    return await db.Celcsoport.findAll();</span>
+  async getAll() {
+    return await db.Celcsoport.findAll();
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync getById(id) {
-    const celcsoport = <span class="cstat-no" title="statement not covered" >await db.Celcsoport.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!celcsoport) {</span>
-<span class="cstat-no" title="statement not covered" >      throw new Error("Célcsoport nem található");</span>
+  async getById(id) {
+    const celcsoport = await db.Celcsoport.findByPk(id);
+    if (!celcsoport) {
+      throw new Error("Célcsoport nem található");
     }
-<span class="cstat-no" title="statement not covered" >    return celcsoport;</span>
+    return celcsoport;
   }
 &nbsp;
   async create(data) {
     return await db.Celcsoport.create(data);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync update(id, data) {
-    const celcsoport = <span class="cstat-no" title="statement not covered" >await db.Celcsoport.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!celcsoport) {</span>
-<span class="cstat-no" title="statement not covered" >      throw new Error("Célcsoport nem található");</span>
+  async update(id, data) {
+    const celcsoport = await db.Celcsoport.findByPk(id);
+    if (!celcsoport) {
+      throw new Error("Célcsoport nem található");
     }
-<span class="cstat-no" title="statement not covered" >    await celcsoport.update(data);</span>
-<span class="cstat-no" title="statement not covered" >    return celcsoport;</span>
+    await celcsoport.update(data);
+    return celcsoport;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync delete(id) {
-    const celcsoport = <span class="cstat-no" title="statement not covered" >await db.Celcsoport.findByPk(id);</span>
-<span class="cstat-no" title="statement not covered" >    if (!celcsoport) {</span>
-<span class="cstat-no" title="statement not covered" >      throw new Error("Célcsoport nem található");</span>
+  async delete(id) {
+    const celcsoport = await db.Celcsoport.findByPk(id);
+    if (!celcsoport) {
+      throw new Error("Célcsoport nem található");
     }
-<span class="cstat-no" title="statement not covered" >    await celcsoport.destroy();</span>
-<span class="cstat-no" title="statement not covered" >    return true;</span>
+    await celcsoport.destroy();
+    return true;
   }
 }
 &nbsp;
@@ -187,7 +187,7 @@ module.exports = new CelcsoportService();
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-17T10:20:06.049Z
+                at 2026-03-18T09:32:39.341Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

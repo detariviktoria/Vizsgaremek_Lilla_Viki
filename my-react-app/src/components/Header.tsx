@@ -197,13 +197,15 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
         </Link>
       </div>
 
-      <nav id="main-nav" className="header-right">
-
+      <div className="header-center">
         {username && (
           <span className="welcome-text">
             Szia, {username}! {remainingTime && <span className="timer">({remainingTime})</span>}
           </span>
         )}
+      </div>
+
+      <nav id="main-nav" className="header-right">
 
         {username ? (
           <>

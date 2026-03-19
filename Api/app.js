@@ -106,7 +106,7 @@ const uploadRoutes = require("./api/routes/uploadRoutes");
 const inviteRoutes = require("./api/routes/inviteRoutes");
 const chatRoutes = require('./api/routes/chat');
 const notificationRoutes = require('./api/routes/notificationRoutes');
-const couponRoutes = require('./api/routes/couponRoutes');
+const kuponRoutes = require('./api/routes/kuponRoutes');
 
 // Route-ok regisztrálása
 app.use("/users", userRoutes);
@@ -121,7 +121,8 @@ app.use("/ajandekok", ajandekRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/chat", chatRoutes);
 app.use("/notifications", notificationRoutes);
-app.use("/coupons", couponRoutes);
+app.use("/coupons", kuponRoutes);
+app.use("/kuponok", kuponRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1>Fut a szerver</h1><p>API dokumentáció: <a href='/api-docs'>/api-docs</a></p>");
