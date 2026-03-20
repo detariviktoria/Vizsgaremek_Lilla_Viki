@@ -1,20 +1,20 @@
+import { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './components/Home';
-import KategoriaValasztas from './components/KategoriaValasztas';
-import Tovabb from './components/Tovabb';
-import Bejelentkezes from './components/Bejelentkezes';
-import Regisztracio from './components/Regisztracio';
-import Welcome from './components/Welcome';
-import Kedvencek from './components/Kedvencek';
-import Elozmenyek from './components/Elozmenyek';
-import Baratok from './components/Baratok';
-import Profile from './components/Profile';
-import ResetPassword from './components/ResetPassword';
-import Chat from './components/Chat';
+import Home from './components/Pages/Home';
+import KategoriaValasztas from './components/Gifts/KategoriaValasztas';
+import Tovabb from './components/Gifts/Tovabb';
+import Bejelentkezes from './components/Auth/Bejelentkezes';
+import Regisztracio from './components/Auth/Regisztracio';
+import Welcome from './components/Pages/Welcome';
+import Kedvencek from './components/Gifts/Kedvencek';
+import Elozmenyek from './components/Gifts/Elozmenyek';
+import Baratok from './components/Social/Baratok';
+import Profile from './components/User/Profile';
+import ResetPassword from './components/Auth/ResetPassword';
 import './App.css';
 import { useAuth } from './hooks/useAuth';
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { username, isChecking } = useAuth();
 
   if (isChecking) {
@@ -53,8 +53,6 @@ function App() {
         <Route path="/elozmenyek" element={<ProtectedRoute><Elozmenyek /></ProtectedRoute>} />
         <Route path="/baratok" element={<ProtectedRoute><Baratok /></ProtectedRoute>} />
         <Route path="/profil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        {/* A Chat route csak akkor működik hibamentesen, ha van currentUser és selectedUser. */}
-        <Route path="/chat" element={<ProtectedRoute><Chat fromUserId={0} toUserId={0} onBack={() => {}} /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

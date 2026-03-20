@@ -1,22 +1,44 @@
 const db = require('../../config/db');
 
-
-
-
-
 exports.getKuponok = async (req, res) => {
   try {
     const kuponok = await db.Kupon.findAll();
-    res.json(kuponok);
+    
+    // Map backend fields to what the frontend expects (id, kod, lejarat_datum)
+    const formattedKuponok = kuponok.map(k => ({
+      id: k.coupon_id,
+      kod: k.coupon_code,
+      lejarat_datum: k.expiry_date,
+      user_id: k.user_id,
+      status: k.status,
+      discount: k.discount
+    }));
+    
+    res.json(formattedKuponok);
   } catch (err) {
     console.error("Hiba a kuponok lekérésekor:", err);
     res.status(500).json({ error: err.message });
   }
-
 };
 
-
-
+exports.getKuponokByUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const kuponok = await db.Kupon.findAll({ where: { user_id: userId } });
+    
+    // Map backend fields to what the frontend expects (id, kod, lejarat_datum)
+    const formattedKuponok = kuponok.map(k => ({
+      id: k.coupon_id,
+      kod: k.coupon_code,
+      lejarat_datum: k.expiry_date
+    }));
+    
+    res.json(formattedKuponok);
+  } catch (err) {
+    console.error("Hiba a felhasználó kuponjainak lekérésekor:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
 
 exports.getKuponById = async (req, res) => {
 

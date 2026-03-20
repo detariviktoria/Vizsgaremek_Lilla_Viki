@@ -163,7 +163,7 @@ export const useAuth = () => {
 
 
 
-  const login = (user: string, id: number, admin: boolean) => {
+  const login = (user: string, id: number, admin: boolean, token?: string) => {
 
     console.log('📝 Login:', user, id, admin);
 
@@ -172,6 +172,8 @@ export const useAuth = () => {
     if (id !== undefined && id !== null) sessionStorage.setItem('userId', id.toString());
 
     if (admin !== undefined && admin !== null) sessionStorage.setItem('isAdmin', admin.toString());
+
+    if (token) sessionStorage.setItem('token', token);
 
     sessionStorage.setItem('sessionStart', Date.now().toString());
 

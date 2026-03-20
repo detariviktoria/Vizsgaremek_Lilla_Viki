@@ -96,13 +96,16 @@ exports.updateUserAdmin = async (req, res) => {
     }
 
     if (email && email.trim() !== "") {
-      if (email !== user.email) {
-        const existingEmail = await db.Felhasznalo.findOne({ where: { email } });
+      const trimmedEmail = email.toLowerCase().trim();
+      if (trimmedEmail !== user.email) {
+        const existingEmail = await db.Felhasznalo.findOne({ 
+          where: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('email')), trimmedEmail) 
+        });
         if (existingEmail) {
           return res.status(400).json({ message: "Ez az e-mail cím már foglalt." });
         }
       }
-      user.email = email.trim();
+      user.email = trimmedEmail;
     }
 
     if (password && password.trim() !== "") {
@@ -143,8 +146,11 @@ exports.updateUser = async (req, res) => {
     }
     
     // Email módosítása le van tiltva biztonsági okokból
-    if (email && email !== user.email) {
-      return res.status(400).json({ message: "Az e-mail cím módosítása nem engedélyezett!" });
+    if (email) {
+      const trimmedEmail = email.toLowerCase().trim();
+      if (trimmedEmail !== user.email) {
+        return res.status(400).json({ message: "Az e-mail cím módosítása nem engedélyezett!" });
+      }
     }
     
     if (password) {
@@ -160,11 +166,7 @@ exports.updateUser = async (req, res) => {
 
     if (kep_url !== undefined) {
       console.log(`DEBUG: Updating database for user ${id}, setting kep_url to: ${kep_url}`);
-      // Közvetlen update parancs, hogy biztosan bekerüljön az adatbázisba
-      await db.sequelize.query(`UPDATE Felhasznalo SET kep_url = ? WHERE user_id = ?`, {
-        replacements: [kep_url, id],
-        type: db.Sequelize.QueryTypes.UPDATE
-      });
+      user.kep_url = kep_url;
     }
 
     // Ha egyéb adatokat is mentünk (név, jelszó)
@@ -257,6 +259,7 @@ exports.resetPassword = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   const { name, email, password, ajanlo_id } = req.body;
+  const trimmedEmail = email ? email.toLowerCase().trim() : '';
 
   // Tranzakció indítása az adatintegritás érdekében
   const t = await db.sequelize.transaction();
@@ -268,7 +271,10 @@ exports.createUser = async (req, res) => {
       return res.status(400).json({ message: "Ez a felhasználónév már foglalt." });
     }
 
-    const existingEmail = await db.Felhasznalo.findOne({ where: { email }, transaction: t });
+    const existingEmail = await db.Felhasznalo.findOne({ 
+      where: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('email')), trimmedEmail), 
+      transaction: t 
+    });
     if (existingEmail) {
       await t.rollback();
       return res.status(400).json({ message: "Ezzel az email címmel már regisztráltak." });
@@ -276,7 +282,7 @@ exports.createUser = async (req, res) => {
 
     const user = await db.Felhasznalo.create({
       name,
-      email,
+      email: trimmedEmail,
       password,
       ajanlo_id: ajanlo_id || null
     }, { transaction: t });
@@ -284,11 +290,14 @@ exports.createUser = async (req, res) => {
     // Ha van ajánló, frissítsük a meghívó státuszát és generáljunk egy közös kuponkódot
     if (ajanlo_id) {
       const meghivo = await db.Meghivo.findOne({
-        where: {
-          kuldo_id: parseInt(ajanlo_id),
-          email: email,
-          elfogadva: false
-        },
+        where: db.Sequelize.and(
+          { kuldo_id: parseInt(ajanlo_id) },
+          { elfogadva: false },
+          db.Sequelize.where(
+            db.Sequelize.fn('LOWER', db.Sequelize.col('email')),
+            trimmedEmail
+          )
+        ),
         transaction: t
       });
 
@@ -305,6 +314,23 @@ exports.createUser = async (req, res) => {
           lejarat_datum: expiry
         }, { transaction: t });
 
+        // Kuponok létrehozása mindkét félnek
+        await db.Kupon.create({
+          user_id: parseInt(ajanlo_id),
+          coupon_code: code,
+          status: 'Nem felhasználva',
+          discount: 5000,
+          expiry_date: expiry
+        }, { transaction: t });
+
+        await db.Kupon.create({
+          user_id: user.user_id,
+          coupon_code: code,
+          status: 'Nem felhasználva',
+          discount: 5000,
+          expiry_date: expiry
+        }, { transaction: t });
+
         const expiryStr = expiry.toLocaleDateString('hu-HU');
         const couponMsg = `Kaptál egy kupont: "${code}", érvényes: ${expiryStr}. Felhasználható legalább 15.000 Ft értékű vásárlás esetén (5.000 Ft kedvezmény).`;
 
@@ -317,6 +343,8 @@ exports.createUser = async (req, res) => {
           user_id: user.user_id,
           message: `Üdvözlünk! Mivel meghívóval érkeztél, ${couponMsg}`
         }, { transaction: t });
+      } else {
+        console.log(`DEBUG: No matching invitation found for referrer ID ${ajanlo_id} and email ${trimmedEmail}`);
       }
     }
 

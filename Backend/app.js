@@ -92,6 +92,7 @@ app.use(cookieParser());
 // Képek mappa statikus kiszolgálása
 app.use('/images', express.static(path.join(__dirname, "../Frontend/public/Képek")));
 app.use('/Képek', express.static(path.join(__dirname, "../Frontend/public/Képek")));
+//app.use(express.static(path.join(__dirname, "../Frontend/public")));
 
 // Route-ok importálása
 const userRoutes = require("./api/routes/userRoutes");
@@ -129,9 +130,6 @@ app.get("/", (req, res) => {
 });
 
 app.use((req, res, next) => {
-  if (req.path.startsWith('/api') || req.path.startsWith('/users') || req.path.startsWith('/ajandekok') || req.path.startsWith('/chat')) {
-    return next();
-  }
   res.status(404).json({ error: "Not Found", message: "Az API végpont nem található." });
 });
 

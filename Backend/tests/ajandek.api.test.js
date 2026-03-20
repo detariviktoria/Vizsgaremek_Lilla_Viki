@@ -1,5 +1,4 @@
 jest.mock("../api/db");
-// A biztonság kedvéért a config/db-t is mockoljuk, mivel az app azt használja
 jest.mock("../config/db", () => require("../api/db"));
 
 const request = require("supertest");
