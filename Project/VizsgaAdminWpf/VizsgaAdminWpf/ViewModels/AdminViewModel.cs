@@ -14,6 +14,15 @@ namespace VizsgaAdminWpf.ViewModels
         public ObservableCollection<AjandekDTO> Gifts { get; } = new();
         public ObservableCollection<UserListDto> Users { get; } = new();
 
+        private bool _isLoggedIn;
+        public bool IsLoggedIn
+        {
+            get => _isLoggedIn;
+            set { _isLoggedIn = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsNotLoggedIn)); }
+        }
+
+        public bool IsNotLoggedIn => !IsLoggedIn;
+
         private AjandekDTO? _selectedGift;
         public AjandekDTO? SelectedGift
         {

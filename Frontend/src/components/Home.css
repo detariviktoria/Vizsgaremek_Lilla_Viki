@@ -3,7 +3,26 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  margin-top: 80px; /* Header magasság */
+  margin-top: 80px; /* Header magasság + kis térköz */
+}
+
+.home-logo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease-out;
+}
+
+.home-big-logo {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 15px rgba(219, 112, 147, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.home-big-logo:hover {
+  transform: scale(1.05);
 }
 
 .search-section {

@@ -14,12 +14,10 @@ module.exports = (sequelize) => {
       name: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        unique: "user_name",
       },
       email: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        unique: "user_email",
         validate: {
           isEmail: {
             args: true,
@@ -57,6 +55,18 @@ module.exports = (sequelize) => {
       modelName: "Felhasznalo",
       tableName: "Felhasznalo",
       timestamps: false,
+      indexes: [
+        {
+          unique: true,
+          fields: ["name"],
+          name: "user_name"
+        },
+        {
+          unique: true,
+          fields: ["email"],
+          name: "user_email"
+        }
+      ],
       hooks: {
         beforeCreate: async (felhasznalo) => {
           if (felhasznalo.password) {

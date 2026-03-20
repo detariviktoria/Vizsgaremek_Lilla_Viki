@@ -37,6 +37,20 @@ module.exports = (sequelize) => {
       modelName: "Ajandek",
       tableName: "Ajandek",
       timestamps: false,
+      indexes: [
+        {
+          name: "idx_ajandek_ar",
+          fields: ["ar"],
+        },
+        {
+          name: "idx_ajandek_kategoria",
+          fields: ["kategoria"],
+        },
+        {
+          name: "idx_ajandek_nev",
+          fields: ["nev"],
+        },
+      ],
     }
   );
 

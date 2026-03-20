@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,13 +16,17 @@ namespace VizsgaAdminWpf.Test
             var loginResponse = new LoginResponse
             {
                 username = "Viktória",
-                userId = 1
+                userId = 1,
+                token = "abc.123.def",
+                isAdmin = true
             };
 
             Assert.Multiple(() =>
             {
                 Assert.That(loginResponse.username, Is.EqualTo("Viktória"));
                 Assert.That(loginResponse.userId, Is.EqualTo(1));
+                Assert.That(loginResponse.token, Is.EqualTo("abc.123.def"));
+                Assert.That(loginResponse.isAdmin, Is.True);
             });
         }
 

@@ -1,5 +1,3 @@
-// # felhasználókkal kapcsolatos útvonalak
-
 const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
@@ -102,7 +100,7 @@ router.get("/:id", authMiddleware, userController.getUserById);
  *       200:
  *         description: Sikeres frissítés
  */
-router.put("/:id/admin", userController.updateUserAdmin);
+router.put("/:id/admin", authMiddleware, adminMiddleware, userController.updateUserAdmin);
 
 /**
  * @swagger

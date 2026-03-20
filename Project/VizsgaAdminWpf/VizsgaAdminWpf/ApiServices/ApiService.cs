@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Linq;
 using VizsgaAdminWpf.Models;
 
 using System.Text.Json.Serialization;
@@ -19,13 +20,38 @@ namespace VizsgaAdminWpf.ApiServices
             BaseAddress = new Uri("http://localhost:3000")
         };
 
+        private string? _token;
+
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-       
+        private void UpdateAuthHeader()
+        {
+            httpClient.DefaultRequestHeaders.Authorization = 
+                !string.IsNullOrEmpty(_token) ? new AuthenticationHeaderValue("Bearer", _token) : null;
+        }
+
+        private async Task<string> GetErrorMessage(HttpResponseMessage response)
+        {
+            try
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                using var json = JsonDocument.Parse(content);
+                if (json.RootElement.TryGetProperty("message", out var msg))
+                    return msg.GetString() ?? content;
+                if (json.RootElement.TryGetProperty("error", out var err))
+                    return err.GetString() ?? content;
+                return content;
+            }
+            catch
+            {
+                return response.ReasonPhrase ?? "Ismeretlen hiba";
+            }
+        }
+
         public async Task<List<AjandekDTO>> GetAjandekok()
         {
             try
@@ -47,7 +73,7 @@ namespace VizsgaAdminWpf.ApiServices
                 var response = await httpClient.PostAsJsonAsync("ajandekok", ajandek, JsonOptions);
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await response.Content.ReadAsStringAsync();
+                    var error = await GetErrorMessage(response);
                     return (false, error);
                 }
                 return (true, "Sikeres");
@@ -65,7 +91,7 @@ namespace VizsgaAdminWpf.ApiServices
                 var response = await httpClient.PutAsJsonAsync($"ajandekok/{id}", ajandek, JsonOptions);
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await response.Content.ReadAsStringAsync();
+                    var error = await GetErrorMessage(response);
                     return (false, error);
                 }
                 return (true, "Sikeres");
@@ -113,7 +139,7 @@ namespace VizsgaAdminWpf.ApiServices
                 var response = await httpClient.PutAsJsonAsync($"users/{userId}/admin", payload, JsonOptions);
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await response.Content.ReadAsStringAsync();
+                    var error = await GetErrorMessage(response);
                     return (false, error);
                 }
                 return (true, "Sikeres");
@@ -149,9 +175,23 @@ namespace VizsgaAdminWpf.ApiServices
         }
 
         // Továbbiak
-        public async Task<List<string>> GetAlkalmak() => await httpClient.GetFromJsonAsync<List<string>>("/alkalmak", JsonOptions) ?? new();
-        public async Task<List<string>> GetStilusok() => await httpClient.GetFromJsonAsync<List<string>>("/stilusok", JsonOptions) ?? new();
-        public async Task<List<string>> GetCelcsoportok() => await httpClient.GetFromJsonAsync<List<string>>("/celcsoportok", JsonOptions) ?? new();
+        public async Task<List<string>> GetAlkalmak()
+        {
+            var result = await httpClient.GetFromJsonAsync<List<JsonElement>>("/alkalmak", JsonOptions);
+            return result?.Select(x => x.TryGetProperty("nev", out var prop) ? prop.GetString() ?? "" : "").ToList() ?? new();
+        }
+
+        public async Task<List<string>> GetStilusok()
+        {
+            var result = await httpClient.GetFromJsonAsync<List<JsonElement>>("/stilusok", JsonOptions);
+            return result?.Select(x => x.TryGetProperty("nev", out var prop) ? prop.GetString() ?? "" : "").ToList() ?? new();
+        }
+
+        public async Task<List<string>> GetCelcsoportok()
+        {
+            var result = await httpClient.GetFromJsonAsync<List<JsonElement>>("/celcsoportok", JsonOptions);
+            return result?.Select(x => x.TryGetProperty("nev", out var prop) ? prop.GetString() ?? "" : "").ToList() ?? new();
+        }
 
         public async Task<List<AjandekDTO>> GetAjandekokByAlkalom(string alkalom) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/ajandekok/alkalom/{Uri.EscapeDataString(alkalom)}", JsonOptions) ?? new();
         public async Task<List<AjandekDTO>> GetAjandekokByStilus(string stilus) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/ajandekok/stilus/{Uri.EscapeDataString(stilus)}", JsonOptions) ?? new();
@@ -160,7 +200,16 @@ namespace VizsgaAdminWpf.ApiServices
         public async Task<LoginResponse?> Login(string username, string password)
         {
             var response = await httpClient.PostAsJsonAsync("/users/login", new { username, password }, JsonOptions);
-            if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<LoginResponse>(JsonOptions);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<LoginResponse>(JsonOptions);
+                if (result != null && !string.IsNullOrEmpty(result.token))
+                {
+                    _token = result.token;
+                    UpdateAuthHeader();
+                }
+                return result;
+            }
             return null;
         }
 
@@ -181,6 +230,22 @@ namespace VizsgaAdminWpf.ApiServices
         public async Task<List<AjandekDTO>> GetElozmenyek(int userId) => await httpClient.GetFromJsonAsync<List<AjandekDTO>>($"/elozmenyek/{userId}", JsonOptions) ?? new();
         public async Task AddElozmeny(int userId, int ajandekId) => await httpClient.PostAsJsonAsync($"/elozmenyek/{userId}", new { ajandek_id = ajandekId }, JsonOptions);
 
-        public async Task SendInvite(string email, int userId) => await httpClient.PostAsJsonAsync("/invite", new { email, userId }, JsonOptions);
+        public async Task<(bool Success, string Message)> SendInvite(string email, int userId)
+        {
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync("/invite", new { email, userId }, JsonOptions);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await GetErrorMessage(response);
+                    return (false, error);
+                }
+                return (true, "Sikeres");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
     }
 }

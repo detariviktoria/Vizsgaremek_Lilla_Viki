@@ -3,8 +3,44 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="VizsgaRemek Admin" Height="480" Width="820"
         Loaded="AdminWindow_Loaded">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <Style x:Key="InvertedBoolToVis" TargetType="FrameworkElement">
+            <Setter Property="Visibility" Value="Visible" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid Margin="10">
-        <TabControl x:Name="tabMain" SelectionChanged="tabMain_SelectionChanged">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Login Section -->
+        <Border Grid.Row="0" Background="#F0F0F0" Padding="10" Margin="0,0,0,10">
+            <Grid>
+                <StackPanel Orientation="Horizontal" x:Name="panelLogin" Visibility="{Binding IsNotLoggedIn, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="Admin Bejelentkezés:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+                    <TextBlock Text="Felhasználónév:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox x:Name="txtLoginUser" Width="100" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Text="Jelszó:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <PasswordBox x:Name="txtLoginPass" Width="100" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <Button x:Name="btnLogin" Content="Belépés" Click="btnLogin_Click" Padding="10,2" Background="LightBlue"/>
+                    <TextBlock x:Name="lblLoginStatus" Text="Nincs bejelentkezve" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Red"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" x:Name="panelLogout" Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="Bejelentkezve mint Admin" VerticalAlignment="Center" Margin="0,0,20,0" FontWeight="Bold" Foreground="Green"/>
+                    <Button x:Name="btnLogout" Content="Kijelentkezés" Click="btnLogout_Click" Padding="10,2" Background="LightCoral"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl x:Name="tabMain" Grid.Row="1" SelectionChanged="tabMain_SelectionChanged" Visibility="{Binding IsLoggedIn, Converter={StaticResource BoolToVis}}">
             <TabItem Header="Ajándékok">
                 <Grid Margin="0,5,0,0">
                     <Grid.ColumnDefinitions>

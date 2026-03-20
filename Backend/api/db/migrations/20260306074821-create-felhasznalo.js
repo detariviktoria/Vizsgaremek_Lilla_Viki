@@ -12,12 +12,10 @@ module.exports = {
       name: {
         type: Sequelize.STRING(100),
         allowNull: false,
-        unique: true,
       },
       email: {
         type: Sequelize.STRING(100),
         allowNull: false,
-        unique: true,
       },
       password: {
         type: Sequelize.STRING(255),
@@ -45,9 +43,20 @@ module.exports = {
         defaultValue: null
       }
     });
+
+    await queryInterface.addIndex('Felhasznalo', ['name'], {
+      unique: true,
+      name: 'user_name'
+    });
+    await queryInterface.addIndex('Felhasznalo', ['email'], {
+      unique: true,
+      name: 'user_email'
+    });
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeIndex('Felhasznalo', 'user_name');
+    await queryInterface.removeIndex('Felhasznalo', 'user_email');
     await queryInterface.dropTable('Felhasznalo');
   }
 };

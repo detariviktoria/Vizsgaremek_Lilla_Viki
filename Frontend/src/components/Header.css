@@ -3,7 +3,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  padding: 2px 20px;
   background-color: white;
   position: fixed;
   width: 100%;
@@ -26,18 +26,26 @@ header.header--home nav a,
 header.header--home .auth-btn {
   color: black;
 }
-.header-left, .header-right {
+
+
+.header-left, .header-right, .header-center {
+
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 .header-left {
-  flex: 1 0 0;
   justify-content: flex-start;
 }
 
+
+.header-center {
+  justify-content: center;
+}
+
+
 .header-right {
-  flex: 1 0 0;
   justify-content: flex-end;
   gap: 20px;
 }
@@ -56,17 +64,17 @@ header.header--home .auth-btn {
 }
 
 .logo img {
-  width: 28px;
-  height: 28px;
-  margin-right: 8px;
+  width: 70px;
+  height: 70px;
+  margin-right: 15px;
 }
 
-nav a {
-  margin-left: 15px;
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  font-size: clamp(12px, 3vw, 16px);
+.welcome-text {
+  color: palevioletred;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-align: center;
+  white-space: nowrap;
 }
 
 nav a:hover {
@@ -232,7 +240,7 @@ nav a:hover {
   color: palevioletred;
   font-weight: bold;
   font-size: 1.1rem;
-  text-align: right;
+  text-align: center;
   white-space: nowrap;
 }
 

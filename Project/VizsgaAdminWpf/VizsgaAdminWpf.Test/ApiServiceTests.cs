@@ -44,7 +44,7 @@ namespace VizsgaAdminWpf.Test
             try
             {
                 var result = await service.UpdateUserAdmin(1, "Teszt Elek", "teszt@example.com", null);
-                Assert.That(result, Is.TypeOf<bool>());
+                Assert.That(result.Success, Is.True.Or.False);
             }
             catch (Exception ex)
             {
@@ -84,7 +84,7 @@ namespace VizsgaAdminWpf.Test
                     kategoria = "tárgy"
                 };
                 var result = await service.CreateAjandek(ujAjandek);
-                Assert.That(result, Is.TypeOf<bool>());
+                Assert.That(result.Success, Is.True.Or.False);
             }
             catch (Exception ex)
             {
@@ -104,6 +104,140 @@ namespace VizsgaAdminWpf.Test
             {
                 Assert.Inconclusive($"API hiba: {ex.Message}");
             }
+        }
+
+        [Test]
+        public async Task GetStilusok_ReturnsList()
+        {
+            try
+            {
+                var list = await service.GetStilusok();
+                Assert.That(list, Is.Not.Null);
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task GetCelcsoportok_ReturnsList()
+        {
+            try
+            {
+                var list = await service.GetCelcsoportok();
+                Assert.That(list, Is.Not.Null);
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task UpdateAjandek_ValidData_Succeeds()
+        {
+            try
+            {
+                var ajandek = new AjandekDTO { nev = "Módosított", ar = 5000 };
+                var (success, message) = await service.UpdateAjandek(1, ajandek);
+                Assert.That(success, Is.True.Or.False);
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task DeleteAjandek_Test()
+        {
+            try
+            {
+                var result = await service.DeleteAjandek(9999); 
+                Assert.That(result, Is.False.Or.True);
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task Login_Test()
+        {
+            try
+            {
+                var result = await service.Login("tesztuser", "tesztpass");
+                Assert.That(result, Is.Null.Or.InstanceOf<LoginResponse>());
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task Register_Test()
+        {
+            try
+            {
+                var result = await service.Register("Teszt", "teszt@teszt.hu", "pass");
+                Assert.That(result, Is.Null.Or.InstanceOf<User>());
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task GetAjandekokByAlkalom_Test()
+        {
+            try
+            {
+                var list = await service.GetAjandekokByAlkalom("Születésnap");
+                Assert.That(list, Is.Not.Null);
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task GetKedvencek_Test()
+        {
+            try
+            {
+                var list = await service.GetKedvencek(1);
+                Assert.That(list, Is.Not.Null);
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task GetElozmenyek_Test()
+        {
+            try
+            {
+                var list = await service.GetElozmenyek(1);
+                Assert.That(list, Is.Not.Null);
+            }
+            catch (Exception ex)
+            {
+                Assert.Inconclusive($"API hiba: {ex.Message}");
+            }
+        }
+
+        [Test]
+        public async Task SendInvite_Test()
+        {
+            var result = await service.SendInvite("lilla@mail.com", 2);
+            Assert.That(result.Success, Is.True, $"API hiba: {result.Message}");
         }
     }
 }

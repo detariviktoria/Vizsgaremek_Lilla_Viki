@@ -31,9 +31,22 @@ module.exports = {
         type: Sequelize.STRING(255),
       },
     });
+
+    await queryInterface.addIndex('Ajandek', ['ar'], {
+      name: 'idx_ajandek_ar'
+    });
+    await queryInterface.addIndex('Ajandek', ['kategoria'], {
+      name: 'idx_ajandek_kategoria'
+    });
+    await queryInterface.addIndex('Ajandek', ['nev'], {
+      name: 'idx_ajandek_nev'
+    });
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeIndex('Ajandek', 'idx_ajandek_ar');
+    await queryInterface.removeIndex('Ajandek', 'idx_ajandek_kategoria');
+    await queryInterface.removeIndex('Ajandek', 'idx_ajandek_nev');
     await queryInterface.dropTable('Ajandek');
   }
 };

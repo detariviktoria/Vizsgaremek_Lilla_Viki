@@ -4,8 +4,8 @@
   flex-direction: row; /* Alapértelmezett asztali elrendezés: egymás mellett */
   gap: 16px;
   /* Fix header miatt kell nagyobb ráhagyás, különben levágja a "Szűrés" fejlécet */
-  margin-top: 110px;
-  padding: 16px 20px 28px 20px;
+  margin-top: 80px;
+  padding: 10px 20px 28px 20px;
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
@@ -23,8 +23,8 @@
   width: 260px; /* Fix szélesség asztali gépen */
   flex-shrink: 0;
   position: sticky;
-  top: 110px;
-  max-height: calc(100vh - 120px);
+  top: 80px;
+  max-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
 }
@@ -207,6 +207,7 @@
 .content-area {
   flex-grow: 1;
   width: 100%;
+  margin-top: 0; /* index.css-beli main margin felülírása */
 }
 
 .ajandek-grid {
@@ -229,7 +230,7 @@
 @media (max-width: 1200px) {
   .main-content-container {
     flex-direction: column; /* Mobilon és tableten egymás alá */
-    margin-top: 90px;
+    margin-top: 80px;
     gap: 6px; /* kisebb hely a szűrő és a kártyák között */
     padding-top: 10px;
     padding-bottom: 16px;

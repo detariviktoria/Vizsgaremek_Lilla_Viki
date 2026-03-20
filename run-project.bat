@@ -1,13 +1,14 @@
 @echo off
 chcp 65001 > nul
 echo ==========================================
-echo Projekt Beállítása és Indítása
+echo Ajándák ajánló oldal rendszer indítása...
 echo ==========================================
 
 :: Backend beállítása és indítása
 echo.
 echo [1/2] Backend beállítása és indítása...
 cd Backend
+
 if not exist node_modules (
     echo Backend függőségek telepítése...
     call npm install
@@ -26,6 +27,7 @@ start cmd /k "chcp 65001 > nul && npm start"
 echo.
 echo [2/2] Frontend beállítása és indítása...
 cd ..\Frontend
+
 if not exist node_modules (
     echo Frontend függőségek telepítése...
     call npm install

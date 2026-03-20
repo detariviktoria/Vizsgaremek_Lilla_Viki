@@ -31,9 +31,64 @@ namespace VizsgaAdminWpf
             listBoxUsers.SelectionChanged += listBoxUsers_SelectionChanged;
         }
 
+        private async void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            var user = txtLoginUser.Text;
+            var pass = txtLoginPass.Password;
+
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
+            {
+                MessageBox.Show("Kérlek add meg a felhasználónevet és a jelszót!");
+                return;
+            }
+
+            try
+            {
+                var response = await _vm.Api.Login(user, pass);
+                if (response != null)
+                {
+                    if (response.isAdmin == true)
+                    {
+                        _vm.IsLoggedIn = true;
+                        lblLoginStatus.Text = $"Bejelentkezve: {response.username}";
+                        lblLoginStatus.Foreground = Brushes.Green;
+                        MessageBox.Show("Sikeres bejelentkezés adminisztrátorként!");
+                        _ = LoadGifts();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Sikeres bejelentkezés, de nincs admin jogosultságod!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Hibás felhasználónév vagy jelszó!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba a bejelentkezés során: {ex.Message}");
+            }
+        }
+
+        private void btnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Biztosan ki szeretnél lépni?", "Kijelentkezés", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                _vm.IsLoggedIn = false;
+                txtLoginUser.Text = "";
+                txtLoginPass.Password = "";
+                lblLoginStatus.Text = "Nincs bejelentkezve";
+                lblLoginStatus.Foreground = Brushes.Red;
+                _vm.Gifts.Clear();
+                _vm.Users.Clear();
+            }
+        }
+
         private void AdminWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _ = LoadGifts();
+            // Ne töltsön be semmit automatikusan, amíg nincs bejelentkezve
         }
 
         private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -2,29 +2,21 @@ const db = require('../../config/db');
 
 
 
-// Összes kupon lekérése
+
 
 exports.getKuponok = async (req, res) => {
-
   try {
-
     const kuponok = await db.Kupon.findAll();
-
     res.json(kuponok);
-
   } catch (err) {
-
     console.error("Hiba a kuponok lekérésekor:", err);
-
     res.status(500).json({ error: err.message });
-
   }
 
 };
 
 
 
-// Egy kupon lekérése ID alapján
 
 exports.getKuponById = async (req, res) => {
 
