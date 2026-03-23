@@ -4,8 +4,8 @@ const path = require('path');
 // Multer konfiguráció
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // A képeket a Frontend/public/Képek mappába mentjük
-    cb(null, path.join(__dirname, '../../../Frontend/public/Képek'));
+    // A képeket a ../Képek mappába mentjük
+    cb(null, path.join(__dirname, '../../../Képek'));
   },
   filename: (req, file, cb) => {
     // Megtartjuk az eredeti fájlnevet, vagy egyedit generálunk ha szükséges

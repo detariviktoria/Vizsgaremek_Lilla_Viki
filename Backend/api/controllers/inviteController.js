@@ -8,9 +8,8 @@ const fs = require('fs');
 exports.sendInvite = async (req, res, next) => {
   try {
     const { email, userId } = req.body;
-    const trimmedEmail = email ? email.toLowerCase().trim() : '';
 
-    if (!trimmedEmail || !userId) {
+    if (!email || !userId) {
       return res.status(400).json({ message: 'Email és küldő ID megadása kötelező!' });
     }
 
@@ -48,13 +47,13 @@ exports.sendInvite = async (req, res, next) => {
       console.warn('Kupon kép nem található, a meghívó csatolmány nélkül lesz elküldve:', attachmentPath);
     }
 
-    const success = await sendEmail(trimmedEmail, subject, html, attachments);
+    const success = await sendEmail(email, subject, html, attachments);
 
     if (success) {
       // Mentjük a meghívót az adatbázisba
       await db.Meghivo.create({
         kuldo_id: userId,
-        email: trimmedEmail,
+        email: email,
         kuldve_datum: new Date(),
         elfogadva: false
       });
