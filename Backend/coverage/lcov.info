@@ -1,8 +1,8 @@
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\app.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\app.js
 FN:79,(anonymous_0)
-FN:127,(anonymous_1)
-FN:131,(anonymous_2)
+FN:128,(anonymous_1)
+FN:132,(anonymous_2)
 FNF:3
 FNH:1
 FNDA:66,(anonymous_0)
@@ -28,7 +28,6 @@ DA:89,12
 DA:90,12
 DA:93,12
 DA:94,12
-DA:97,12
 DA:98,12
 DA:99,12
 DA:100,12
@@ -41,7 +40,7 @@ DA:106,12
 DA:107,12
 DA:108,12
 DA:109,12
-DA:112,12
+DA:110,12
 DA:113,12
 DA:114,12
 DA:115,12
@@ -55,33 +54,26 @@ DA:122,12
 DA:123,12
 DA:124,12
 DA:125,12
-DA:127,12
-DA:128,0
-DA:131,12
-DA:132,0
+DA:126,12
+DA:128,12
+DA:129,0
+DA:132,12
 DA:133,0
-DA:135,0
-DA:138,12
+DA:136,12
+DA:137,12
 DA:139,12
-DA:141,12
-LF:56
+LF:54
 LH:51
 BRDA:80,0,0,66
 BRDA:80,0,1,0
 BRDA:80,1,0,66
 BRDA:80,1,1,0
 BRDA:80,1,2,0
-BRDA:132,2,0,0
-BRDA:132,2,1,0
-BRDA:132,3,0,0
-BRDA:132,3,1,0
-BRDA:132,3,2,0
-BRDA:132,3,3,0
-BRF:11
+BRF:5
 BRH:2
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\ajandekController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\ajandekController.js
 FN:4,(anonymous_0)
 FN:14,(anonymous_1)
 FN:28,(anonymous_2)
@@ -177,7 +169,7 @@ BRF:6
 BRH:3
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\alkalomController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\alkalomController.js
 FN:3,(anonymous_0)
 FN:13,(anonymous_1)
 FN:22,(anonymous_2)
@@ -209,7 +201,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\celcsoportController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\celcsoportController.js
 FN:3,(anonymous_0)
 FN:13,(anonymous_1)
 FN:22,(anonymous_2)
@@ -241,7 +233,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\chatController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\chatController.js
 FN:4,(anonymous_0)
 FN:26,(anonymous_1)
 FN:53,(anonymous_2)
@@ -313,7 +305,7 @@ BRF:10
 BRH:9
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\elozmenyekController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\elozmenyekController.js
 FN:5,(anonymous_0)
 FN:53,(anonymous_1)
 FNF:2
@@ -354,7 +346,7 @@ BRF:6
 BRH:5
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\inviteController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\inviteController.js
 FN:8,(anonymous_0)
 FN:73,(anonymous_1)
 FNF:2
@@ -440,7 +432,7 @@ BRF:24
 BRH:17
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\kategoriaController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\kategoriaController.js
 FN:3,(anonymous_0)
 FN:3,(anonymous_1)
 FN:4,(anonymous_2)
@@ -487,7 +479,7 @@ BRF:12
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\kedvencekController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\kedvencekController.js
 FN:4,(anonymous_0)
 FN:35,(anonymous_1)
 FN:57,(anonymous_2)
@@ -545,7 +537,7 @@ BRF:10
 BRH:7
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\kuponController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\kuponController.js
 FN:5,(anonymous_0)
 FN:26,(anonymous_1)
 FN:40,(anonymous_2)
@@ -621,7 +613,7 @@ BRF:6
 BRH:3
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\notificationController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\notificationController.js
 FN:4,(anonymous_0)
 FN:19,(anonymous_1)
 FN:34,(anonymous_2)
@@ -658,7 +650,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\stilusController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\stilusController.js
 FN:3,(anonymous_0)
 FN:13,(anonymous_1)
 FN:22,(anonymous_2)
@@ -690,7 +682,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\uploadController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\uploadController.js
 FN:6,(anonymous_0)
 FN:10,(anonymous_1)
 FN:19,(anonymous_2)
@@ -726,7 +718,7 @@ BRF:4
 BRH:3
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\controllers\userController.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\controllers\userController.js
 FN:15,(anonymous_0)
 FN:52,(anonymous_1)
 FN:65,(anonymous_2)
@@ -1015,7 +1007,7 @@ BRF:84
 BRH:50
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\db\index.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\db\index.js
 FNF:0
 FNH:0
 DA:1,1
@@ -1040,7 +1032,7 @@ BRF:10
 BRH:6
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\errors\AppError.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\errors\AppError.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:0
@@ -1070,7 +1062,7 @@ BRF:12
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\errors\BadRequestError.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\errors\BadRequestError.js
 FN:5,(anonymous_0)
 FNF:1
 FNH:0
@@ -1086,7 +1078,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\errors\DbError.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\errors\DbError.js
 FN:5,(anonymous_0)
 FNF:1
 FNH:0
@@ -1102,7 +1094,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\errors\NotFoundError.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\errors\NotFoundError.js
 FN:5,(anonymous_0)
 FNF:1
 FNH:0
@@ -1118,7 +1110,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\errors\UnauthorizedError.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\errors\UnauthorizedError.js
 FN:5,(anonymous_0)
 FNF:1
 FNH:0
@@ -1134,7 +1126,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\errors\ValidationError.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\errors\ValidationError.js
 FN:5,(anonymous_0)
 FNF:1
 FNH:0
@@ -1150,7 +1142,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\errors\index.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\errors\index.js
 FNF:0
 FNH:0
 DA:1,25
@@ -1160,7 +1152,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\middlewares\auth.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\middlewares\auth.js
 FN:3,(anonymous_0)
 FN:30,(anonymous_1)
 FNF:2
@@ -1210,7 +1202,7 @@ BRF:16
 BRH:11
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\middlewares\errorHandler.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\middlewares\errorHandler.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:0
@@ -1224,7 +1216,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Ajandek.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Ajandek.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1239,7 +1231,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Alkalom.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Alkalom.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1254,7 +1246,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Celcsoport.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Celcsoport.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1269,7 +1261,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\ChatMessage.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\ChatMessage.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1284,7 +1276,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Elozmeny.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Elozmeny.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1299,7 +1291,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Felhasznalo.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Felhasznalo.js
 FN:4,(anonymous_0)
 FN:71,(anonymous_1)
 FN:76,(anonymous_2)
@@ -1327,7 +1319,7 @@ BRF:4
 BRH:3
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Kedvenc.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Kedvenc.js
 FN:4,(anonymous_0)
 FNF:1
 FNH:1
@@ -1342,7 +1334,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Kupon.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Kupon.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1357,7 +1349,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Meghivo.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Meghivo.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1372,7 +1364,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Notification.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Notification.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1387,7 +1379,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\Stilus.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\Stilus.js
 FN:3,(anonymous_0)
 FNF:1
 FNH:1
@@ -1402,7 +1394,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\models\index.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\models\index.js
 FN:1,(anonymous_0)
 FNF:1
 FNH:1
@@ -1446,7 +1438,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\ajandekRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\ajandekRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1468,7 +1460,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\alkalomRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\alkalomRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1484,7 +1476,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\celcsoportRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\celcsoportRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1500,7 +1492,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\chat.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\chat.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1518,7 +1510,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\elozmenyekRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\elozmenyekRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1533,7 +1525,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\inviteRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\inviteRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1548,7 +1540,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\kategoriaRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\kategoriaRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1566,7 +1558,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\kedvencekRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\kedvencekRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1582,7 +1574,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\kuponRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\kuponRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1602,7 +1594,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\notificationRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\notificationRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1619,7 +1611,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\stilusRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\stilusRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1635,7 +1627,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\uploadRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\uploadRoutes.js
 FNF:0
 FNH:0
 DA:1,12
@@ -1649,7 +1641,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\routes\userRoutes.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\routes\userRoutes.js
 FN:13,(anonymous_0)
 FNF:1
 FNH:1
@@ -1683,7 +1675,7 @@ BRF:2
 BRH:1
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\services\ajandekService.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\services\ajandekService.js
 FN:4,(anonymous_0)
 FN:8,(anonymous_1)
 FN:16,(anonymous_2)
@@ -1769,7 +1761,7 @@ BRF:24
 BRH:21
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\services\alkalomService.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\services\alkalomService.js
 FN:4,(anonymous_0)
 FN:8,(anonymous_1)
 FN:16,(anonymous_2)
@@ -1812,7 +1804,7 @@ BRF:6
 BRH:6
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\services\celcsoportService.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\services\celcsoportService.js
 FN:4,(anonymous_0)
 FN:8,(anonymous_1)
 FN:16,(anonymous_2)
@@ -1855,7 +1847,7 @@ BRF:6
 BRH:6
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\services\meghivoService.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\services\meghivoService.js
 FN:4,(anonymous_0)
 FN:8,(anonymous_1)
 FN:16,(anonymous_2)
@@ -1898,7 +1890,7 @@ BRF:6
 BRH:6
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\services\stilusService.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\services\stilusService.js
 FN:4,(anonymous_0)
 FN:8,(anonymous_1)
 FN:16,(anonymous_2)
@@ -1941,7 +1933,7 @@ BRF:6
 BRH:6
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\services\userService.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\services\userService.js
 FN:5,(anonymous_0)
 FN:11,(anonymous_1)
 FN:21,(anonymous_2)
@@ -1985,7 +1977,7 @@ BRF:6
 BRH:6
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\api\utilities\emailService.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\api\utilities\emailService.js
 FN:41,(anonymous_0)
 FNF:1
 FNH:1
@@ -2025,7 +2017,7 @@ BRF:11
 BRH:6
 end_of_record
 TN:
-SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Api\config\db.js
+SF:\\ckik-pdc\Diakok\2021_B\detari.viktoria\Vizsgaremek_Lilla_Viki\Backend\config\db.js
 FNF:0
 FNH:0
 DA:1,1

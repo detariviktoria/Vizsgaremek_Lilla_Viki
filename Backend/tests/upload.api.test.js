@@ -30,7 +30,7 @@ describe("Upload API Tests", () => {
         expect(res.body.filename).toBe("test-image.png");
 
         // Clean up the uploaded file from the real folder
-        const uploadedPath = path.join(__dirname, "../../../Képek", "test-image.png");
+        const uploadedPath = path.join(__dirname, "../../../Frontend/public/Képek", "test-image.png");
         if (fs.existsSync(uploadedPath)) {
             fs.unlinkSync(uploadedPath);
         }

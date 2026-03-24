@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt');
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Felhasznalo', [
-      { user_id: 1, name: 'Viktória', email: 'viktoria@mail.com', password: await bcrypt.hash('pass123', 10), kep_url: 'Viktoria.jpg' },
-      { user_id: 2, name: 'Lilla', email: 'lilla@mail.com', password: await bcrypt.hash('pass456', 10), kep_url: 'Lilla.jpg' },
+      { user_id: 1, name: 'Viktória', email: 'viktoria@mail.com', password: await bcrypt.hash('pass123', 10),is_admin: true, kep_url: 'Viktoria.jpg' },
+      { user_id: 2, name: 'Lilla', email: 'lilla@mail.com', password: await bcrypt.hash('pass456', 10),is_admin: true, kep_url: 'Lilla.jpg' },
       { user_id: 3, name: 'Beáta', email: 'beata@mail.com', password: await bcrypt.hash('pass789', 10), kep_url: 'Beata.jpg' },
       { user_id: 4, name: 'Anna', email: 'anna@mail.com', password: await bcrypt.hash('pass321', 10), kep_url: 'Anna.jpg' },
       { user_id: 5, name: 'Flóra', email: 'flora@mail.com', password: await bcrypt.hash('pass654', 10), kep_url: 'Flora.jpg' },
