@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api, type User, API_BASE_URL } from '../../api';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../Layout/Header';
@@ -27,6 +28,24 @@ export default function Profile() {
   });
 
   const [uploading, setUploading] = useState(false);
+  const [nameError, setNameError] = useState('');
+
+  const navigate = useNavigate();
+
+  // Debounced check for username availability
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (formData.name && user && formData.name !== user.name && formData.name.length >= 3) {
+        try {
+          const { available } = await api.checkAvailability({ name: formData.name });
+          setNameError(available ? '' : 'Ez a felhasználónév már foglalt.');
+        } catch (err) { console.error(err); }
+      } else {
+        setNameError('');
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [formData.name, user]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -76,6 +95,11 @@ export default function Profile() {
 
   const handleSave = async (field: string) => {
     if (!userId) return;
+    
+    if (field === 'name' && nameError) {
+      setError(nameError);
+      return;
+    }
     
     try {
       const updateData: Partial<User> & { oldPassword?: string } = {};
@@ -174,7 +198,7 @@ export default function Profile() {
           <div className="error-card">
             <h3>Nincs bejelentkezve</h3>
             <p>Kérjük, jelentkezzen be a profilja megtekintéséhez!</p>
-            <button className="login-redirect-btn" onClick={() => window.location.href = '/bejelentkezes'}>
+            <button className="login-redirect-btn" onClick={() => navigate('/bejelentkezes')}>
               Bejelentkezés
             </button>
           </div>
@@ -191,7 +215,7 @@ export default function Profile() {
           <div className="error-card">
             <h3>Hiba történt</h3>
             <p>{error}</p>
-            <button className="retry-btn" onClick={() => window.location.reload()}>
+            <button className="retry-btn" onClick={() => navigate(0)}>
               Próbálja újra
             </button>
           </div>
@@ -240,15 +264,18 @@ export default function Profile() {
               <label>Felhasználónév</label>
               <div className="profile-row">
                 {isEditing.name ? (
-                  <div className="edit-group">
+                  <div className="edit-group vertical">
                     <input 
                       type="text" 
                       name="name" 
                       value={formData.name} 
                       onChange={handleChange}
+                      className={nameError ? 'input-error' : ''}
                       autoFocus
                     />
+                    {nameError && <span className="error-text">{nameError}</span>}
                     <button className="save-btn" onClick={() => handleSave('name')}>Mentés</button>
+                    <button className="cancel-btn" onClick={() => setIsEditing({...isEditing, name: false})}>Mégse</button>
                   </div>
                 ) : (
                   <>

@@ -64,12 +64,19 @@ const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = fals
   };
 
 
-  const imageUrl = ajandek.image_url ? `/Képek/${ajandek.image_url.split('/').pop()}` : 'https://via.placeholder.com/300x200?text=Nincs+kép';
+  const imageUrl = ajandek.image_url ? `/Képek/${ajandek.image_url.split('/').pop()}` : '/Képek/logo.webp';
 
   return (
     <div className="ajandek-kartya animate-fade-in opacity-0 transition-all duration-300 hover:scale-105 hover:shadow-xl">
       <div className="ajandek-kep-container">
-        <img src={imageUrl} alt={ajandek.nev} className="ajandek-kep" />
+        <img 
+          src={imageUrl} 
+          alt={ajandek.nev} 
+          className="ajandek-kep" 
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/Képek/logo.webp';
+          }}
+        />
         {userId && (
           <button 
             className={`kedvenc-ikon ${kedvenc ? 'aktiv' : 'inaktiv'}`}

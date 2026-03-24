@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 > nul
 echo ==========================================
-echo Ajándák ajánló oldal rendszer indítása...
+echo Ajándék ajánló oldal rendszer indítása...
 echo ==========================================
 
 :: Backend beállítása és indítása

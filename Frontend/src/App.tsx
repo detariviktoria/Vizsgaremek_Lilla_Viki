@@ -13,6 +13,7 @@ import Profile from './components/User/Profile';
 import ResetPassword from './components/Auth/ResetPassword';
 import './App.css';
 import { useAuth } from './hooks/useAuth';
+import { AuthProvider } from './hooks/AuthContext';
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { username, isChecking } = useAuth();
@@ -35,26 +36,28 @@ function App() {
   };
 
   return (
-    <BrowserRouter future={future}>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/ajandekok" element={<KategoriaValasztas />} />
-        <Route path="/alkalom/:nev" element={<KategoriaValasztas />} />
-        <Route path="/stilus/:nev" element={<KategoriaValasztas />} />
-        <Route path="/celcsoport/:nev" element={<KategoriaValasztas />} />
-        <Route path="/elmeny" element={<KategoriaValasztas />} />
-        <Route path="/targy" element={<KategoriaValasztas />} />
-        <Route path="/tovabb" element={<Tovabb />} />
-        <Route path="/bejelentkezes" element={<Bejelentkezes />} />
-        <Route path="/regisztracio" element={<Regisztracio />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/welcome" element={<Welcome />} />
-        <Route path="/kedvencek" element={<ProtectedRoute><Kedvencek /></ProtectedRoute>} />
-        <Route path="/elozmenyek" element={<ProtectedRoute><Elozmenyek /></ProtectedRoute>} />
-        <Route path="/baratok" element={<ProtectedRoute><Baratok /></ProtectedRoute>} />
-        <Route path="/profil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter future={future}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/ajandekok" element={<KategoriaValasztas />} />
+          <Route path="/alkalom/:nev" element={<KategoriaValasztas />} />
+          <Route path="/stilus/:nev" element={<KategoriaValasztas />} />
+          <Route path="/celcsoport/:nev" element={<KategoriaValasztas />} />
+          <Route path="/elmeny" element={<KategoriaValasztas />} />
+          <Route path="/targy" element={<KategoriaValasztas />} />
+          <Route path="/tovabb" element={<Tovabb />} />
+          <Route path="/bejelentkezes" element={<Bejelentkezes />} />
+          <Route path="/regisztracio" element={<Regisztracio />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/welcome" element={<Welcome />} />
+          <Route path="/kedvencek" element={<ProtectedRoute><Kedvencek /></ProtectedRoute>} />
+          <Route path="/elozmenyek" element={<ProtectedRoute><Elozmenyek /></ProtectedRoute>} />
+          <Route path="/baratok" element={<ProtectedRoute><Baratok /></ProtectedRoute>} />
+          <Route path="/profil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

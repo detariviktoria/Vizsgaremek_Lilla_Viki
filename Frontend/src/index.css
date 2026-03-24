@@ -722,3 +722,12 @@ main {
   border-color: #ff4d4d !important;
   background-color: #fff5f5 !important;
 }
+
+.error-text {
+  color: #ff4d4d;
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  text-align: left;
+  display: block;
+}

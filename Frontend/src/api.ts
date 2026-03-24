@@ -507,4 +507,11 @@ export const api = {
 
     return await response.json();
   },
+
+  checkAvailability: async (params: { name?: string; email?: string }): Promise<{ available: boolean }> => {
+    const query = new URLSearchParams(params).toString();
+    const response = await fetch(`${API_BASE_URL}/users/check-availability?${query}`);
+    if (!response.ok) throw new Error('Hiba az elérhetőség ellenőrzésekor');
+    return await response.json();
+  },
 };

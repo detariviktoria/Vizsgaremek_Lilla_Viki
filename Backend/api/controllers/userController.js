@@ -375,3 +375,25 @@ exports.checkSession = (req, res) => {
     res.status(401).json({ message: 'Érvénytelen token' });
   }
 };
+
+// Elérhetőség ellenőrzése (username/email)
+exports.checkAvailability = async (req, res) => {
+  const { name, email } = req.query;
+  try {
+    if (name) {
+      const user = await db.Felhasznalo.findOne({ where: { name } });
+      return res.json({ available: !user });
+    }
+    if (email) {
+      const trimmedEmail = email.toLowerCase().trim();
+      const user = await db.Felhasznalo.findOne({ 
+        where: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('email')), trimmedEmail) 
+      });
+      return res.json({ available: !user });
+    }
+    res.status(400).json({ message: "Hiányzó paraméterek (name vagy email)" });
+  } catch (error) {
+    console.error('Hiba az elérhetőség ellenőrzésekor:', error);
+    res.status(500).json({ error: error.message });
+  }
+};

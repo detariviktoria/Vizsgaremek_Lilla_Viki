@@ -231,4 +231,25 @@ router.post("/reset-password", userController.resetPassword);
  */
 router.get("/check/session", userController.checkSession);
 
+/**
+ * @swagger
+ * /users/check-availability:
+ *   get:
+ *     summary: Felhasználónév vagy email elérhetőségének ellenőrzése
+ *     tags: [Felhasználók]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: email
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Elérhetőség állapota
+ */
+router.get("/check-availability", userController.checkAvailability);
+
 module.exports = router;
