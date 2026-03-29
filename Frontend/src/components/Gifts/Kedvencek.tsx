@@ -5,12 +5,10 @@ import { api, type Ajandek } from '../../api';
 import AjandekKartya, { SkeletonKartya } from './AjandekKartya';
 import Header from '../Layout/Header';
 import './Kedvencek.css';
-
 const Kedvencek = () => {
   const { userId, isChecking } = useAuth();
   const [kedvencek, setKedvencek] = useState<Ajandek[]>([]);
   const [loading, setLoading] = useState(true);
-
   const fetchKedvencek = async () => {
     if (!userId) return;
     try {
@@ -22,7 +20,6 @@ const Kedvencek = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (!isChecking && userId) {
       fetchKedvencek();
@@ -30,7 +27,6 @@ const Kedvencek = () => {
       setLoading(false);
     }
   }, [userId, isChecking]);
-
   if (isChecking || loading) {
     return (
       <>
@@ -44,7 +40,6 @@ const Kedvencek = () => {
       </>
     );
   }
-
   if (!userId) {
     return (
       <>
@@ -57,7 +52,6 @@ const Kedvencek = () => {
       </>
     );
   }
-
   return (
     <>
       <Header />
@@ -86,5 +80,4 @@ const Kedvencek = () => {
     </>
   );
 };
-
 export default Kedvencek;

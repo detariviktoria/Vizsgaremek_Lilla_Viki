@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../api';
 import Header from '../Layout/Header';
 import './AuthModal.css'; 
-
 export default function ResetPassword() {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
@@ -12,26 +11,21 @@ export default function ResetPassword() {
   const [message, setMessage] = useState('');
   const [messageColor, setMessageColor] = useState<'red' | 'green'>('red');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
-
     if (password !== confirmPassword) {
       setMessage('A jelszavak nem egyeznek!');
       setMessageColor('red');
       return;
     }
-
     if (password.length < 6) {
       setMessage('A jelszónak legalább 6 karakterből kell állnia!');
       setMessageColor('red');
       return;
     }
-
     setIsSubmitting(true);
     setMessage('');
-
     try {
       await api.resetPassword(token, password);
       setMessage('A jelszavad sikeresen megváltozott!');
@@ -46,7 +40,6 @@ export default function ResetPassword() {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="profile-page animate-fade-in opacity-0">
       <Header title="Jelszó visszaállítása" />
@@ -58,7 +51,6 @@ export default function ResetPassword() {
           <div className="profile-content">
             <form className="login-form" onSubmit={handleSubmit}>
               <p className="form-info">Kérjük, add meg az új jelszavadat.</p>
-              
               <input
                 type="password"
                 placeholder="Új jelszó"
@@ -66,8 +58,8 @@ export default function ResetPassword() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isSubmitting}
+                autoComplete="new-password"
               />
-              
               <input
                 type="password"
                 placeholder="Új jelszó megerősítése"
@@ -75,14 +67,13 @@ export default function ResetPassword() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 disabled={isSubmitting}
+                autoComplete="new-password"
               />
-
               {message && (
                 <div className="message-box" style={{ color: messageColor, marginBottom: '15px', textAlign: 'center' }}>
                   {message}
                 </div>
               )}
-
               <button type="submit" className="save-btn transition-all duration-300 hover:scale-105 active:scale-95" style={{ width: '100%' }} disabled={isSubmitting}>
                 {isSubmitting ? 'Folyamatban...' : 'Jelszó mentése'}
               </button>

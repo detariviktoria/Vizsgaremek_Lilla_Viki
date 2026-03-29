@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VizsgaAdminWpf")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04aab5a2b0cc8bf6e6cd135150b92dd0a1f5e4bc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+402417318def38d7234a7e7acedecf4fc43ae20f")]
 [assembly: System.Reflection.AssemblyProductAttribute("VizsgaAdminWpf")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VizsgaAdminWpf")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

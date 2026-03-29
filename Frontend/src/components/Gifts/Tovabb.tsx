@@ -1,83 +1,41 @@
 import { useState, useEffect } from 'react';
-
 import { Navigate, useSearchParams } from 'react-router-dom';
-
 import Header from '../Layout/Header';
-
 import AjandekKartya from './AjandekKartya';
-
 import { useAuth } from '../../hooks/useAuth';
-
 import { api, type Ajandek } from '../../api';
-
 import './Tovabb.css';
-
-
-
 export default function Tovabb() {
-
   const { username, userId } = useAuth();
-
   const [ajandekok, setAjandekok] = useState<Ajandek[]>([]);
-
   const [kedvencekIds, setKedvencekIds] = useState<number[]>([]);
-
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
   const [searchParams] = useSearchParams();
-
-
-
   if (!username) {
-
     return <Navigate to="/bejelentkezes" replace />;
-
   }
-
-
-
   useEffect(() => {
-
     const kategoria = searchParams.get('kategoria');
-
     if (kategoria) {
-
       handleCategoryClick(kategoria);
-
     }
-
   }, [searchParams]);
-
-
-
   const handleCategoryClick = async (kategoria: string) => {
-
     setSelectedCategory(kategoria);
-
     try {
-
       const [allAjandekok, kedvencData] = await Promise.all([
         api.getAjandekok(),
         userId ? api.getKedvencek(userId) : Promise.resolve([])
       ]);
-
       const filtered = allAjandekok.filter(a => a.kategoria === kategoria);
-
       setAjandekok(filtered);
       if (userId) {
         setKedvencekIds(kedvencData.map(k => k.id!).filter(id => id !== undefined));
       }
-
     } catch (error) {
-
       console.error('Hiba az ajándékok lekérésekor:', error);
-
     }
-
   };
-
-
-
   return (
     <>
       <Header title="Tovább oldal" />

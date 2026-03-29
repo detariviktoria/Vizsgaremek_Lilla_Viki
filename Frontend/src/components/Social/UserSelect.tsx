@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { api, type User, API_BASE_URL } from "../../api";
+import { api, type User } from "../../api";
 import "./UserSelect.css";
-
 type UserSelectProps = {
   onSelect: (user: User) => void;
   selectedUserId?: number;
   highlightUserIds?: number[];
 };
-
 const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highlightUserIds = [] }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     fetchUsers();
   }, []);
-
   const fetchUsers = async () => {
     setLoading(true);
     setError(null);
@@ -29,11 +25,8 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
       setLoading(false);
     }
   };
-  
   const currentUserId = Number(sessionStorage.getItem('userId'));
   const filteredUsers = users.filter(u => u.user_id !== currentUserId);
-
-
   const orderedUsers = [...filteredUsers].sort((a, b) => {
     const aHighlighted = highlightUserIds.some(id => Number(id) === Number(a.user_id));
     const bHighlighted = highlightUserIds.some(id => Number(id) === Number(b.user_id));
@@ -41,15 +34,12 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
     if (!aHighlighted && bHighlighted) return 1;
     return a.name.localeCompare(b.name);
   });
-
   if (loading) return <div className="user-select-loading">Felhasználók betöltése...</div>;
   if (error) return <div className="user-select-error">{error}</div>;
-
   const isHighlighted = (userId?: number) => {
     if (!userId) return false;
     return highlightUserIds.some(id => Number(id) === Number(userId));
   };
-
   return (
     <div className="user-grid-container">
       <div className="user-grid">
@@ -76,5 +66,4 @@ const UserSelect: React.FC<UserSelectProps> = ({ onSelect, selectedUserId, highl
     </div>
   );
 };
-
 export default UserSelect;

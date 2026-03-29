@@ -5,26 +5,22 @@ import { api, type Ajandek } from '../../api';
 import AjandekKartya, { SkeletonKartya } from './AjandekKartya';
 import Header from '../Layout/Header';
 import './Elozmenyek.css';
-
 const Elozmenyek = () => {
   const { userId, isChecking } = useAuth();
   const [elozmenyek, setElozmenyek] = useState<Ajandek[]>([]);
   const [kedvencekIds, setKedvencekIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchData = async () => {
       if (!userId) {
         setLoading(false);
         return;
       }
-
       try {
         const [elozmenyData, kedvencData] = await Promise.all([
           api.getElozmenyek(userId),
           api.getKedvencek(userId)
         ]);
-
         setElozmenyek(elozmenyData);
         setKedvencekIds(kedvencData.map(k => k.id!).filter(id => id !== undefined));
       } catch (error) {
@@ -33,12 +29,10 @@ const Elozmenyek = () => {
         setLoading(false);
       }
     };
-
     if (!isChecking) {
       fetchData();
     }
   }, [userId, isChecking]);
-
   if (isChecking || loading) {
     return (
       <>
@@ -52,7 +46,6 @@ const Elozmenyek = () => {
       </>
     );
   }
-
   if (!userId) {
     return (
       <>
@@ -65,7 +58,6 @@ const Elozmenyek = () => {
       </>
     );
   }
-
   return (
     <>
       <Header />
@@ -93,5 +85,4 @@ const Elozmenyek = () => {
     </>
   );
 };
-
 export default Elozmenyek;

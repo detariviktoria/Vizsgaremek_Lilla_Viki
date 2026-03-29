@@ -4,12 +4,20 @@ echo ==========================================
 echo Ajándék ajánló oldal rendszer indítása...
 echo ==========================================
 
+:: Portok felszabadítása (3000 a Backend, 5173 a Frontend számára)
+echo.
+echo Portok ellenőrzése és felszabadítása...
+
+:: PowerShell használata a folyamatok leállításához (megbízhatóbb)
+powershell -Command "Get-NetTCPConnection -LocalPort 3000, 5173 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }"
+echo Portok felszabadítva (ha foglaltak voltak).
+
 :: Backend beállítása és indítása
 echo.
 echo [1/2] Backend beállítása és indítása...
 cd Backend
 
-if not exist node_modules (
+if not exist node_modules\.bin\sequelize-cli (
     echo Backend függőségek telepítése...
     call npm install
 )
@@ -28,7 +36,7 @@ echo.
 echo [2/2] Frontend beállítása és indítása...
 cd ..\Frontend
 
-if not exist node_modules (
+if not exist node_modules\.bin\vite (
     echo Frontend függőségek telepítése...
     call npm install
 )

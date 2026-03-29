@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../../api';
 import '../Social/Chat.css';
-
 interface Coupon {
   id: number;
   kod: string;
   lejarat_datum: string;
 }
-
 interface MyCouponsProps {
   userId: number;
 }
-
 const MyCoupons: React.FC<MyCouponsProps> = ({ userId }) => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
-
   const fetchCoupons = async () => {
     try {
       const data = await api.getCoupons(userId);
@@ -27,19 +23,15 @@ const MyCoupons: React.FC<MyCouponsProps> = ({ userId }) => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchCoupons();
   }, [userId]);
-
   const handleCopy = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 2000);
   };
-
   if (loading) return <div style={{padding: '20px', textAlign: 'center'}}>Betöltés...</div>;
-
   return (
     <div className="chat-container">
       <div style={{display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '10px'}}>
@@ -47,7 +39,6 @@ const MyCoupons: React.FC<MyCouponsProps> = ({ userId }) => {
         <p style={{fontSize: '12px', color: '#888', marginBottom: '15px'}}>
           * Ezeket a kódokat más weboldalakon tudod felhasználni legalább 15.000 Ft értékű vásárlás esetén (5.000 Ft kedvezmény).
         </p>
-        
         {coupons.length === 0 ? (
           <div key="no-coupons" style={{textAlign: 'center', padding: '20px', color: '#888'}}>
             Még nincsenek kuponjaid. Hívj meg barátokat, és ha regisztrálnak, mindketten kaptok egy kódot!
@@ -98,5 +89,4 @@ const MyCoupons: React.FC<MyCouponsProps> = ({ userId }) => {
     </div>
   );
 };
-
 export default MyCoupons;

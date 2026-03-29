@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,18 +15,18 @@ namespace VizsgaAdminWpf.Test
         {
             var loginResponse = new LoginResponse
             {
-                username = "Viktória",
-                userId = 1,
-                token = "abc.123.def",
-                isAdmin = true
+                Username = "Viktória",
+                UserId = 1,
+                Token = "abc.123.def",
+                IsAdmin = true
             };
 
             Assert.Multiple(() =>
             {
-                Assert.That(loginResponse.username, Is.EqualTo("Viktória"));
-                Assert.That(loginResponse.userId, Is.EqualTo(1));
-                Assert.That(loginResponse.token, Is.EqualTo("abc.123.def"));
-                Assert.That(loginResponse.isAdmin, Is.True);
+                Assert.That(loginResponse.Username, Is.EqualTo("Viktória"));
+                Assert.That(loginResponse.UserId, Is.EqualTo(1));
+                Assert.That(loginResponse.Token, Is.EqualTo("abc.123.def"));
+                Assert.That(loginResponse.IsAdmin, Is.True);
             });
         }
 
@@ -35,14 +35,14 @@ namespace VizsgaAdminWpf.Test
         {
             var loginResponse = new LoginResponse
             {
-                username = null,
-                userId = null
+                Username = null,
+                UserId = null
             };
 
             Assert.Multiple(() =>
             {
-                Assert.That(loginResponse.username, Is.Null);
-                Assert.That(loginResponse.userId, Is.Null);
+                Assert.That(loginResponse.Username, Is.Null);
+                Assert.That(loginResponse.UserId, Is.Null);
             });
         }
 
@@ -51,13 +51,13 @@ namespace VizsgaAdminWpf.Test
         {
             var loginResponse = new LoginResponse
             {
-                username = "János"
+                Username = "János"
             };
 
             Assert.Multiple(() =>
             {
-                Assert.That(loginResponse.username, Is.EqualTo("János"));
-                Assert.That(loginResponse.userId, Is.Null);
+                Assert.That(loginResponse.Username, Is.EqualTo("János"));
+                Assert.That(loginResponse.UserId, Is.Null);
             });
         }
 
@@ -66,13 +66,13 @@ namespace VizsgaAdminWpf.Test
         {
             var loginResponse = new LoginResponse
             {
-                userId = 42
+                UserId = 42
             };
 
             Assert.Multiple(() =>
             {
-                Assert.That(loginResponse.userId, Is.EqualTo(42));
-                Assert.That(loginResponse.username, Is.Null);
+                Assert.That(loginResponse.UserId, Is.EqualTo(42));
+                Assert.That(loginResponse.Username, Is.Null);
             });
         }
     }

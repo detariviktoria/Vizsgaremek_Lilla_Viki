@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-
 interface MobileNavProps {
   isOpen: boolean;
   onClose: () => void;
@@ -11,7 +10,6 @@ interface MobileNavProps {
   onCouponsOpen: () => void;
   onLogout: () => void;
 }
-
 export default function MobileNav({
   isOpen,
   onClose,
@@ -21,7 +19,6 @@ export default function MobileNav({
   onCouponsOpen,
   onLogout
 }: MobileNavProps) {
-  // Keyboard navigation: Close on Escape
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -29,9 +26,7 @@ export default function MobileNav({
     if (isOpen) window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
-
   if (!isOpen) return null;
-
   return (
     <>
       <div className="mobile-menu-overlay" onClick={onClose}></div>

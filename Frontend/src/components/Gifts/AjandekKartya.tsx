@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
-import { api, type Ajandek, API_BASE_URL } from '../../api';
-
+import { api, type Ajandek } from '../../api';
 import { useAuth } from '../../hooks/useAuth';
 import './AjandekKartya.css';
-
 interface AjandekKartyaProps {
   ajandek: Ajandek;
   isKedvenc?: boolean;
   onKedvencValtozas?: () => void; 
 }
-
 export const SkeletonKartya: React.FC = () => (
   <div className="skeleton-kartya animate-fade-in">
     <div className="skeleton-kep"></div>
@@ -21,20 +17,16 @@ export const SkeletonKartya: React.FC = () => (
     </div>
   </div>
 );
-
 const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = false, onKedvencValtozas }) => {
   const { userId } = useAuth();
   const [kedvenc, setKedvenc] = useState(isKedvenc);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     setKedvenc(isKedvenc);
   }, [isKedvenc]);
-
   const handleKedvencClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (!userId || loading || !ajandek.id) return;
-
     setLoading(true);
     try {
       if (kedvenc) {
@@ -51,21 +43,16 @@ const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = fals
       setLoading(false);
     }
   };
-
   const handleLinkClick = async () => {
     if (userId && ajandek.id) {
       try {
         await api.addElozmeny(userId, ajandek.id);
-        console.log('Előzmény mentve');
       } catch (error) {
         console.error('Hiba az előzmény mentésekor:', error);
       }
     }
   };
-
-
   const imageUrl = ajandek.image_url ? `/Képek/${ajandek.image_url.split('/').pop()}` : '/Képek/logo.webp';
-
   return (
     <div className="ajandek-kartya animate-fade-in opacity-0 transition-all duration-300 hover:scale-105 hover:shadow-xl">
       <div className="ajandek-kep-container">
@@ -103,5 +90,4 @@ const AjandekKartya: React.FC<AjandekKartyaProps> = ({ ajandek, isKedvenc = fals
     </div>
   );
 };
-
 export default AjandekKartya;

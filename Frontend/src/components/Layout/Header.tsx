@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import MyCoupons from '../User/MyCoupons';
 import AuthModal from '../Auth/AuthModal';
@@ -7,18 +7,14 @@ import ChatModal from '../Social/ChatModal';
 import MobileNav from './MobileNav';
 import './Header.css';
 import '../Social/ChatModal.css';
-import { api, API_BASE_URL } from "../../api";
+import { api } from "../../api";
 import socket from "../../socket";
-
 interface HeaderProps {
   title?: string;
 }
-
 export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   const { username, userId, logout, remainingTime } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -29,9 +25,7 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
   const [highlightUserIds, setHighlightUserIds] = useState<number[]>([]);
   const [highlightUserName, setHighlightUserName] = useState<string | undefined>(undefined);
   const [authModalInitialTab, setAuthModalInitialTab] = useState<'login' | 'register' | 'forgot'>('login');
-
   const currentUserId = userId;
-
   useEffect(() => {
     const handleOpenForgot = () => {
       setAuthModalInitialTab('forgot');
@@ -40,7 +34,6 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
     window.addEventListener('open-forgot-password', handleOpenForgot);
     return () => window.removeEventListener('open-forgot-password', handleOpenForgot);
   }, []);
-
   useEffect(() => {
     if (!currentUserId) return;
     const joinRoom = () => {
@@ -54,7 +47,6 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
       socket.off("connect", joinRoom);
     };
   }, [currentUserId]);
-
   const fetchUnreadSenders = useCallback(async () => {
     if (!currentUserId) return;
     try {
@@ -67,21 +59,17 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
       setHighlightUserIds(prev => prev.length > 0 ? [] : prev);
     }
   }, [currentUserId]);
-
   const checkUnread = useCallback(() => {
     if (!currentUserId) return;
     api.getUnreadChatCount(currentUserId).then(data => {
       setHasUnread(prev => prev !== data.unreadCount > 0 ? data.unreadCount > 0 : prev);
     }).catch(console.error);
-    
     api.getNotifications(currentUserId).then(data => {
       const unread = data.some((n: any) => !n.is_read);
       setHasUnreadNotif(unread);
     }).catch(console.error);
-
     fetchUnreadSenders();
   }, [currentUserId, fetchUnreadSenders]);
-
   useEffect(() => {
     if (!currentUserId) return;
     const handler = (msg: { from: number; to: number; message: string }) => {
@@ -103,10 +91,8 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
       socket.off("private message", handler);
     };
   }, [currentUserId, isChatOpen, checkUnread]);
-
   useEffect(() => { fetchUnreadSenders(); }, [fetchUnreadSenders, isChatOpen]);
   useEffect(() => { checkUnread(); }, [checkUnread]);
-
   useEffect(() => {
     if (highlightUserIds.length > 0) {
       api.getUser(highlightUserIds[0]).then(user => {
@@ -116,8 +102,6 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
       setHighlightUserName(undefined);
     }
   }, [highlightUserIds]);
-
-  // Keyboard navigation for Kuponjaim modal
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsCouponsOpen(false);
@@ -125,15 +109,28 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
     if (isCouponsOpen) window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isCouponsOpen]);
-
   const handleLogout = async () => {
+    setIsMenuOpen(false);
+    setIsMobileMenuOpen(false);
     await logout();
     navigate('/');
   };
-
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsMobileMenuOpen(false);
+  }, [username]);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (isMenuOpen && !target.closest('.menu-container')) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
   return (
     <header>
       <div className="header-left">
@@ -144,7 +141,6 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
           </div>
         </Link>
       </div>
-
       <div className="header-center">
         {username && (
           <span className="welcome-text">
@@ -152,7 +148,6 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
           </span>
         )}
       </div>
-
       <nav id="main-nav" className="header-right">
         {username ? (
           <>
@@ -192,13 +187,11 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
           </div>
         )}
       </nav>
-
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
         initialTab={authModalInitialTab} 
       />
-
       {isCouponsOpen && userId && (
         <div className="chat-modal-bg" onClick={() => setIsCouponsOpen(false)}>
           <div className="chat-modal fixed-modal-size" onClick={e => e.stopPropagation()}>
@@ -212,14 +205,12 @@ export default function Header({ title = 'Ajándékajánló' }: HeaderProps) {
           </div>
         </div>
       )}
-
       {highlightUserIds.length > 0 && highlightUserName && !isChatOpen && (
         <button className="floating-notification" onClick={() => setIsChatOpen(true)}>
           <span className="notification-icon">💬</span>
           <span>{highlightUserName} {highlightUserIds.length > 1 ? `és még ${highlightUserIds.length - 1} személy` : ''} üzenetet küldött!</span>
         </button>
       )}
-
       {userId && (
         <ChatModal 
           isOpen={isChatOpen} 

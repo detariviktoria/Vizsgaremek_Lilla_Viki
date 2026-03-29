@@ -4,7 +4,6 @@ import Chat from './Chat';
 import Notifications from '../User/Notifications';
 import UserSelect from './UserSelect';
 import './ChatModal.css';
-
 interface ChatModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -15,7 +14,6 @@ interface ChatModalProps {
   checkUnread: () => void;
   highlightUserIds: number[];
 }
-
 export default function ChatModal({
   isOpen,
   onClose,
@@ -29,14 +27,11 @@ export default function ChatModal({
   const [activeTab, setActiveTab] = useState<'messages' | 'notifications'>('messages');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [currentUserData, setCurrentUserData] = useState<User | null>(null);
-
   useEffect(() => {
     if (userId) {
       api.getUser(userId).then(setCurrentUserData).catch(console.error);
     }
   }, [userId]);
-
-  // Keyboard navigation: Close on Escape
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -46,9 +41,7 @@ export default function ChatModal({
     }
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, onClose]);
-
   if (!isOpen) return null;
-
   return (
     <div className="chat-modal-bg" onClick={onClose}>
       <div className="chat-modal fixed-modal-size" onClick={e => e.stopPropagation()}>
@@ -71,7 +64,6 @@ export default function ChatModal({
           </div>
           <button className="chat-modal-close" onClick={onClose}>✖</button>
         </div>
-
         {activeTab === 'messages' ? (
           <div style={{display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden'}}>
             {!selectedUser ? (

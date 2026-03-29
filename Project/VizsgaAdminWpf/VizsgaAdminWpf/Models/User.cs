@@ -1,16 +1,19 @@
-﻿﻿﻿﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿﻿using System.Text.Json.Serialization;
 
 namespace VizsgaAdminWpf.Models
 {
     public class User
     {
-        public int? user_id { get; set; }
-        public string? name { get; set; }
-        public string? email { get; set; }
-        public string? password { get; set; }
+        [JsonPropertyName("user_id")]
+        public int? UserId { get; set; }
+
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("email")]
+        public string? Email { get; set; }
+
+        [JsonPropertyName("password")]
+        public string? Password { get; set; }
     }
 }

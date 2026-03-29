@@ -1,6 +1,7 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,11 +12,27 @@ namespace VizsgaAdminWpf.ViewModels
 {
     public class UserViewModel : INotifyPropertyChanged
     {
-        public ApiService Api { get; } = new ApiService();
-        public ObservableCollection<UserListDto> Users { get; } = new();
+        public UserApiService Api { get; set; } = new();
+
+        private List<UserListDto> _users = new();
+        public List<UserListDto> Users 
+        { 
+            get => _users; 
+            set { _users = value; OnPropertyChanged(); } 
+        }
 
         private bool _isLoggedIn;
-        public bool IsLoggedIn { get => _isLoggedIn; set { _isLoggedIn = value; OnPropertyChanged(); OnPropertyChanged(nameof(IsNotLoggedIn)); } }
+        public bool IsLoggedIn 
+        { 
+            get => _isLoggedIn; 
+            set 
+            { 
+                _isLoggedIn = value; 
+                OnPropertyChanged(); 
+                OnPropertyChanged(nameof(IsNotLoggedIn)); 
+            } 
+        }
+
         public bool IsNotLoggedIn => !IsLoggedIn;
 
         private UserListDto? _selectedUser;
@@ -26,21 +43,51 @@ namespace VizsgaAdminWpf.ViewModels
             {
                 _selectedUser = value;
                 OnPropertyChanged();
-                if (value != null) { CurrentUserName = value.name ?? ""; CurrentUserEmail = value.email ?? ""; }
+                
+                if (value != null) 
+                { 
+                    CurrentUserName = value.Name ?? ""; 
+                    CurrentUserEmail = value.Email ?? ""; 
+                }
             }
         }
 
         private string _currentUserName = "";
-        public string CurrentUserName { get => _currentUserName; set { _currentUserName = value; OnPropertyChanged(); } }
+        public string CurrentUserName 
+        { 
+            get => _currentUserName; 
+            set 
+            { 
+                _currentUserName = value; 
+                OnPropertyChanged(); 
+            } 
+        }
 
         private string _currentUserEmail = "";
-        public string CurrentUserEmail { get => _currentUserEmail; set { _currentUserEmail = value; OnPropertyChanged(); } }
+        public string CurrentUserEmail 
+        { 
+            get => _currentUserEmail; 
+            set 
+            { 
+                _currentUserEmail = value; 
+                OnPropertyChanged(); 
+            } 
+        }
 
         private string _loginUsername = "";
-        public string LoginUsername { get => _loginUsername; set { _loginUsername = value; OnPropertyChanged(); } }
+        public string LoginUsername 
+        { 
+            get => _loginUsername; 
+            set 
+            { 
+                _loginUsername = value; 
+                OnPropertyChanged(); 
+            } 
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string? name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        private void OnPropertyChanged([CallerMemberName] string? name = null) => 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         public async Task<bool> LoginAsync(string password)
         {
@@ -53,12 +100,14 @@ namespace VizsgaAdminWpf.ViewModels
             try
             {
                 var response = await Api.Login(LoginUsername, password);
-                if (response?.isAdmin == true)
+                
+                if (response?.IsAdmin == true)
                 {
                     IsLoggedIn = true;
-                    MessageBox.Show($"Üdv, {response.username}!", "Siker", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Üdv, {response.Username}!", "Siker", MessageBoxButton.OK, MessageBoxImage.Information);
                     return true;
                 }
+                
                 MessageBox.Show(response == null ? "Hibás adatok!" : "Nincs admin jogosultság!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
@@ -72,9 +121,32 @@ namespace VizsgaAdminWpf.ViewModels
         {
             if (SelectedUser == null) return false;
 
+            if (string.IsNullOrWhiteSpace(CurrentUserName) || string.IsNullOrWhiteSpace(CurrentUserEmail))
+            {
+                MessageBox.Show("A név és az e-mail cím megadása kötelező!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Users.Any(u => u.Name == CurrentUserName && u.UserId != SelectedUser.UserId))
+            {
+                MessageBox.Show("Már létezik felhasználó ezzel a névvel!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Users.Any(u => u.Email == CurrentUserEmail && u.UserId != SelectedUser.UserId))
+            {
+                MessageBox.Show("Már létezik felhasználó ezzel az e-mail címmel!", "Hiba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
             try
             {
-                var result = await Api.UpdateUserAdmin(SelectedUser.user_id ?? 0, CurrentUserName, CurrentUserEmail, string.IsNullOrWhiteSpace(password) ? null : password);
+                var result = await Api.UpdateUserAdmin(
+                    SelectedUser.UserId ?? 0, 
+                    CurrentUserName, 
+                    CurrentUserEmail, 
+                    string.IsNullOrWhiteSpace(password) ? null : password);
+
                 if (result.Success)
                 {
                     MessageBox.Show("Sikeres módosítás.", "Siker", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -94,15 +166,11 @@ namespace VizsgaAdminWpf.ViewModels
         {
             try
             {
-                Users.Clear();
-                var list = await Api.GetUsers();
-                if (list == null || list.Count == 0)
+                Users = await Api.GetUsers();
+                
+                if (Users == null || Users.Count == 0)
                 {
                     MessageBox.Show("Nem érkeztek felhasználók az API-tól.", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    foreach (var u in list) Users.Add(u);
                 }
             }
             catch (Exception ex)

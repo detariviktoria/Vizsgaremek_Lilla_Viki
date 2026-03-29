@@ -1,24 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api, type User, API_BASE_URL } from '../../api';
+import { api, type User } from '../../api';
 import { useAuth } from '../../hooks/useAuth';
 import Header from '../Layout/Header';
 import './Profile.css';
-
 export default function Profile() {
-  const { userId, username, isChecking } = useAuth();
+  const { userId, isChecking } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  // Szerkesztési állapotok
   const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({
     name: false,
     email: false,
     password: false,
   });
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,13 +22,9 @@ export default function Profile() {
     confirmPassword: '',
     oldPassword: '',
   });
-
   const [uploading, setUploading] = useState(false);
   const [nameError, setNameError] = useState('');
-
   const navigate = useNavigate();
-
-  // Debounced check for username availability
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (formData.name && user && formData.name !== user.name && formData.name.length >= 3) {
@@ -46,16 +38,12 @@ export default function Profile() {
     }, 500);
     return () => clearTimeout(timer);
   }, [formData.name, user]);
-
   useEffect(() => {
     const fetchUserData = async () => {
       if (userId) {
         setLoading(true);
         try {
-          console.log('Fetching user data for ID:', userId);
           const userData = await api.getUser(userId);
-          console.log('User data received:', userData);
-          
           if (userData) {
             setUser(userData);
             setFormData({
@@ -79,28 +67,22 @@ export default function Profile() {
         setLoading(false);
       }
     };
-
     if (!isChecking) {
       fetchUserData();
     }
   }, [userId, isChecking]);
-
   const handleEdit = (field: string) => {
     setIsEditing({ ...isEditing, [field]: true });
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSave = async (field: string) => {
     if (!userId) return;
-    
     if (field === 'name' && nameError) {
       setError(nameError);
       return;
     }
-    
     try {
       const updateData: Partial<User> & { oldPassword?: string } = {};
       if (field === 'name') updateData.name = formData.name;
@@ -121,51 +103,33 @@ export default function Profile() {
         updateData.password = formData.password;
         updateData.oldPassword = formData.oldPassword;
       }
-
       await api.updateUser(userId, updateData);
-      
       if (user) {
         setUser({ ...user, ...updateData });
       }
-      
       setIsEditing({ ...isEditing, [field]: false });
       setSuccess('Adatok sikeresen frissítve!');
       setTimeout(() => setSuccess(null), 3000);
-      
       if (field === 'password') setFormData({ ...formData, password: '', confirmPassword: '', oldPassword: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Hiba történt a mentés során.');
       setTimeout(() => setError(null), 5000);
     }
   };
-
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !userId) return;
-
-    // Fájlméret ellenőrzés (pl. 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setError('A fájl mérete nem haladhatja meg az 5MB-ot!');
       return;
     }
-
     setUploading(true);
     try {
-      console.log('DEBUG: Starting avatar upload for file:', file.name);
-      // 1. Fájl feltöltése
       const { filename } = await api.uploadImage(file);
-      console.log('DEBUG: Uploaded filename:', filename);
-      
-      // 2. Felhasználó kep_url frissítése
-      console.log('DEBUG: Updating user kep_url for ID:', userId);
       await api.updateUser(userId, { kep_url: filename });
-      
-      // 3. Helyi állapot frissítése
       if (user) {
-        console.log('DEBUG: Updating local user state with kep_url:', filename);
         setUser({ ...user, kep_url: filename });
       }
-      
       setSuccess('Profilkép sikeresen frissítve!');
       setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
@@ -175,7 +139,6 @@ export default function Profile() {
       setUploading(false);
     }
   };
-
   if (isChecking || (loading && userId && !user)) {
     return (
       <div className="profile-page">
@@ -189,7 +152,6 @@ export default function Profile() {
       </div>
     );
   }
-
   if (!userId) {
     return (
       <div className="profile-page">
@@ -206,7 +168,6 @@ export default function Profile() {
       </div>
     );
   }
-
   if (error && !user) {
     return (
       <div className="profile-page">
@@ -223,7 +184,6 @@ export default function Profile() {
       </div>
     );
   }
-
   return (
     <div className="profile-page animate-fade-in">
       <Header title="Profilom" />
@@ -255,11 +215,9 @@ export default function Profile() {
             </div>
             <h2>Személyes adatok</h2>
           </div>
-
           <div className="profile-content">
             {success && <div className="success-toast">{success}</div>}
             {error && <div className="error-toast">{error}</div>}
-
             <div className="profile-item">
               <label>Felhasználónév</label>
               <div className="profile-row">
@@ -285,7 +243,6 @@ export default function Profile() {
                 )}
               </div>
             </div>
-
             <div className="profile-item">
               <label>Email cím</label>
               <div className="profile-row">
@@ -293,7 +250,6 @@ export default function Profile() {
               </div>
               <small className="info-hint">Az e-mail cím biztonsági okokból nem módosítható</small>
             </div>
-
             <div className="profile-item">
               <label>Jelszó</label>
               <div className="profile-row">
@@ -306,6 +262,7 @@ export default function Profile() {
                       value={formData.oldPassword} 
                       onChange={handleChange}
                       autoFocus
+                      autoComplete="current-password"
                     />
                     <input 
                       type="password" 
@@ -313,6 +270,7 @@ export default function Profile() {
                       placeholder="Új jelszó"
                       value={formData.password} 
                       onChange={handleChange}
+                      autoComplete="new-password"
                     />
                     <input 
                       type="password" 
@@ -320,6 +278,7 @@ export default function Profile() {
                       placeholder="Új jelszó megerősítése"
                       value={formData.confirmPassword} 
                       onChange={handleChange}
+                      autoComplete="new-password"
                     />
                     <div className="forgot-password-link" style={{textAlign: 'left', marginBottom: '10px'}}>
                       <a href="#" style={{color: 'palevioletred', fontSize: '13px', textDecoration: 'none'}} onClick={(e) => { 

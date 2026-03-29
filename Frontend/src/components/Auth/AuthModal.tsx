@@ -3,13 +3,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../../api';
 import { useAuth } from '../../hooks/useAuth';
 import './AuthModal.css';
-
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: 'login' | 'register' | 'forgot';
 }
-
 export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: AuthModalProps) {
   const [activeTab, setActiveTab] = useState<'login' | 'register' | 'forgot'>(initialTab);
   const { login } = useAuth();
@@ -18,22 +16,16 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
   const [messageColor, setMessageColor] = useState<'red' | 'green'>('red');
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-
-  // Real-time validation states
   const [regData, setRegData] = useState({ email: '', username: '', password: '', confirmPassword: '' });
   const [regErrors, setRegErrors] = useState({ email: '', username: '', password: '', confirmPassword: '' });
-
   useEffect(() => {
     if (isOpen) {
       setActiveTab(initialTab);
       setMessage('');
     }
   }, [isOpen, initialTab]);
-
-  // Debounced check for email/username availability
   useEffect(() => {
     if (activeTab !== 'register') return;
-
     const checkEmail = async () => {
       if (regData.email && !regErrors.email) {
         try {
@@ -42,7 +34,6 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         } catch (err) { console.error(err); }
       }
     };
-
     const checkUsername = async () => {
       if (regData.username && regData.username.length >= 3) {
         try {
@@ -51,16 +42,12 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         } catch (err) { console.error(err); }
       }
     };
-
     const timer = setTimeout(() => {
       checkEmail();
       checkUsername();
     }, 500);
-
     return () => clearTimeout(timer);
   }, [regData.email, regData.username, activeTab]);
-
-  // Keyboard navigation: Close on Escape
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCloseModal();
@@ -68,23 +55,18 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
     if (isOpen) window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen]);
-
   if (!isOpen) return null;
-
   const handleCloseModal = () => {
     setMessage('');
     onClose();
   };
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
-
     setMessage('');
     setMessageColor('red');
-
     try {
       const data = await api.login(username, password);
       if (data && data.username) {
@@ -93,7 +75,6 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
         setMessageColor('green');
         setTimeout(() => {
           onClose();
-          // window.location.reload() removed - use state/context instead
           navigate('/'); 
         }, 800);
       }
@@ -103,12 +84,9 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
       setMessageColor('red');
     }
   };
-
   const handleRegChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRegData(prev => ({ ...prev, [name]: value }));
-
-    // Real-time validation
     if (name === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       setRegErrors(prev => ({ ...prev, email: emailRegex.test(value) ? '' : 'Érvénytelen email formátum' }));
@@ -124,7 +102,6 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
       setRegErrors(prev => ({ ...prev, confirmPassword: value === regData.password ? '' : 'A jelszavak nem egyeznek!' }));
     }
   };
-
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (regErrors.email || regErrors.username || regErrors.password || regErrors.confirmPassword) {
@@ -132,7 +109,6 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
       setMessageColor('red');
       return;
     }
-
     setMessage('');
     try {
       const refId = searchParams.get('ref') || undefined;
@@ -149,7 +125,6 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
       setMessageColor('red');
     }
   };
-
   const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage('');
@@ -162,7 +137,6 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
       setMessageColor('red');
     }
   };
-
   return (
     <div className="modal show animate-fade-in" onClick={(e) => e.target === e.currentTarget && handleCloseModal()}>
       <div className="modal-content animate-scale-in" onClick={(e) => e.stopPropagation()}>
@@ -171,12 +145,11 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
           <button className={activeTab === 'login' ? 'active' : ''} onClick={() => { setActiveTab('login'); setMessage(''); }}>Bejelentkezés</button>
           <button className={activeTab === 'register' ? 'active' : ''} onClick={() => { setActiveTab('register'); setMessage(''); }}>Regisztráció</button>
         </div>
-
         {activeTab === 'login' && (
           <form className="login-form" onSubmit={handleLogin}>
             <h2>Bejelentkezés</h2>
-            <input type="text" name="username" placeholder="Felhasználónév" required />
-            <input type="password" name="password" placeholder="Jelszó" required />
+            <input type="text" name="username" placeholder="Felhasználónév" required autoComplete="username" />
+            <input type="password" name="password" placeholder="Jelszó" required autoComplete="current-password" />
             {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
             <button type="submit">Belépés</button>
             <div className="forgot-password-link">
@@ -184,27 +157,21 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }: Aut
             </div>
           </form>
         )}
-
         {activeTab === 'register' && (
           <form className="login-form" onSubmit={handleRegister}>
             <h2>Regisztráció</h2>
-            <input type="email" name="email" placeholder="Email" value={regData.email} onChange={handleRegChange} required className={regErrors.email ? 'input-error' : ''} />
+            <input type="email" name="email" placeholder="Email" value={regData.email} onChange={handleRegChange} required className={regErrors.email ? 'input-error' : ''} autoComplete="email" />
             {regErrors.email && <span className="error-text">{regErrors.email}</span>}
-            
-            <input type="text" name="username" placeholder="Felhasználónév" value={regData.username} onChange={handleRegChange} required className={regErrors.username ? 'input-error' : ''} />
+            <input type="text" name="username" placeholder="Felhasználónév" value={regData.username} onChange={handleRegChange} required className={regErrors.username ? 'input-error' : ''} autoComplete="username" />
             {regErrors.username && <span className="error-text">{regErrors.username}</span>}
-            
-            <input type="password" name="password" placeholder="Jelszó" value={regData.password} onChange={handleRegChange} required className={regErrors.password ? 'input-error' : ''} />
+            <input type="password" name="password" placeholder="Jelszó" value={regData.password} onChange={handleRegChange} required className={regErrors.password ? 'input-error' : ''} autoComplete="new-password" />
             {regErrors.password && <span className="error-text">{regErrors.password}</span>}
-            
-            <input type="password" name="confirmPassword" placeholder="Jelszó megerősítése" value={regData.confirmPassword} onChange={handleRegChange} required className={regErrors.confirmPassword ? 'input-error' : ''} />
+            <input type="password" name="confirmPassword" placeholder="Jelszó megerősítése" value={regData.confirmPassword} onChange={handleRegChange} required className={regErrors.confirmPassword ? 'input-error' : ''} autoComplete="new-password" />
             {regErrors.confirmPassword && <span className="error-text">{regErrors.confirmPassword}</span>}
-            
             {message && <div className="message-box" style={{ color: messageColor }}>{message}</div>}
             <button type="submit">Regisztráció</button>
           </form>
         )}
-
         {activeTab === 'forgot' && (
           <form className="login-form" onSubmit={handleForgotPassword}>
             <h2>Elfelejtett jelszó</h2>

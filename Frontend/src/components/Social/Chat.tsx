@@ -1,30 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 import socket from "../../socket";
-import { api, type User, API_BASE_URL } from "../../api";
+import { api, type User } from "../../api";
 import "./Chat.css";
-
 interface ChatProps {
   currentUser: User;
   selectedUser: User | null;
   onMessagesRead?: () => void;
 }
-
 const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }) => {
   const [messages, setMessages] = useState<
     { from_user_id: number; to_user_id: number; message: string; created_at: string }[]
   >([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const cId = currentUser?.user_id;
     const sId = selectedUser?.user_id;
-
     if (cId && sId) {
       api.getChatHistory(cId, sId)
         .then(setMessages)
         .catch(console.error);
-      
       api.markChatAsRead(sId, cId)
         .then(() => {
           if (onMessagesRead) onMessagesRead();
@@ -34,26 +29,17 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
       setMessages([]);
     }
   }, [currentUser?.user_id, selectedUser?.user_id, onMessagesRead]);
-
   useEffect(() => {
-    console.log("Chat component mounted/updated, setting up socket handler for user", currentUser?.user_id);
-    
     const handler = (msg: { from: number; to: number; message: string }) => {
-      console.log("Socket message received in Chat component:", msg);
       const cId = currentUser?.user_id;
       const sId = selectedUser?.user_id;
-
       if (!cId || !sId) {
-        console.log("Missing cId or sId in handler, skipping.");
         return;
       }
-
       const isRelevant = 
         (Number(msg.from) === Number(sId) && Number(msg.to) === Number(cId)) ||
         (Number(msg.from) === Number(cId) && Number(msg.to) === Number(sId));
-
       if (isRelevant) {
-        console.log("Message is relevant, adding to state.");
         setMessages((prev) => [
           ...prev,
           {
@@ -63,7 +49,6 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
             created_at: new Date().toISOString(),
           },
         ]);
-
         if (Number(msg.from) === Number(sId)) {
           api.markChatAsRead(msg.from, cId)
             .then(() => {
@@ -71,50 +56,38 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
             })
             .catch(console.error);
         }
-      } else {
-        console.log("Message is not relevant to current conversation.");
       }
     };
     socket.on("private message", handler);
     return () => {
-      console.log("Removing socket handler in Chat component.");
       socket.off("private message", handler);
     };
   }, [currentUser?.user_id, selectedUser?.user_id, onMessagesRead]);
-
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     const cId = currentUser.user_id;
     const sId = selectedUser?.user_id;
-
     if (input.trim() && cId && sId) {
       const trimmed = input.trim();
-
       socket.emit("private message", {
         from: cId,
         to: sId,
         message: trimmed,
       });
-
       api.sendChatMessage(cId, sId, trimmed)
         .catch(console.error);
-
       setInput("");
     }
   };
-
   const renderAvatar = (user: User | null) => {
     if (!user) return <div className="chat-avatar-placeholder">?</div>;
-    
     const safeName = user.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const imageUrl = `/Képek/${user.kep_url || safeName + ".jpg"}`;
-    
     return (
       <img 
         src={imageUrl} 
@@ -126,7 +99,6 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
       />
     );
   };
-
   return (
     <div className="chat-container">
       <div className="chat-messages">
@@ -191,5 +163,4 @@ const Chat: React.FC<ChatProps> = ({ currentUser, selectedUser, onMessagesRead }
     </div>
   );
 };
-
 export default Chat;

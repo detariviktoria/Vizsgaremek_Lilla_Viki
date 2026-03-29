@@ -1,16 +1,19 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿﻿using System.Text.Json.Serialization;
 
 namespace VizsgaAdminWpf.Models
 {
     public class LoginResponse
     {
-        public string? username { get; set; }
-        public int? userId { get; set; }
-        public string? token { get; set; }
-        public bool? isAdmin { get; set; }
+        [JsonPropertyName("username")]
+        public string? Username { get; set; }
+
+        [JsonPropertyName("userId")]
+        public int? UserId { get; set; }
+
+        [JsonPropertyName("token")]
+        public string? Token { get; set; }
+
+        [JsonPropertyName("isAdmin")]
+        public bool? IsAdmin { get; set; }
     }
 }

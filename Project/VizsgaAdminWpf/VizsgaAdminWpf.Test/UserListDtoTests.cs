@@ -12,16 +12,16 @@ namespace VizsgaAdminWpf.Test
         {
             var dto = new UserListDto
             {
-                user_id = 123,
-                name = "Kovács János",
-                email = "kovacs.janos@example.com"
+                UserId = 123,
+                Name = "Kovács János",
+                Email = "kovacs.janos@example.com"
             };
 
             Assert.Multiple(() =>
             {
-                Assert.That(dto.user_id, Is.EqualTo(123));
-                Assert.That(dto.name, Is.EqualTo("Kovács János"));
-                Assert.That(dto.email, Is.EqualTo("kovacs.janos@example.com"));
+                Assert.That(dto.UserId, Is.EqualTo(123));
+                Assert.That(dto.Name, Is.EqualTo("Kovács János"));
+                Assert.That(dto.Email, Is.EqualTo("kovacs.janos@example.com"));
             });
         }
 
@@ -32,9 +32,9 @@ namespace VizsgaAdminWpf.Test
 
             Assert.Multiple(() =>
             {
-                Assert.That(dto.user_id, Is.Null);
-                Assert.That(dto.name, Is.Null);
-                Assert.That(dto.email, Is.Null);
+                Assert.That(dto.UserId, Is.Null);
+                Assert.That(dto.Name, Is.Null);
+                Assert.That(dto.Email, Is.Null);
             });
         }
     }

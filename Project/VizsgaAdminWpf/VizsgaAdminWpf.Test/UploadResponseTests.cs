@@ -12,14 +12,14 @@ namespace VizsgaAdminWpf.Test
         {
             var response = new UploadResponse
             {
-                message = "Sikeres feltöltés",
-                filename = "test_image.jpg"
+                Message = "Sikeres feltöltés",
+                Filename = "test_image.jpg"
             };
 
             Assert.Multiple(() =>
             {
-                Assert.That(response.message, Is.EqualTo("Sikeres feltöltés"));
-                Assert.That(response.filename, Is.EqualTo("test_image.jpg"));
+                Assert.That(response.Message, Is.EqualTo("Sikeres feltöltés"));
+                Assert.That(response.Filename, Is.EqualTo("test_image.jpg"));
             });
         }
 
@@ -30,8 +30,8 @@ namespace VizsgaAdminWpf.Test
 
             Assert.Multiple(() =>
             {
-                Assert.That(response.message, Is.Null);
-                Assert.That(response.filename, Is.Null);
+                Assert.That(response.Message, Is.Null);
+                Assert.That(response.Filename, Is.Null);
             });
         }
     }

@@ -1,5 +1,4 @@
 export const API_BASE_URL = 'http://localhost:3000';
-
 export type Ajandek = {
   id?: number;
   nev: string;
@@ -10,7 +9,6 @@ export type Ajandek = {
   image_url?: string;
   link_url?: string;
 };
-
 export type User = {
   user_id?: number;
   name: string;
@@ -18,15 +16,12 @@ export type User = {
   password?: string;
   kep_url?: string;
 };
-
-
 export type LoginResponse = {
   username: string;
   userId: number;
   isAdmin: boolean;
   token?: string;
 };
-
 const getAuthHeaders = () => {
   const token = sessionStorage.getItem('token');
   const headers: Record<string, string> = {
@@ -37,7 +32,6 @@ const getAuthHeaders = () => {
   }
   return headers;
 };
-
 export const api = {
   getAlkalmak: async (): Promise<string[]> => {
     try {
@@ -53,7 +47,6 @@ export const api = {
       throw error;
     }
   },
-
   getStilusok: async (): Promise<string[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/stilusok`, { 
@@ -68,7 +61,6 @@ export const api = {
       throw error;
     }
   },
-
   getCelcsoportok: async (): Promise<string[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/celcsoportok`, { 
@@ -83,7 +75,6 @@ export const api = {
       throw error;
     }
   },
-
   getAjandekok: async (): Promise<Ajandek[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/ajandekok`, { 
@@ -97,7 +88,6 @@ export const api = {
       throw error;
     }
   },
-
   getAjandekokByAlkalom: async (alkalom: string): Promise<Ajandek[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/ajandekok/alkalom/${encodeURIComponent(alkalom)}`, { 
@@ -111,7 +101,6 @@ export const api = {
       throw error;
     }
   },
-
   getAjandekokByStilus: async (stilus: string): Promise<Ajandek[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/ajandekok/stilus/${encodeURIComponent(stilus)}`, { 
@@ -125,7 +114,6 @@ export const api = {
       throw error;
     }
   },
-
   getAjandekokByCelcsoport: async (celcsoport: string): Promise<Ajandek[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/ajandekok/celcsoport/${encodeURIComponent(celcsoport)}`, { 
@@ -139,7 +127,6 @@ export const api = {
       throw error;
     }
   },
-
   login: async (username: string, password: string): Promise<LoginResponse> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/login`, {
@@ -159,7 +146,6 @@ export const api = {
       throw error;
     }
   },
-
   logout: async (): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/logout`, {
@@ -175,7 +161,6 @@ export const api = {
       throw error;
     }
   },
-
   checkSession: async (): Promise<LoginResponse | null> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/check/session`, {
@@ -191,7 +176,6 @@ export const api = {
       return null;
     }
   },
-
   getKedvencek: async (userId: number): Promise<Ajandek[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/kedvencek/${userId}`, { 
@@ -205,7 +189,6 @@ export const api = {
       throw error;
     }
   },
-
   addKedvenc: async (userId: number, ajandekId: number): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/kedvencek/${userId}`, {
@@ -220,7 +203,6 @@ export const api = {
       throw error;
     }
   },
-
   removeKedvenc: async (userId: number, ajandekId: number): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/kedvencek/${userId}/${ajandekId}`, {
@@ -234,7 +216,6 @@ export const api = {
       throw error;
     }
   },
-
   getUser: async (userId: number): Promise<User> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
@@ -249,7 +230,6 @@ export const api = {
       throw error;
     }
   },
-
   getUsers: async (): Promise<User[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users`, { 
@@ -263,7 +243,6 @@ export const api = {
       throw error;
     }
   },
-
   updateUser: async (userId: number, userData: Partial<User> & { oldPassword?: string }): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
@@ -281,7 +260,6 @@ export const api = {
       throw error;
     }
   },
-
   forgotPassword: async (email: string): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/forgot-password`, {
@@ -290,7 +268,6 @@ export const api = {
         credentials: 'include',
         body: JSON.stringify({ email }),
       });
-      console.log('forgotPassword response.status:', response.status); // DEBUG
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || 'Hiba a jelszó visszaállítás kérésekor');
@@ -300,7 +277,6 @@ export const api = {
       throw error;
     }
   },
-
   resetPassword: async (token: string, password: string): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users/reset-password`, {
@@ -318,9 +294,7 @@ export const api = {
       throw error;
     }
   },
-
   getElozmenyek: async (userId: number): Promise<Ajandek[]> => {
-
     try {
       const response = await fetch(`${API_BASE_URL}/elozmenyek/${userId}`, { 
         headers: getAuthHeaders(),
@@ -333,7 +307,6 @@ export const api = {
       throw error;
     }
   },
-
   addElozmeny: async (userId: number, ajandekId: number): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/elozmenyek/${userId}`, {
@@ -348,7 +321,6 @@ export const api = {
       throw error;
     }
   },
-
   sendInvite: async (email: string, userId: number): Promise<void> => {
     try {
       const response = await fetch(`${API_BASE_URL}/invite`, {
@@ -366,7 +338,6 @@ export const api = {
       throw error;
     }
   },
-
   register: async (name: string, email: string, password: string, ajanlo_id?: string): Promise<User> => {
     try {
       const response = await fetch(`${API_BASE_URL}/users`, {
@@ -385,7 +356,6 @@ export const api = {
       throw error;
     }
   },
-
   getInvitedFriends: async (userId: number): Promise<Array<{ email: string; name: string; status: string; accepted: boolean }>> => {
     try {
       const response = await fetch(`${API_BASE_URL}/invite/friends/${userId}`, {
@@ -400,8 +370,6 @@ export const api = {
       throw error;
     }
   },
-
-  // Chat privát üzenetek és előzmények
   getChatHistory: async (user1: number, user2: number) => {
     const response = await fetch(`${API_BASE_URL}/chat/history/${user1}/${user2}`, { 
       headers: getAuthHeaders(),
@@ -452,8 +420,6 @@ export const api = {
       return [];
     }
   },
-
-  // Értesítések
   getNotifications: async (userId: number): Promise<any[]> => {
     const response = await fetch(`${API_BASE_URL}/notifications/${userId}`, { 
       headers: getAuthHeaders(),
@@ -476,8 +442,6 @@ export const api = {
       credentials: 'include'
     });
   },
-
-  // Kuponok
   getCoupons: async (userId: number): Promise<any[]> => {
     const response = await fetch(`${API_BASE_URL}/coupons/user/${userId}`, { 
       headers: getAuthHeaders(),
@@ -486,12 +450,9 @@ export const api = {
     if (!response.ok) throw new Error('Hiba a kuponok lekérésekor');
     return await response.json();
   },
-
-  // Fájlfeltöltés
   uploadImage: async (file: File): Promise<{ filename: string }> => {
     const formData = new FormData();
     formData.append('image', file);
-
     const response = await fetch(`${API_BASE_URL}/upload`, {
       method: 'POST',
       headers: {
@@ -499,15 +460,12 @@ export const api = {
       },
       body: formData,
     });
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || 'Hiba a fájl feltöltésekor');
     }
-
     return await response.json();
   },
-
   checkAvailability: async (params: { name?: string; email?: string }): Promise<{ available: boolean }> => {
     const query = new URLSearchParams(params).toString();
     const response = await fetch(`${API_BASE_URL}/users/check-availability?${query}`);

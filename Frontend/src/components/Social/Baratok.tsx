@@ -4,7 +4,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { api } from '../../api';
 import Header from '../Layout/Header';
 import './Baratok.css';
-
 interface Friend {
   email: string;
   name: string;
@@ -12,12 +11,10 @@ interface Friend {
   accepted: boolean;
   direction?: 'en_hivtam_meg' | 'engem_hivott_meg';
 }
-
 const Baratok = () => {
   const { userId, isChecking } = useAuth();
   const [baratok, setBaratok] = useState<Friend[]>([]);
   const [loading, setLoading] = useState(true);
-
   const fetchBaratok = async () => {
     if (!userId) return;
     try {
@@ -29,7 +26,6 @@ const Baratok = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (!isChecking && userId) {
       fetchBaratok();
@@ -37,7 +33,6 @@ const Baratok = () => {
       setLoading(false);
     }
   }, [userId, isChecking]);
-
   if (isChecking || loading) {
     return (
       <>
@@ -46,7 +41,6 @@ const Baratok = () => {
       </>
     );
   }
-
   if (!userId) {
     return (
       <>
@@ -59,7 +53,6 @@ const Baratok = () => {
       </>
     );
   }
-
   return (
     <>
       <Header />
@@ -91,6 +84,4 @@ const Baratok = () => {
     </>
   );
 };
-
 export default Baratok;
-

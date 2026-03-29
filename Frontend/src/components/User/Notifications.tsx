@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../../api';
-import '../Social/Chat.css'; // Újrahasználjuk a chat stílusait
-
+import '../Social/Chat.css';
 interface Notification {
   id: number;
   message: string;
   is_read: boolean;
   createdAt: string;
 }
-
 interface NotificationsProps {
   userId: number;
   onRead?: () => void;
 }
-
 const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
-
   const fetchNotifications = async () => {
     try {
       const data = await api.getNotifications(userId);
@@ -28,7 +24,6 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchNotifications();
     const timer = setTimeout(async () => {
@@ -39,9 +34,7 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
     }, 2000);
     return () => clearTimeout(timer);
   }, [userId]);
-
   if (loading) return <div style={{padding: '20px', textAlign: 'center'}}>Betöltés...</div>;
-
   return (
     <div className="chat-container">
       <div className="chat-messages">
@@ -73,5 +66,4 @@ const Notifications: React.FC<NotificationsProps> = ({ userId, onRead }) => {
     </div>
   );
 };
-
 export default Notifications;

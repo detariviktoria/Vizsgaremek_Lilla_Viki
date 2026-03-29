@@ -1,298 +1,121 @@
 import { useState, useEffect } from 'react';
-
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
-
-
-
 import Header from '../Layout/Header';
-
 import AjandekKartya from './AjandekKartya';
-
 import { useAuth } from '../../hooks/useAuth';
-
 import { api, type Ajandek } from '../../api';
-
 import './KategoriaValasztas.css';
-
-
-
 export default function KategoriaValasztas() {
-
   const [allAjandekok, setAllAjandekok] = useState<Ajandek[]>([]);
-
   const [filteredAjandekok, setFilteredAjandekok] = useState<Ajandek[]>([]);
-
   const [kedvencekIds, setKedvencekIds] = useState<number[]>([]);
-
   const { userId } = useAuth();
-
-
-
   const { nev } = useParams();
-
-
-
   const [searchParams] = useSearchParams();
-
-
-
   const location = useLocation();
-
-
-
   let pageTitle = 'Ajándékok';
-
   let categoryFilter: string | null = null;
-
-
-
   if (location.pathname === '/elmeny') {
-
     pageTitle = 'Élmények';
-
     categoryFilter = 'élmény';
-
   } else if (location.pathname === '/targy') {
-
     pageTitle = 'Tárgyak';
-
     categoryFilter = 'tárgy';
-
   }
-
-
-
   const [alkalmak, setAlkalmak] = useState<string[]>([]);
-
   const [stilusok, setStilusok] = useState<string[]>([]);
-
   const [celcsoportok, setCelcsoportok] = useState<string[]>([]);
-
-
-
-  // Kiválasztott szűrők
-
   const [selectedAlkalmak, setSelectedAlkalmak] = useState<string[]>([]);
-
   const [selectedStilusok, setSelectedStilusok] = useState<string[]>([]);
-
   const [selectedCelcsoportok, setSelectedCelcsoportok] = useState<string[]>([]);
-
   const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 0 });
-
   const [maxPriceLimit, setMaxPriceLimit] = useState(0);
-
-
-
-  // Panel állapotok (nyitva/zárva)
-
-  // Kezdő állapot: nagy képernyőn nyitva (bal oldalt), mobilon csukva (kompakt kezdőkép).
   const [isFilterOpen, setIsFilterOpen] = useState(() => {
     if (typeof window === 'undefined') return true;
     return window.innerWidth > 1200;
   });
-
   useEffect(() => {
     const handleResize = () => {
-      // Ha átmész mobilra, legyen alapból csukva; ha vissza desktopra, legyen nyitva.
       setIsFilterOpen(window.innerWidth > 1200);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   const [openSections, setOpenSections] = useState({
-
     alkalom: false,
-
     stilus: false,
-
     celcsoport: false,
-
     ar: true
-
   });
-
-
-
-  // Adatok betöltése
-
   useEffect(() => {
-
     const loadData = async () => {
-
       try {
-
         const [ajandekData, alkalomData, stilusData, celcsoportData] = await Promise.all([
-
           api.getAjandekok(),
-
           api.getAlkalmak(),
-
           api.getStilusok(),
-
           api.getCelcsoportok()
-
         ]);
-
-
-
         let filteredData = ajandekData;
-
         if (categoryFilter) {
-
           filteredData = ajandekData.filter(a => a.kategoria === categoryFilter);
-
         }
-
-
-
         setAllAjandekok(filteredData);
-
-
-
         setFilteredAjandekok(filteredData);
-
-
-
         setAlkalmak(alkalomData);
-
-
-
         setStilusok(stilusData);
-
-
-
         setCelcsoportok(celcsoportData);
-
-
-        // Max ár meghatározása
         const globalMax = ajandekData.length > 0 ? Math.max(...ajandekData.map(a => a.ar || 0)) : 0;
         setMaxPriceLimit(globalMax);
-
-        if (filteredData.length > 0) {
-          setPriceRange({ min: 0, max: globalMax });
-        } else {
-          setPriceRange({ min: 0, max: globalMax });
-        }
-
-
-
+        setPriceRange({ min: 0, max: globalMax });
         if (userId) {
-
           const kedvencData = await api.getKedvencek(userId);
-
           setKedvencekIds(kedvencData.map(k => k.id!).filter(id => id !== undefined));
-
         }
-
       } catch (error) {
-
         console.error('Hiba az adatok betöltésekor:', error);
-
       }
-
     };
-
     loadData();
-
   }, [userId, categoryFilter]);
-
-
   useEffect(() => {
-
     if (allAjandekok.length === 0) return;
-
-
-
-    let initAlkalmak = [];
-
-    let initStilusok = [];
-
-    let initCelcsoportok = [];
-
+    let initAlkalmak: string[] = [];
+    let initStilusok: string[] = [];
+    let initCelcsoportok: string[] = [];
     let initMinPrice = 0;
-
     let initMaxPrice = maxPriceLimit;
-
     let shouldFilter = false;
-
-
     if (nev) {
-
         const decodedNev = decodeURIComponent(nev);
-
         if (alkalmak.includes(decodedNev)) initAlkalmak.push(decodedNev);
-
         else if (stilusok.includes(decodedNev)) initStilusok.push(decodedNev);
-
         else if (celcsoportok.includes(decodedNev)) initCelcsoportok.push(decodedNev);
-
         shouldFilter = true;
-
     }
-
-
-
     const paramAlkalom = searchParams.getAll('alkalom');
-
     if (paramAlkalom.length > 0) {
-
         initAlkalmak = [...initAlkalmak, ...paramAlkalom];
-
         shouldFilter = true;
-
     }
-
-    
-
     const paramStilus = searchParams.getAll('stilus');
-
     if (paramStilus.length > 0) {
-
         initStilusok = [...initStilusok, ...paramStilus];
-
         shouldFilter = true;
-
     }
-
-
-
     const paramCelcsoport = searchParams.getAll('celcsoport');
-
     if (paramCelcsoport.length > 0) {
-
         initCelcsoportok = [...initCelcsoportok, ...paramCelcsoport];
-
         shouldFilter = true;
-
     }
-
-
-
     const minP = searchParams.get('minPrice');
-
     const maxP = searchParams.get('maxPrice');
-
     if (minP) { initMinPrice = Number(minP); shouldFilter = true; }
-
     if (maxP) { initMaxPrice = Number(maxP); shouldFilter = true; }
-
     else initMaxPrice = maxPriceLimit;
-
-
-
-    // Duplikációk szűrése
-
     initAlkalmak = [...new Set(initAlkalmak)];
-
     initStilusok = [...new Set(initStilusok)];
-
     initCelcsoportok = [...new Set(initCelcsoportok)];
-
-
-
-    // Állapot frissítése - Csak ha tényleg van mit szűrni az URL-ből
     if (shouldFilter) {
         setSelectedAlkalmak(initAlkalmak);
         setSelectedStilusok(initStilusok);
@@ -300,35 +123,22 @@ export default function KategoriaValasztas() {
         setPriceRange({ min: initMinPrice, max: initMaxPrice });
         filterWithParams(initAlkalmak, initStilusok, initCelcsoportok, initMinPrice, initMaxPrice);
     }
-
   }, [allAjandekok, nev, searchParams, alkalmak, stilusok, celcsoportok, maxPriceLimit]);
-
-
-
   const handleFilter = () => {
-
     filterWithParams(selectedAlkalmak, selectedStilusok, selectedCelcsoportok, priceRange.min, priceRange.max);
-
-    // Mobil / kisebb nézetben csukódjon be szűrés után
     if (typeof window !== 'undefined' && window.innerWidth <= 1200) {
       setIsFilterOpen(false);
     }
-
   };
-
-
-
   const filterWithParams = async (alk: string[], stil: string[], cel: string[], minP: number, maxP: number) => {
     try {
       let filteredIds = new Set<number>();
-
       if (alk.length === 0 && stil.length === 0 && cel.length === 0) {
           allAjandekok.forEach(a => {
             if (a.id !== undefined) filteredIds.add(a.id);
           });
       } else {
           const promises: Promise<Ajandek[]>[] = [];
-          
           alk.forEach(a => {
             if (a) promises.push(api.getAjandekokByAlkalom(a));
           });
@@ -338,7 +148,6 @@ export default function KategoriaValasztas() {
           cel.forEach(c => {
             if (c) promises.push(api.getAjandekokByCelcsoport(c));
           });
-
           const results = await Promise.all(promises);
           results.forEach(items => {
               if (Array.isArray(items)) {
@@ -348,24 +157,20 @@ export default function KategoriaValasztas() {
               }
           });
       }
-
       const finalResult = allAjandekok.filter(a => 
           a.id !== undefined && 
           filteredIds.has(a.id) && 
           (a.ar || 0) >= minP && 
           (a.ar || 0) <= maxP
       );
-
       setFilteredAjandekok(finalResult);
     } catch (error) {
       console.error('Hiba a szűrés során:', error);
     }
   };
-
   const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
-
   const handleCheckboxChange = (category: string, type: 'alkalom' | 'stilus' | 'celcsoport') => {
     if (type === 'alkalom') {
       setSelectedAlkalmak(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
@@ -375,26 +180,18 @@ export default function KategoriaValasztas() {
       setSelectedCelcsoportok(prev => prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]);
     }
   };
-
   return (
-
     <>
-
       <Header title={pageTitle} />
-
       <div className="main-content-container animate-fade-in">
-        
-        {/* Szűrő Panel - Mobilon felül, Gépen oldalt */}
         <aside className={`filter-panel ${isFilterOpen ? 'open' : 'closed'}`}>
           <div className="filter-header" onClick={() => setIsFilterOpen(!isFilterOpen)}>
             <h2 className="filter-title">Szűrés</h2>
             <span className="toggle-icon">{isFilterOpen ? '▲' : '▼'}</span>
           </div>
-
           {isFilterOpen && (
             <div className="filter-content-wrapper">
               <div className="filter-sections-grid">
-                {/* Ár Szűrés */}
                 <div className="filter-section">
                   <h3 onClick={() => toggleSection('ar')}>Ár {openSections.ar ? '▲' : '▼'}</h3>
                   {openSections.ar && (
@@ -430,8 +227,6 @@ export default function KategoriaValasztas() {
                     </div>
                   )}
                 </div>
-
-                {/* Alkalmak */}
                 <div className="filter-section">
                   <h3 onClick={() => toggleSection('alkalom')}>Alkalmak {openSections.alkalom ? '▲' : '▼'}</h3>
                   {openSections.alkalom && (
@@ -449,8 +244,6 @@ export default function KategoriaValasztas() {
                     </div>
                   )}
                 </div>
-
-                {/* Stílusok */}
                 <div className="filter-section">
                   <h3 onClick={() => toggleSection('stilus')}>Stílusok {openSections.stilus ? '▲' : '▼'}</h3>
                   {openSections.stilus && (
@@ -468,8 +261,6 @@ export default function KategoriaValasztas() {
                     </div>
                   )}
                 </div>
-
-                {/* Célcsoportok */}
                 <div className="filter-section">
                   <h3 onClick={() => toggleSection('celcsoport')}>Célcsoportok {openSections.celcsoport ? '▲' : '▼'}</h3>
                   {openSections.celcsoport && (
@@ -488,13 +279,10 @@ export default function KategoriaValasztas() {
                   )}
                 </div>
               </div>
-
               <button className="filter-button" onClick={handleFilter}>Szűrés alkalmazása</button>
             </div>
           )}
         </aside>
-
-        {/* Találatok */}
         <main className="content-area">
             <div className="ajandek-grid">
               {filteredAjandekok.length > 0 ? (
